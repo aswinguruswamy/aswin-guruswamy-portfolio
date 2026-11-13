@@ -20,3 +20,6 @@ The project runs with the pm-toolkit life cycle. Jira project AGP holds the work
 
 ## Assets
 `docs/assets/` holds the screenshots for the project cards (checklist item B6).
+
+## Releases
+To release, a pull request sets the version in the `VERSION` file (for example `1.0.0`). An optional `RELEASE_NOTES.md` holds the release text. After the merge to main, the workflow `.github/workflows/release.yml` makes the tag `v<VERSION>` and the GitHub release.
