@@ -1,0 +1,92 @@
+---
+// EXPLAIN: the main page. The order follows the recruiter view (D22): who, contact, projects, experience, skills.
+import fs from 'node:fs';
+import Base from '../layouts/Base.astro';
+import Avatar from '../components/Avatar.astro';
+import Tile from '../components/Tile.astro';
+import Badge from '../components/Badge.astro';
+import { profile, pmTools, apps, experience, skills, allProjects } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const live = allProjects.filter((p) => p.status === 'Live').length;
+const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.url));
+---
+<Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="Overview">
+  <div class="grid">
+    <section class="panel span2 hero" id="overview" aria-label="About Aswin">
+      <div class="hero-id">
+        <Avatar id="hero" size={128} />
+        <div>
+          <h1 class="display">{profile.name.toUpperCase()}</h1>
+          <div class="role">{profile.title}</div>
+          <div class="where">{profile.location}</div>
+        </div>
+      </div>
+      <ul class="chips" aria-label="Credentials">{profile.badges.map((b) => <li>{b}</li>)}</ul>
+      <p class="summary">{profile.summary}</p>
+      <div class="hero-actions">
+        <a class="btn primary" href={`mailto:${profile.email}`} data-copy={profile.email}>Copy email</a>
+        {hasResume
+          ? <a class="btn" href={`${base}/resume.pdf`} download>Download résumé</a>
+          : <span class="btn" aria-disabled="true">Résumé soon</span>}
+        <p class="copy-out" hidden></p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-projects">
+      <div class="panel-head"><h2 class="tag" id="h-projects">PROJECTS</h2></div>
+      <div class="stat">
+        <span class="big display">{allProjects.length}</span>
+        <ul>
+          <li>{pmTools.length} PM tools</li>
+          <li>{apps.length} apps</li>
+          <li>{live} live <Badge status="Live" /></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-goal">
+      <div class="panel-head"><h2 class="tag" id="h-goal">CAREER GOAL</h2></div>
+      <ul class="ladder" aria-label="Career ladder, from now (bottom) up to the goal (top)">
+        {profile.ladder.map((step, i) => (
+          <>
+            <li>
+              <span class={`step${i === profile.ladder.length - 1 ? ' now' : ''}`}>{step}</span>
+              {i === 0 && <span class="goal"> goal</span>}
+              {i === profile.ladder.length - 1 && <span class="vh"> (now)</span>}
+            </li>
+            {i < profile.ladder.length - 1 && <li class="arrow" aria-hidden="true">↑</li>}
+          </>
+        ))}
+      </ul>
+    </section>
+
+    <section class="panel span4" id="pm-tools" aria-labelledby="h-tools">
+      <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools<span class="scroll"> · scroll →</span></span></div>
+      <ul class="row clip" id="tools-row">{pmTools.map((p) => <Tile p={p} />)}</ul>
+      <button class="more" type="button" aria-controls="tools-row">Show all {pmTools.length} PM tools ↓</button>
+    </section>
+
+    <div class="split">
+      <section class="panel" id="apps" aria-labelledby="h-apps">
+        <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps<span class="scroll"> · scroll →</span></span></div>
+        <ul class="row">{apps.map((p) => <Tile p={p} />)}</ul>
+      </section>
+      <section class="panel" id="experience" aria-labelledby="h-exp">
+        <div class="panel-head"><h2 class="tag" id="h-exp">EXPERIENCE</h2></div>
+        <div class="boxes">{experience.map((e) => <div class="box"><strong>{e.org}</strong><span>{e.role}</span></div>)}</div>
+      </section>
+    </div>
+
+    <section class="panel span4" id="skills" aria-labelledby="h-skills">
+      <div class="panel-head"><h2 class="tag" id="h-skills">SKILLS</h2></div>
+      <div class="skills">
+        {skills.map((s, i) => (
+          <details open={i === 0}>
+            <summary><span>{s.head}</span><span class="chev" aria-hidden="true">▸</span></summary>
+            <p>{s.text}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
