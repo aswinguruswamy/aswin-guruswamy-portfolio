@@ -11,8 +11,12 @@ import Avatar from '../components/Avatar.astro';
 import Icon from '../components/Icon.astro';
 import { profile } from '../data/site';
 
-interface Props { title: string; description: string; section?: string; heading: string }
-const { title, description, section = 'overview', heading } = Astro.props;
+interface Props { title: string; description: string; section?: string; heading: string; person?: boolean }
+const { title, description, section = 'overview', heading, person = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site).href;
+// EXPLAIN: Person structured data (REQ-21) helps search engines show the right name, title and profiles.
+const personLd = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, jobTitle: profile.title, address: { '@type': 'PostalAddress', addressRegion: 'Ontario', addressCountry: 'CA' }, url: new URL(import.meta.env.BASE_URL, Astro.site).href, image: ogImage, sameAs: [profile.linkedin, profile.github], hasCredential: ['PMP', 'CSM', 'CSPO'].map((n) => ({ '@type': 'EducationalOccupationalCredential', name: n })) });
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = `${base}/`;
 // EXPLAIN: the résumé button becomes a real download as soon as public/resume.pdf exists.
@@ -33,8 +37,19 @@ const nav = [
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Aswin Guruswamy, Project Manager: PMP, CSM, CSPO. Greater Toronto Area, Canada." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={`${base}/favicon-32.png`} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
+    {person && <script type="application/ld+json" set:html={personLd} />}
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
     <script is:inline src={`${base}/js/theme.js`}></script>
@@ -58,7 +73,7 @@ const nav = [
           ))}
         </nav>
         <div class="actions">
-          <a class="btn primary" href={`mailto:${profile.email}`} data-copy={profile.email}>Copy email</a>
+          <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>
           <p class="copy-out" hidden></p>
           {hasResume
             ? <a class="btn" href={`${base}/resume.pdf`} download>Download résumé</a>

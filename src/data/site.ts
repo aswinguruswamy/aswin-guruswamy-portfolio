@@ -26,8 +26,10 @@ export const profile = {
   badges: ['PMP', 'CSM', 'CSPO', 'MS Computer Engineering (USA)', 'BE ECE'],
   summary:
     'I run software projects from charter to release, and I build PM tools with AI to make that work faster and safer.',
-  email: 'aswinguruswamy@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/aswinguruswamy',
+  // EXPLAIN: the address is kept in 2 parts and joined by JavaScript, so it is not plain text in the page source (NFR-05).
+  emailUser: 'aswinguruswamy',
+  emailDomain: 'gmail.com',
+  linkedin: 'https://www.linkedin.com/in/aswinguruswamy/',
   github: 'https://github.com/aswinguruswamy',
   ladder: ['Portfolio Manager', 'Program Manager', 'Project Manager'], // top = goal, bottom = now
 };
@@ -40,7 +42,7 @@ export const pmTools: Project[] = [
     name: 'Monte Carlo Delivery Forecast',
     line: 'Delivery dates at 50%, 85% and 95% confidence',
     status: 'Live',
-    image: 'monte-carlo-forecast.png',
+    image: 'monte-carlo-forecast.webp',
     version: 'v1.2.0',
     links: [
       { label: 'Live demo', href: 'https://mcf-forecast.streamlit.app' },
@@ -61,7 +63,7 @@ export const pmTools: Project[] = [
     name: 'RAID Log Extractor',
     line: 'Risks, assumptions, issues and dependencies from notes',
     status: 'Live',
-    image: 'raid-log-extractor.png',
+    image: 'raid-log-extractor.webp',
     version: 'v1.0.0',
     links: [
       { label: 'Live demo', href: 'https://raid-log-extractor.streamlit.app/' },
@@ -83,7 +85,7 @@ export const pmTools: Project[] = [
     name: 'Weekly Status Report Generator',
     line: 'Weekly status with RAG from Jira and GitHub',
     status: 'Live',
-    image: 'status-report-generator.png',
+    image: 'status-report-generator.webp',
     version: 'v1.0.0',
     links: [
       { label: 'Sample report', href: gh('status-report-generator/blob/main/examples/DEMO-2026-W43.md') },
@@ -104,14 +106,14 @@ export const pmTools: Project[] = [
     name: 'pm-toolkit plugin',
     line: 'Runs the PM life cycle in Claude',
     status: 'In progress',
-    image: 'pm-toolkit-readme.png',
+    image: 'pm-toolkit-readme.webp',
   },
   {
     slug: 'pm-benchmark',
     name: 'PM Benchmark',
     line: '108 items to score a software project',
     status: 'Live',
-    image: 'pm-benchmark-items.png',
+    image: 'pm-benchmark-items.webp',
     links: [
       { label: 'The checklist', href: gh('pm-benchmark-software-projects/blob/main/benchmark.md') },
       { label: 'Repository', href: gh('pm-benchmark-software-projects') },

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://aswinguruswamy.github.io/aswin-guruswamy-portfolio/sitemap.xml

@@ -298,3 +298,14 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
 .pager { flex-wrap: wrap; }
 .pager .btn { white-space: normal; text-align: center; max-width: 100%; }
 @media (min-width: 761px) { .close { display: none !important; } }
+
+/* EXPLAIN: racket-swing hover (D31): swings once on mouse over, desktop only, no motion with "reduce motion". */
+.av-wrap { position: relative; display: inline-block; flex: none; }
+.racket { position: absolute; left: -22px; bottom: -14px; opacity: 0; transform-origin: 80% 90%; pointer-events: none; }
+.racket .rk-head { fill: var(--tile); stroke: var(--line); }
+.racket .rk-line { stroke: var(--line); fill: none; }
+@media (hover: hover) and (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  .av-wrap:hover .racket { animation: swing 450ms ease-out 1 forwards; }
+}
+/* mirrored, on the left side, so the racket never covers the name (D22 rule 3) */
+@keyframes swing { 0% { opacity: 1; transform: scaleX(-1) rotate(-30deg); } 60% { opacity: 1; transform: scaleX(-1) rotate(12deg); } 100% { opacity: 1; transform: scaleX(-1) rotate(0deg); } }
