@@ -3,7 +3,10 @@
 Personal portfolio page of Aswin Guruswamy, Project Manager (PMP, CSM, CSPO), Greater Toronto Area, Canada.
 
 ## Status
-Phase 2 — Planning. The build has not started.
+Phase 3 done: design approved at gate G4 (17 Nov 2026). Sprint 1 starts Mon 23 Nov 2026.
+
+## Code guide
+[`docs/explain/code-guide.md`](docs/explain/code-guide.md) explains each action of the project in plain words: what, why, and where.
 
 ## Planned contents
 - Header, credentials, and career-goal card
