@@ -8,6 +8,7 @@ import '@fontsource/inter/800.css';
 import '../styles/global.css';
 import fs from 'node:fs';
 import Avatar from '../components/Avatar.astro';
+import Icon from '../components/Icon.astro';
 import { profile } from '../data/site';
 
 interface Props { title: string; description: string; section?: string; heading: string }
@@ -71,8 +72,8 @@ const nav = [
           </button>
           <span class="title display">{heading}</span>
           <div class="links">
-            <a class="btn social" href={profile.linkedin} rel="noopener">LinkedIn</a>
-            <a class="btn social" href={profile.github} rel="noopener">GitHub</a>
+            <a class="btn social" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /><span class="lbl">LinkedIn</span></a>
+            <a class="btn social" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="GitHub" /><span class="lbl">GitHub</span></a>
             <button class="btn theme" type="button" aria-label="Switch light or dark mode"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg><span> Light / dark</span></button>
           </div>
         </header>
