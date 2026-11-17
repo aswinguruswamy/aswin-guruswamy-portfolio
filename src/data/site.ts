@@ -25,7 +25,7 @@ export const profile = {
   location: 'Greater Toronto Area, Canada',
   badges: ['PMP', 'CSM', 'CSPO', 'MS Computer Engineering (USA)', 'BE ECE'],
   summary:
-    '[Summary line: Aswin to write]',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.',
   // EXPLAIN: the address is kept in 2 parts and joined by JavaScript, so it is not plain text in the page source (NFR-05).
   emailUser: 'aswinguruswamy',
   emailDomain: 'gmail.com',
@@ -163,12 +163,12 @@ export const experience = [
   {
     org: 'Logofn Solutions LLP',
     role: 'Project Manager · Oct 2022 – now',
-    text: '[Logofn card text: Aswin to write]',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',
   },
   {
     org: 'Amazon',
     role: 'Data Content Associate – Kindle SGX Operations · Oct 2020 – Oct 2022',
-    text: '[Amazon card text: Aswin to write]',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
 ];
 
@@ -179,7 +179,7 @@ export const skills: { head: string; text: string; tools?: string[] }[] = [
   },
   {
     head: 'AI skills',
-    text: '[AI skills line: Aswin to write]',
+    text: 'Lorem ipsum · Dolor sit amet · Consectetur adipiscing',
   },
   { head: 'Tools', text: '', tools: ['Jira', 'Confluence', 'GitHub', 'Figma', 'Miro', 'Claude'] },
 ];
