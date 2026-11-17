@@ -142,6 +142,7 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; 
 /* hero */
 .hero { justify-content: center; }
 .hero-id { display: flex; gap: 16px; align-items: center; }
+.hero-id > div { min-width: 0; }
 .hero h1 { margin: 0; font-size: 46px; line-height: 1; }
 .hero .role { font-size: 18px; font-weight: 700; }
 .hero .where { font-size: 14px; color: var(--muted); }
@@ -290,6 +291,8 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
 }
 @media (max-width: 374px) {
   .top .links .social { display: none; }
+  .hero-id { gap: 12px; }
+  .hero h1 { font-size: 26px; }
 }
 @media (max-width: 419px) {
   .tile-body strong { padding-right: 0; }
