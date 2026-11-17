@@ -72,14 +72,14 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
 
     <section class="panel span4" id="pm-tools" aria-labelledby="h-tools">
       <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools</span><span class="row-nav" data-row="tools-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="tools-row" aria-label="Scroll PM tools left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="tools-row" aria-label="Scroll PM tools right">›</button></span></div>
-      <ul class="row clip" id="tools-row">{pmTools.map((p) => <Tile p={p} />)}</ul>
+      <ul class="row clip" id="tools-row" aria-label="PM tools, scrolls sideways">{pmTools.map((p) => <Tile p={p} />)}</ul>
       <button class="more" type="button" aria-controls="tools-row">Show all {pmTools.length} PM tools ↓</button>
     </section>
 
     <div class="split">
       <section class="panel" id="apps" aria-labelledby="h-apps">
         <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps</span><span class="row-nav" data-row="apps-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="apps-row" aria-label="Scroll apps left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="apps-row" aria-label="Scroll apps right">›</button></span></div>
-        <ul class="row" id="apps-row">{apps.map((p) => <Tile p={p} />)}</ul>
+        <ul class="row" id="apps-row" tabindex="0" aria-label="Apps and simulations, scrolls sideways">{apps.map((p) => <Tile p={p} />)}</ul>
       </section>
       <section class="panel" id="experience" aria-labelledby="h-exp">
         <div class="panel-head"><h2 class="tag" id="h-exp">EXPERIENCE</h2></div>

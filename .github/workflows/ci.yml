@@ -1,4 +1,5 @@
-# EXPLAIN: CI. On every pull request a GitHub robot builds the page and runs tests/check.mjs.
+# EXPLAIN: CI. On every pull request a GitHub robot builds the page and runs tests/check.mjs (3 browsers)
+# and tests/quality.mjs (axe-core and Lighthouse: NFR-01, NFR-02, NFR-10).
 # Branch protection blocks the merge when this fails.
 name: CI
 on:
@@ -26,3 +27,16 @@ jobs:
       - run: npm test
         env:
           BROWSER: ${{ matrix.browser }}
+  quality:
+    # EXPLAIN: speed and access gate. axe on every page; Lighthouse mobile on the main page (median of 3 runs).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:quality
