@@ -1,0 +1,85 @@
+---
+// EXPLAIN: the frame of every page: head tags, sidebar (desktop) or menu (phone), top bar, footer.
+import '@fontsource/bangers/400.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
+import '../styles/global.css';
+import fs from 'node:fs';
+import Avatar from '../components/Avatar.astro';
+import { profile } from '../data/site';
+
+interface Props { title: string; description: string; section?: string; heading: string }
+const { title, description, section = 'overview', heading } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = `${base}/`;
+// EXPLAIN: the résumé button becomes a real download as soon as public/resume.pdf exists.
+const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.url));
+const nav = [
+  ['overview', 'Overview', '#overview'],
+  ['pm-tools', 'PM tools', '#pm-tools'],
+  ['apps', 'Apps and simulations', '#apps'],
+  ['experience', 'Experience', '#experience'],
+  ['skills', 'Skills', '#skills'],
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <script is:inline src={`${base}/js/theme.js`}></script>
+  </head>
+  <body>
+    <a class="vh" href="#main">Skip to content</a>
+    <div class="shell">
+      <aside class="side" id="menu" aria-label="Sections">
+        <div class="panel-head">
+          <a class="brand" href={home}>
+            <Avatar id="side" size={44} label={false} />
+            <span><strong class="display">{profile.name.toUpperCase()}</strong><small>Portfolio</small></span>
+          </a>
+          <button class="close menu-close" type="button" aria-label="Close menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5 L19 19 M19 5 L5 19" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <nav class="nav">
+          {nav.map(([id, label, hash]) => (
+            <a href={section === 'overview' ? hash : `${home}${hash}`} aria-current={id === section ? 'true' : undefined}><span>{label}</span></a>
+          ))}
+        </nav>
+        <div class="actions">
+          <a class="btn primary" href={`mailto:${profile.email}`} data-copy={profile.email}>Copy email</a>
+          <p class="copy-out" hidden></p>
+          {hasResume
+            ? <a class="btn" href={`${base}/resume.pdf`} download>Download résumé</a>
+            : <span class="btn" aria-disabled="true">Résumé coming soon</span>}
+        </div>
+      </aside>
+      <main id="main">
+        <header class="top">
+          <button class="menu-btn" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6 H21 M3 12 H21 M3 18 H21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+          </button>
+          <span class="title display">{heading}</span>
+          <div class="links">
+            <a class="btn social" href={profile.linkedin} rel="noopener">LinkedIn</a>
+            <a class="btn social" href={profile.github} rel="noopener">GitHub</a>
+            <button class="btn theme" type="button" aria-label="Switch light or dark mode"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg><span> Light / dark</span></button>
+          </div>
+        </header>
+        <slot />
+        <footer>© {new Date().getFullYear()} {profile.name} · Built with Claude, run as a PM project</footer>
+      </main>
+    </div>
+    <script is:inline src={`${base}/js/site.js`} defer></script>
+  </body>
+</html>

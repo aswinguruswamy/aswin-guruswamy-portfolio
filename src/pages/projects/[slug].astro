@@ -1,0 +1,46 @@
+---
+// EXPLAIN: one page for each project that has real content (problem, approach, role, stack, outcome, links).
+import Base from '../../layouts/Base.astro';
+import Badge from '../../components/Badge.astro';
+import { withPage, pmTools, type Project } from '../../data/site';
+export function getStaticPaths() {
+  return withPage.map((p, i) => ({ params: { slug: p.slug }, props: { p, prev: withPage[i - 1], next: withPage[i + 1] } }));
+}
+interface Props { p: Project; prev?: Project; next?: Project }
+const { p, prev, next } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const group = pmTools.includes(p) ? 'PM tools' : 'Apps and simulations';
+const pg = p.page!;
+const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.approach], ['MY ROLE', pg.role], ['STACK', pg.stack], ['OUTCOME', pg.outcome]];
+---
+<Base title={`${p.name} · Aswin Guruswamy`} description={`${p.name}: ${p.line}.`} section="pm-tools" heading="">
+  <div class="crumbs-row">
+    <div class="crumbs">
+      <a class="btn" href={`${base}/#pm-tools`}>← All {group}</a>
+      <small>{group} › {p.name}</small>
+    </div>
+  </div>
+  <section class="panel">
+    <div class="p-hero">
+      <div class="shot">{p.image && <img src={`${base}/img/${p.image}`} alt={`Screenshot of ${p.name}`} />}</div>
+      <div>
+        <h1 class="display">{p.name.toUpperCase()}</h1>
+        <p>{p.line}</p>
+        <div class="p-meta"><Badge status={p.status} />{p.version && <span class="ver">{p.version}</span>}</div>
+        <button class="btn primary" type="button" data-copy-link>Copy link to this page</button>
+      </div>
+    </div>
+  </section>
+  <div class="p-grid">
+    {boxes.map(([h, t]) => (
+      <section class="panel"><div class="panel-head"><h2 class="tag">{h}</h2></div><p>{t}</p></section>
+    ))}
+    <section class="panel"><div class="panel-head"><h2 class="tag">LINKS</h2></div>
+      <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} rel="noopener">{l.label}</a>)}</div>
+    </section>
+  </div>
+  <nav class="pager" aria-label="Other projects">
+    {prev ? <a class="btn" href={`${base}/projects/${prev.slug}/`}>← {prev.name}</a> : <span></span>}
+    {next ? <a class="btn" href={`${base}/projects/${next.slug}/`}>{next.name} →</a> : <span></span>}
+  </nav>
+</Base>

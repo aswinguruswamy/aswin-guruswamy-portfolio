@@ -1,0 +1,12 @@
+---
+// EXPLAIN: the page a visitor sees for a wrong address. It leads back to the main page.
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="Page not found · Aswin Guruswamy" description="This page does not exist." heading="Out of court">
+  <section class="panel lost">
+    <h1 class="display">OUT OF COURT!</h1>
+    <p>This page does not exist. The shuttle landed outside the lines.</p>
+    <a class="btn primary" href={`${base}/`}>Back to the portfolio</a>
+  </section>
+</Base>
