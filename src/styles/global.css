@@ -270,12 +270,13 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
    that a button opens, as on the phone. The menu is matte and solid (D30 v1). */
 @media (max-width: 1359px) {
   .side { display: none; }
+  /* EXPLAIN: the menu is a small solid card at the top left, sized to its content, not a full-height panel. */
   .side.open {
-    display: flex; position: fixed; left: 0; top: 0; height: 100vh; height: 100dvh; width: 300px; max-width: 86vw; z-index: 21;
-    border: 0; border-right: 2px solid var(--line); border-radius: 0; background: var(--side);
-    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.2); overflow-y: auto;
+    display: flex; position: fixed; left: 12px; top: 12px; width: 270px; max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); z-index: 21;
+    border: 2px solid var(--line); border-radius: 16px; background: var(--side);
+    box-shadow: 4px 4px 0 var(--shadow), 0 10px 30px rgba(0, 0, 0, 0.2); overflow-y: auto;
   }
-  .side.open .actions { margin-top: auto; }
+  .side.open .actions { margin-top: 10px; }
   .side .close { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 0; color: var(--ink); cursor: pointer; }
   .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 20; }
   .menu-btn { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 0; color: var(--ink); cursor: pointer; }

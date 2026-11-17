@@ -12,6 +12,7 @@ console.log('browser:', kind);
 const B = URL_BASE(4500);
 const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log-extractor/', 'projects/status-report-generator/', 'projects/pm-benchmark/', 'no-such-page'];
 const fails = [];
+const warns = [];
 const seen = new Set();
 for (const path of pages) for (const w of [320, 390, 768, 1024, 1280, 1440]) for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme });
@@ -25,7 +26,8 @@ for (const path of pages) for (const w of [320, 390, 768, 1024, 1280, 1440]) for
     const out = [];
     if (document.documentElement.scrollWidth > w + 1) out.push('page is wider than the screen: ' + document.documentElement.scrollWidth);
     const txt = document.body.innerText;
-    if (/\[[^\]]{2,}\]/.test(txt)) out.push('placeholder text: ' + txt.match(/\[[^\]]{2,}\]/)[0]);
+    // D43 v0: text that Aswin will write later may show as "[...: Aswin to write]" (a warning, not a fail). Any other "[...]" fails.
+    for (const m of txt.match(/\[[^\]]{2,}\]/g) || []) { if (/: Aswin to write\]$/.test(m)) out.push('WARN placeholder: ' + m); else out.push('placeholder text: ' + m); }
     // every clip-path must point to a clipPath that exists (the avatar circle)
     for (const g of document.querySelectorAll('[clip-path]')) { const m = g.getAttribute('clip-path').match(/^url\(#([\w-]+)\)$/); if (!m || !document.getElementById(m[1])) out.push('broken clip-path: ' + g.getAttribute('clip-path')); }
     if (/\$\{|\{`/.test(document.documentElement.innerHTML)) out.push('unprocessed template text in the page');
@@ -64,7 +66,7 @@ for (const path of pages) for (const w of [320, 390, 768, 1024, 1280, 1440]) for
     const imgs = [...document.querySelectorAll('img')].map((i) => i.src);
     return { out, urls: [...links, ...imgs] };
   }, w);
-  r.out.forEach((o) => fails.push(`${tag}: ${o}`));
+  r.out.forEach((o) => (o.startsWith('WARN ') ? warns : fails).push(`${tag}: ${o.slice(o.startsWith('WARN ') ? 5 : 0)}`));
   for (const u of r.urls) {
     const clean = u.split('#')[0];
     if (seen.has(clean) || clean.endsWith('no-such-page')) continue; seen.add(clean);
@@ -130,6 +132,7 @@ for (const path of pages) for (const w of [320, 390, 768, 1024, 1280, 1440]) for
   await ctx.close();
 }
 await browser.close(); srv.close();
+[...new Set(warns.map((w) => w.replace(/^.*?: /, '')))].forEach((w) => console.log('WARN', w));
 const uniq = [...new Set(fails)];
 uniq.forEach((f) => console.log('FAIL', f));
 console.log(uniq.length ? `RESULT: FAIL (${uniq.length})` : 'RESULT: PASS');
