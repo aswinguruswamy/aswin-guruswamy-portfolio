@@ -23,6 +23,9 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
     if (document.documentElement.scrollWidth > w + 1) out.push('page is wider than the screen: ' + document.documentElement.scrollWidth);
     const txt = document.body.innerText;
     if (/\[[^\]]{2,}\]/.test(txt)) out.push('placeholder text: ' + txt.match(/\[[^\]]{2,}\]/)[0]);
+    // every clip-path must point to a clipPath that exists (the avatar circle)
+    for (const g of document.querySelectorAll('[clip-path]')) { const m = g.getAttribute('clip-path').match(/^url\(#([\w-]+)\)$/); if (!m || !document.getElementById(m[1])) out.push('broken clip-path: ' + g.getAttribute('clip-path')); }
+    if (/\$\{|\{`/.test(document.documentElement.innerHTML)) out.push('unprocessed template text in the page');
     if (/build overlay/i.test(txt)) out.push('team word "Build Overlay" on the page');
     // contrast of each visible text element against its nearest solid background
     const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
