@@ -36,7 +36,7 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
       <section class="panel"><div class="panel-head"><h2 class="tag">{h}</h2></div><p>{t}</p></section>
     ))}
     <section class="panel"><div class="panel-head"><h2 class="tag">LINKS</h2></div>
-      <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} rel="noopener">{l.label}</a>)}</div>
+      <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label}<span class="vh"> (opens in a new tab)</span> <span aria-hidden="true">↗</span></a>)}</div>
     </section>
   </div>
   <nav class="pager" aria-label="Other projects">

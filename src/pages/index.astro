@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 import Avatar from '../components/Avatar.astro';
 import Tile from '../components/Tile.astro';
 import Badge from '../components/Badge.astro';
+import Icon from '../components/Icon.astro';
 import { profile, pmTools, apps, experience, skills, allProjects } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const live = allProjects.filter((p) => p.status === 'Live').length;
@@ -61,19 +62,19 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
     </section>
 
     <section class="panel span4" id="pm-tools" aria-labelledby="h-tools">
-      <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools<span class="scroll"> · scroll →</span></span></div>
+      <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools</span></div>
       <ul class="row clip" id="tools-row">{pmTools.map((p) => <Tile p={p} />)}</ul>
       <button class="more" type="button" aria-controls="tools-row">Show all {pmTools.length} PM tools ↓</button>
     </section>
 
     <div class="split">
       <section class="panel" id="apps" aria-labelledby="h-apps">
-        <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps<span class="scroll"> · scroll →</span></span></div>
+        <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps</span></div>
         <ul class="row">{apps.map((p) => <Tile p={p} />)}</ul>
       </section>
       <section class="panel" id="experience" aria-labelledby="h-exp">
         <div class="panel-head"><h2 class="tag" id="h-exp">EXPERIENCE</h2></div>
-        <div class="boxes">{experience.map((e) => <div class="box"><strong>{e.org}</strong><span>{e.role}</span></div>)}</div>
+        <div class="boxes">{experience.map((e) => <div class="box"><strong>{e.org}</strong><span>{e.role}</span><p>{e.text}</p></div>)}</div>
       </section>
     </div>
 
@@ -83,7 +84,9 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
         {skills.map((s, i) => (
           <details open={i === 0}>
             <summary><span>{s.head}</span><span class="chev" aria-hidden="true">▸</span></summary>
-            <p>{s.text}</p>
+            {s.tools
+              ? <ul class="tools">{s.tools.map((t) => <li><Icon name={t} size={20} />{t}</li>)}</ul>
+              : <p>{s.text}</p>}
           </details>
         ))}
       </div>

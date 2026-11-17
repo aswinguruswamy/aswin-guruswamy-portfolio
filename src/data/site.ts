@@ -158,15 +158,19 @@ export const apps: Project[] = [
 ];
 
 export const experience = [
-  { org: 'Logofn Solutions LLP', role: 'Project Manager · Oct 2022 – now' },
-  { org: 'Amazon', role: 'Data Content Associate – Kindle Operations (Notification Team) · Oct 2020 – Oct 2022' },
   {
-    org: 'Project management background',
-    role: 'PMP, CSM and CSPO. Plans, risks, stakeholders and delivery for software projects, with the records in Jira, Confluence and GitHub.',
+    org: 'Logofn Solutions LLP',
+    role: 'Project Manager · Oct 2022 – now',
+    text: 'A small IT consultancy with roots in Coimbatore, India. I plan and run its software projects: scope, schedule, risks, stakeholders and delivery.',
+  },
+  {
+    org: 'Amazon',
+    role: 'Data Content Associate – Kindle SGX Operations · Oct 2020 – Oct 2022',
+    text: 'Kindle content data operations, with the notification team.',
   },
 ];
 
-export const skills = [
+export const skills: { head: string; text: string; tools?: string[] }[] = [
   {
     head: 'PM skills',
     text: 'Risk · Stakeholders · Budget · Agile and Scrum · Systems thinking · Business acumen · AI delivery',
@@ -175,7 +179,7 @@ export const skills = [
     head: 'AI skills',
     text: 'Claude Code and sub-agents · Prompt and evaluation design · AI features with checks against made-up facts',
   },
-  { head: 'Tools', text: 'Jira · Confluence · GitHub · Figma · Miro · Claude' },
+  { head: 'Tools', text: '', tools: ['Jira', 'Confluence', 'GitHub', 'Figma', 'Miro', 'Claude'] },
 ];
 
 export const allProjects = [...pmTools, ...apps];
