@@ -25,7 +25,7 @@ export const profile = {
   location: 'Greater Toronto Area, Canada',
   badges: ['PMP', 'CSM', 'CSPO', 'MS Computer Engineering (USA)', 'BE ECE'],
   summary:
-    'I run software projects from charter to release, and I build PM tools with AI to make that work faster and safer.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.',
   // EXPLAIN: the address is kept in 2 parts and joined by JavaScript, so it is not plain text in the page source (NFR-05).
   emailUser: 'aswinguruswamy',
   emailDomain: 'gmail.com',
@@ -105,7 +105,7 @@ export const pmTools: Project[] = [
     slug: 'pm-toolkit-plugin',
     name: 'pm-toolkit plugin',
     line: 'Runs the PM life cycle in Claude',
-    status: 'In progress',
+    status: 'Live',
     image: 'pm-toolkit-readme.webp',
   },
   {
@@ -163,12 +163,12 @@ export const experience = [
   {
     org: 'Logofn Solutions LLP',
     role: 'Project Manager · Oct 2022 – now',
-    text: 'A small IT consultancy with roots in Coimbatore, India. I plan and run its software projects: scope, schedule, risks, stakeholders and delivery.',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',
   },
   {
     org: 'Amazon',
     role: 'Data Content Associate – Kindle SGX Operations · Oct 2020 – Oct 2022',
-    text: 'Kindle content data operations, with the notification team.',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
 ];
 
@@ -179,7 +179,7 @@ export const skills: { head: string; text: string; tools?: string[] }[] = [
   },
   {
     head: 'AI skills',
-    text: 'Claude Code and sub-agents · Prompt and evaluation design · AI features with checks against made-up facts',
+    text: 'Lorem ipsum · Dolor sit amet · Consectetur adipiscing',
   },
   { head: 'Tools', text: '', tools: ['Jira', 'Confluence', 'GitHub', 'Figma', 'Miro', 'Claude'] },
 ];

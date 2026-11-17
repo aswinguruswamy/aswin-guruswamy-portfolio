@@ -1,5 +1,5 @@
 // EXPLAIN: the automatic checks that CI runs on every pull request. A failed check blocks the merge.
-// It opens each page at 3 widths and in light and dark mode, then checks:
+// It opens each page at 6 widths (320, 390, 768, 1024, 1280, 1440 px) and in light and dark mode, then checks:
 // 1 no page error, 2 nothing wider than the screen, 3 every local link and image works,
 // 4 no placeholder text "[...]" and no team words, 5 the text contrast is 4.5:1 or more, 6 tap targets are 44 px or more on a phone.
 import { chromium, firefox, webkit } from '@playwright/test';
@@ -12,8 +12,9 @@ console.log('browser:', kind);
 const B = URL_BASE(4500);
 const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log-extractor/', 'projects/status-report-generator/', 'projects/pm-benchmark/', 'no-such-page'];
 const fails = [];
+const warns = [];
 const seen = new Set();
-for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of ['light', 'dark']) {
+for (const path of pages) for (const w of [320, 390, 768, 1024, 1280, 1440]) for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme });
   const pg = await ctx.newPage();
   const tag = `${path || 'home'} @${w} ${scheme}`;
@@ -25,7 +26,8 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
     const out = [];
     if (document.documentElement.scrollWidth > w + 1) out.push('page is wider than the screen: ' + document.documentElement.scrollWidth);
     const txt = document.body.innerText;
-    if (/\[[^\]]{2,}\]/.test(txt)) out.push('placeholder text: ' + txt.match(/\[[^\]]{2,}\]/)[0]);
+    // D43 v0: text that Aswin will write later may show as "[...: Aswin to write]" (a warning, not a fail). Any other "[...]" fails.
+    for (const m of txt.match(/\[[^\]]{2,}\]/g) || []) { if (/: Aswin to write\]$/.test(m)) out.push('WARN placeholder: ' + m); else out.push('placeholder text: ' + m); }
     // every clip-path must point to a clipPath that exists (the avatar circle)
     for (const g of document.querySelectorAll('[clip-path]')) { const m = g.getAttribute('clip-path').match(/^url\(#([\w-]+)\)$/); if (!m || !document.getElementById(m[1])) out.push('broken clip-path: ' + g.getAttribute('clip-path')); }
     if (/\$\{|\{`/.test(document.documentElement.innerHTML)) out.push('unprocessed template text in the page');
@@ -46,11 +48,25 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
       if (!el.offsetParent) continue; const r = el.getBoundingClientRect();
       if (r.height < 43.5) out.push('tap target under 44 px: ' + el.textContent.trim().slice(0, 25));
     }
+    // card rows: the first card keeps the panel padding (about 20 px from the panel edge)
+    for (const row of document.querySelectorAll('.row')) { if (getComputedStyle(row).overflowX !== 'auto') continue;
+      const P = row.closest('.panel').getBoundingClientRect(), T = row.querySelector('.tile').getBoundingClientRect();
+      if (T.left - P.left < 18) out.push('first card too close to the panel edge: ' + Math.round(T.left - P.left) + ' px'); }
+    // text stays inside its card: no name, title, step or button runs past the panel edge (issues 3, 4, D39 v0)
+    for (const pn of document.querySelectorAll('.panel')) { const P = pn.getBoundingClientRect();
+      for (const el of pn.querySelectorAll('h1,h2:not(.tag),.role,.where,.step,.goal,.chips li,.btn,.box strong,.badge,.arrow-btn')) { if (!el.offsetParent || el.closest('.row')) continue;
+        const r = el.getBoundingClientRect(); if (r.right > P.right + 0.5 || r.left < P.left - 0.5) out.push('text past the card edge: ' + el.textContent.trim().slice(0, 25)); } }
+    // the "goal" pill is on 1 line (a split pill leaves a stray "(" on the line above)
+    for (const g of document.querySelectorAll('.goal')) if (g.getClientRects().length > 1) out.push('goal pill breaks over 2 lines');
+    // the fixed sidebar shows only when the containers fit; otherwise the menu button shows (D39 v0)
+    { const side = document.querySelector('.side'), btn = document.querySelector('.menu-btn');
+      const sideOn = side && getComputedStyle(side).display !== 'none', btnOn = btn && getComputedStyle(btn).display !== 'none';
+      if (sideOn === btnOn) out.push('sidebar and menu button: exactly one must show'); }
     const links = [...document.querySelectorAll('a[href]')].map((a) => a.href).filter((h) => h.startsWith(location.origin));
     const imgs = [...document.querySelectorAll('img')].map((i) => i.src);
     return { out, urls: [...links, ...imgs] };
   }, w);
-  r.out.forEach((o) => fails.push(`${tag}: ${o}`));
+  r.out.forEach((o) => (o.startsWith('WARN ') ? warns : fails).push(`${tag}: ${o.slice(o.startsWith('WARN ') ? 5 : 0)}`));
   for (const u of r.urls) {
     const clean = u.split('#')[0];
     if (seen.has(clean) || clean.endsWith('no-such-page')) continue; seen.add(clean);
@@ -59,12 +75,52 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
   }
   await ctx.close();
 }
+// card rows scroll fully back to the start (no snap bounce)
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } }); const pg = await ctx.newPage();
+  await pg.goto(B);
+  const r = await pg.evaluate(async () => { const res = []; for (const row of document.querySelectorAll('.row')) {
+    row.scrollLeft = 200; await new Promise((x) => setTimeout(x, 300)); row.scrollLeft = 0; await new Promise((x) => setTimeout(x, 500)); res.push(row.scrollLeft); } return res; });
+  r.forEach((v, i) => { if (v > 1) fails.push(`row ${i + 1} does not scroll back to the start (stops at ${v} px)`); });
+  // D38 v0: no scrollbar on the rows, and the › button moves the row; ‹ is off at the start
+  const sb = await pg.evaluate(() => [...document.querySelectorAll('.row')].map((r) => getComputedStyle(r).scrollbarWidth));
+  // D42 v0: under 1100 px the top line is a sideways row with ‹ › and no scrollbar
+  await pg.setViewportSize({ width: 1024, height: 900 }); await pg.waitForTimeout(200);
+  const top = await pg.evaluate(() => { const r = document.getElementById('top-row'); const n = document.querySelector('.top-nav'); return r ? { sb: getComputedStyle(r).scrollbarWidth, scrolls: r.scrollWidth > r.clientWidth + 1, nav: !!n && getComputedStyle(n).display !== 'none' } : null; });
+  if (!top) fails.push('no top-row container'); else {
+    const back = await pg.evaluate(async () => { const r = document.getElementById('top-row'); r.scrollLeft = 200; await new Promise((x) => setTimeout(x, 300)); r.scrollLeft = 0; await new Promise((x) => setTimeout(x, 500)); return { left: r.scrollLeft, prevOff: document.querySelector('.top-nav [data-dir="-1"]').disabled }; });
+    if (back.left > 1) fails.push(`top row does not scroll back to the start (stops at ${back.left} px)`);
+    if (!back.prevOff) fails.push('top row: ‹ is not off at the start'); if (top.sb !== 'none') fails.push('top row shows a scrollbar'); if (!top.scrolls || !top.nav) fails.push('top row at 1024 px is not a sideways row with ‹ ›'); }
+  await pg.setViewportSize({ width: 1280, height: 900 });
+  sb.forEach((v, i) => { if (v !== 'none') fails.push(`row ${i + 1} shows a scrollbar`); });
+  if (await pg.locator('#pm-tools [data-dir="1"]').count() === 0) fails.push('PM tools row has no ‹ › buttons');
+  else {
+    if (!(await pg.locator('#pm-tools [data-dir="-1"]').isDisabled())) fails.push('‹ button is not off at the start of the row');
+    await pg.click('#pm-tools [data-dir="1"]'); await pg.waitForTimeout(700);
+    const moved = await pg.evaluate(() => document.getElementById('tools-row').scrollLeft);
+    if (moved < 100) fails.push('› button does not move the PM tools row');
+  }
+  // issue 9: the side menu marks the section on the screen (sidebar shows at 1440 px)
+  await pg.setViewportSize({ width: 1440, height: 900 });
+  await pg.evaluate(() => document.getElementById('skills').scrollIntoView()); await pg.waitForTimeout(600);
+  const atSkills = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
+  if (atSkills !== 'Skills') fails.push(`side menu marks "${atSkills}" at the Skills section`);
+  await pg.click('.side .nav a[href="#experience"]'); await pg.waitForTimeout(900);
+  const cur = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
+  if (cur !== 'Experience') fails.push(`side menu marks "${cur}" at the Experience section`);
+  await ctx.close();
+}
 // site-wide files (REQ-21) and no plain email address in any page source (NFR-05)
 {
   const ctx = await browser.newContext(); const pg = await ctx.newPage();
   for (const f of ['sitemap.xml', 'robots.txt', 'og.png', 'favicon-32.png', 'apple-touch-icon.png', 'favicon.svg']) {
     const r = await pg.request.get(B + f); if (r.status() !== 200) fails.push(`missing ${f} (${r.status()})`);
   }
+  // issue 10: the 404 page marks no menu item; issue 12: scripts carry a version tag
+  const nf = await (await pg.request.get(B + 'no-such-page')).text();
+  if (/aria-current/.test(nf)) fails.push('404: a menu item is marked as current');
+  const h0 = await (await pg.request.get(B)).text();
+  if (!/js\/site\.js\?v=/.test(h0)) fails.push('site.js has no version tag');
   for (const path of pages.slice(0, 5)) {
     const html = await (await pg.request.get(B + path)).text();
     if (/[\w.+-]+@[\w-]+\.(com|ca|org|net|io)\b/i.test(html)) fails.push(`${path || 'home'}: plain email address in the page source`);
@@ -76,6 +132,7 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
   await ctx.close();
 }
 await browser.close(); srv.close();
+[...new Set(warns.map((w) => w.replace(/^.*?: /, '')))].forEach((w) => console.log('WARN', w));
 const uniq = [...new Set(fails)];
 uniq.forEach((f) => console.log('FAIL', f));
 console.log(uniq.length ? `RESULT: FAIL (${uniq.length})` : 'RESULT: PASS');
