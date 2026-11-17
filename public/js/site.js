@@ -16,15 +16,16 @@
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fail);
     else fail();
   }
-  document.querySelectorAll('[data-copy]').forEach(function (a) {
-    a.addEventListener('click', function (ev) {
-      ev.preventDefault();
+  // The address is joined here from 2 parts, so it is not plain text in the page source (NFR-05).
+  document.querySelectorAll('[data-u][data-d]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var addr = a.getAttribute('data-u') + '@' + a.getAttribute('data-d');
       var label = a.textContent, out = a.parentElement.querySelector('.copy-out');
-      copy(a.getAttribute('data-copy'), function () {
+      copy(addr, function () {
         a.textContent = '✓ Copied';
         setTimeout(function () { a.textContent = label; }, 5000);
       }, function () {
-        if (out) { out.textContent = a.getAttribute('data-copy'); out.hidden = false; }
+        if (out) { out.textContent = ''; var l = document.createElement('a'); l.href = 'mai' + 'lto:' + addr; l.textContent = addr; out.appendChild(l); out.hidden = false; }
       });
     });
   });

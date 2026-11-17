@@ -22,7 +22,7 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
   </div>
   <section class="panel">
     <div class="p-hero">
-      <div class="shot">{p.image && <img src={`${base}/img/${p.image}`} alt={`Screenshot of ${p.name}`} />}</div>
+      <div class="shot">{p.image && <img src={`${base}/img/${p.image}`} alt={`Screenshot of ${p.name}`} decoding="async" />}</div>
       <div>
         <h1 class="display">{p.name.toUpperCase()}</h1>
         <p>{p.line}</p>

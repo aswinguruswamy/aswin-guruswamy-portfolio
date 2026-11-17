@@ -11,11 +11,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const live = allProjects.filter((p) => p.status === 'Live').length;
 const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.url));
 ---
-<Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="Overview">
+<Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="Overview" person>
   <div class="grid">
     <section class="panel span2 hero" id="overview" aria-label="About Aswin">
       <div class="hero-id">
-        <Avatar id="hero" size={128} />
+        <span class="av-wrap">
+          <Avatar id="hero" size={128} />
+          <svg class="racket" width="54" height="54" viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="78" cy="38" rx="26" ry="32" class="rk-head" stroke-width="6" transform="rotate(35 78 38)"/><path d="M62 22 L94 54 M70 16 L100 46 M56 30 L86 62 M66 50 L90 26 M58 42 L82 18" class="rk-line" stroke-width="2.5"/><path d="M58 62 L22 104" class="rk-line" stroke-width="9" stroke-linecap="round"/></svg>
+        </span>
         <div>
           <h1 class="display">{profile.name.toUpperCase()}</h1>
           <div class="role">{profile.title}</div>
@@ -25,7 +28,7 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
       <ul class="chips" aria-label="Credentials">{profile.badges.map((b) => <li>{b}</li>)}</ul>
       <p class="summary">{profile.summary}</p>
       <div class="hero-actions">
-        <a class="btn primary" href={`mailto:${profile.email}`} data-copy={profile.email}>Copy email</a>
+        <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>
         {hasResume
           ? <a class="btn" href={`${base}/resume.pdf`} download>Download résumé</a>
           : <span class="btn" aria-disabled="true">Résumé soon</span>}

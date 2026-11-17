@@ -7,7 +7,7 @@ const clip = `av-${id}`;
 <svg class="avatar" width={size} height={size} viewBox="0 0 132 132" role={label ? 'img' : undefined} aria-label={label ? 'Cartoon avatar of Aswin' : undefined} aria-hidden={label ? undefined : 'true'}>
 <circle class="av-bg" cx="66" cy="66" r="62" fill="#ffe1d9" stroke="#111111" stroke-width="3"/>
 <clipPath id={clip}><circle cx="66" cy="66" r="60.5"/></clipPath>
-<g clip-path="{`url(#${clip})`}">
+<g clip-path={`url(#${clip})`}>
 <path d="M22 132 C24 104 40 94 66 94 C92 94 108 104 110 132 Z" class="av-shirt" fill="#2f7de1" stroke="#111111" stroke-width="3"/>
 <path d="M58 78 L58 92 C62 95 70 95 74 92 L74 78 Z" fill="#d6a07a" stroke="#111111" stroke-width="2.5"/>
 <path d="M50 96 C52 88 58 86 66 90 C74 86 80 88 82 96 C76 100 56 100 50 96 Z" class="av-shirt" fill="#2f7de1" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/>
