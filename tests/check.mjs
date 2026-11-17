@@ -46,6 +46,10 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
       if (!el.offsetParent) continue; const r = el.getBoundingClientRect();
       if (r.height < 43.5) out.push('tap target under 44 px: ' + el.textContent.trim().slice(0, 25));
     }
+    // card rows: the first card keeps the panel padding (about 20 px from the panel edge)
+    for (const row of document.querySelectorAll('.row')) { if (getComputedStyle(row).overflowX !== 'auto') continue;
+      const P = row.closest('.panel').getBoundingClientRect(), T = row.querySelector('.tile').getBoundingClientRect();
+      if (T.left - P.left < 18) out.push('first card too close to the panel edge: ' + Math.round(T.left - P.left) + ' px'); }
     const links = [...document.querySelectorAll('a[href]')].map((a) => a.href).filter((h) => h.startsWith(location.origin));
     const imgs = [...document.querySelectorAll('img')].map((i) => i.src);
     return { out, urls: [...links, ...imgs] };
@@ -57,6 +61,15 @@ for (const path of pages) for (const w of [320, 390, 1440]) for (const scheme of
     const res = await pg.request.get(clean);
     if (res.status() !== 200) fails.push(`${tag}: broken link ${clean} (${res.status()})`);
   }
+  await ctx.close();
+}
+// card rows scroll fully back to the start (no snap bounce)
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } }); const pg = await ctx.newPage();
+  await pg.goto(B);
+  const r = await pg.evaluate(async () => { const res = []; for (const row of document.querySelectorAll('.row')) {
+    row.scrollLeft = 200; await new Promise((x) => setTimeout(x, 300)); row.scrollLeft = 0; await new Promise((x) => setTimeout(x, 500)); res.push(row.scrollLeft); } return res; });
+  r.forEach((v, i) => { if (v > 1) fails.push(`row ${i + 1} does not scroll back to the start (stops at ${v} px)`); });
   await ctx.close();
 }
 // site-wide files (REQ-21) and no plain email address in any page source (NFR-05)
