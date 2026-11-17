@@ -1,6 +1,7 @@
 ---
 // EXPLAIN: one project card. It links to its project page only when the page has real content.
 import Badge from './Badge.astro';
+import Shuttle from './Shuttle.astro';
 import type { Project } from '../data/site';
 interface Props { p: Project }
 const { p } = Astro.props;
@@ -9,7 +10,9 @@ const Tag = p.page ? 'a' : 'div';
 ---
 <li>
   <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : undefined}>
-    <div class="shot">{p.image && <img src={`${base}/img/thumb/${p.image}`} alt="" loading="lazy" decoding="async" width="240" height="160" />}</div>
+    <div class="shot">{p.image
+      ? <img src={`${base}/img/thumb/${p.image}`} alt="" loading="lazy" decoding="async" width="240" height="160" />
+      : <span class="soon"><Shuttle size={44} /><span>Coming soon</span></span>}</div>
     <div class="tile-body">
       <strong class="display">{p.name}</strong>
       <span class="line">{p.line}</span>

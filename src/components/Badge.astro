@@ -1,11 +1,12 @@
 ---
 // EXPLAIN: status badge with the small shuttlecock (D22). LIVE = first version out (D23).
 import type { Status } from '../data/site';
+import Shuttle from './Shuttle.astro';
 interface Props { status: Status }
 const { status } = Astro.props;
 const cls = status === 'Live' ? 'live' : status === 'In progress' ? 'progress' : 'planned';
 ---
 <span class={`badge ${cls}`}>
-  <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 L18 3 L14.5 14 L9.5 14 Z" fill="#ffffff" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 3 L11 14 M14 3 L13 14 M8.2 8.5 H15.8" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="18" r="4" fill="#e8553d" stroke="currentColor" stroke-width="2"/></svg>
+  <Shuttle />
   {status}
 </span>

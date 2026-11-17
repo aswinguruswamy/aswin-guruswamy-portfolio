@@ -13,6 +13,10 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
 ---
 <Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="Overview" person>
   <div class="grid">
+    <!-- EXPLAIN: invisible container for the intro, Projects and Career goal (D42 v0). Wide screen: the same 4-column line as before.
+         Under 1100 px: one sideways row with ‹ › buttons, intro first. -->
+    <div class="top-nav span4"><span class="row-nav" data-row="top-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="top-row" aria-label="Scroll intro, projects and career goal left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="top-row" aria-label="Scroll intro, projects and career goal right">›</button></span></div>
+    <div class="top-row span4" id="top-row">
     <section class="panel span2 hero" id="overview" aria-label="About Aswin">
       <div class="hero-id">
         <span class="av-wrap">
@@ -55,7 +59,7 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
           <>
             <li>
               <span class={`step${i === profile.ladder.length - 1 ? ' now' : ''}`}>{step}</span>
-              {i === 0 && <span class="goal"> goal</span>}
+              {i === 0 && <span class="goal">goal</span>}
               {i === profile.ladder.length - 1 && <span class="vh"> (now)</span>}
             </li>
             {i < profile.ladder.length - 1 && <li class="arrow" aria-hidden="true">↑</li>}
@@ -64,16 +68,18 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
       </ul>
     </section>
 
+    </div>
+
     <section class="panel span4" id="pm-tools" aria-labelledby="h-tools">
-      <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools</span></div>
+      <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools</span><span class="row-nav" data-row="tools-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="tools-row" aria-label="Scroll PM tools left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="tools-row" aria-label="Scroll PM tools right">›</button></span></div>
       <ul class="row clip" id="tools-row">{pmTools.map((p) => <Tile p={p} />)}</ul>
       <button class="more" type="button" aria-controls="tools-row">Show all {pmTools.length} PM tools ↓</button>
     </section>
 
     <div class="split">
       <section class="panel" id="apps" aria-labelledby="h-apps">
-        <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps</span></div>
-        <ul class="row">{apps.map((p) => <Tile p={p} />)}</ul>
+        <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps</span><span class="row-nav" data-row="apps-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="apps-row" aria-label="Scroll apps left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="apps-row" aria-label="Scroll apps right">›</button></span></div>
+        <ul class="row" id="apps-row">{apps.map((p) => <Tile p={p} />)}</ul>
       </section>
       <section class="panel" id="experience" aria-labelledby="h-exp">
         <div class="panel-head"><h2 class="tag" id="h-exp">EXPERIENCE</h2></div>
