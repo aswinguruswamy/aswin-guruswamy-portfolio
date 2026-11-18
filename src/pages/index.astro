@@ -9,7 +9,11 @@ import Icon from '../components/Icon.astro';
 import { profile, pmTools, apps, experience, skills, allProjects } from '../lib/content';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const live = allProjects.filter((p) => p.status === 'Live').length;
-const hasResume = fs.existsSync(process.cwd() + '/public/resume.pdf') // cwd = repo root at build time; a URL relative to this file breaks after bundling;
+// cwd = repo root at build time; a URL relative to this file breaks after bundling.
+const resumePath = process.cwd() + '/public/resume.pdf';
+const hasResume = fs.existsSync(resumePath);
+// D54 v0: the label names the file type and size, so a visitor knows what the click does. The size comes from the file.
+const resumeKB = hasResume ? Math.round(fs.statSync(resumePath).size / 1024) : 0;
 ---
 <Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="" wip person>
   <div class="grid">
@@ -34,7 +38,7 @@ const hasResume = fs.existsSync(process.cwd() + '/public/resume.pdf') // cwd = r
       <div class="hero-actions">
         <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>
         {hasResume
-          ? <a class="btn" href={`${base}/resume.pdf`} download="Aswin-Guruswamy-Resume.pdf">Download résumé</a>
+          ? <a class="btn" href={`${base}/resume.pdf`} download="Aswin-Guruswamy-Resume.pdf" data-resume>Download résumé <span class="meta">(PDF, {resumeKB} KB)</span></a>
           : <span class="btn" aria-disabled="true">Résumé soon</span>}
         <p class="copy-out" hidden></p>
       </div>
