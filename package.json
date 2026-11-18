@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "test": "node tests/check.mjs",
     "test:quality": "node tests/quality.mjs",
+    "test:licences": "node scripts/check-licences.mjs",
     "test:content": "node tests/content-errors.mjs"
   },
   "dependencies": {

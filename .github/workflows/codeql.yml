@@ -1,0 +1,21 @@
+# EXPLAIN: CodeQL (AGP-15 AC6). GitHub scans the JavaScript and TypeScript for security problems
+# on each pull request, on main, and once a week. Results show in the repo under Security > Code scanning.
+name: CodeQL
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 7 * * 1'
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/analyze@v3

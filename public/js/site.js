@@ -3,13 +3,21 @@
   var root = document.documentElement;
 
   // Theme switch: flips the mode and remembers it for the next visit.
+  // aria-pressed tells screen readers if dark mode is on (AGP-32 AC7).
+  function pressed() { document.querySelectorAll('.theme').forEach(function (b) { b.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false'); }); }
+  pressed();
   document.querySelectorAll('.theme').forEach(function (b) {
     b.addEventListener('click', function () {
       var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', t);
       try { localStorage.setItem('theme', t); } catch (e) {}
+      pressed();
     });
   });
+
+  // One hidden status line. Screen readers read its text when it changes (AGP-30).
+  var status = document.getElementById('status');
+  function say(t) { if (!status) return; status.textContent = ''; setTimeout(function () { status.textContent = t; }, 50); }
 
   // Copy email (D30): "✓ Copied" for 5 s. If the browser blocks copy, the email shows as text.
   function copy(text, ok, fail) {
@@ -22,9 +30,10 @@
       var addr = a.getAttribute('data-u') + '@' + a.getAttribute('data-d');
       var label = a.textContent, out = a.parentElement.querySelector('.copy-out');
       copy(addr, function () {
-        a.textContent = '✓ Copied';
+        a.textContent = '✓ Copied'; say('Email address copied');
         setTimeout(function () { a.textContent = label; }, 5000);
       }, function () {
+        say('Copy is blocked. The email address shows below the button.');
         if (out) { out.textContent = ''; var l = document.createElement('a'); l.href = 'mai' + 'lto:' + addr; l.textContent = addr; out.appendChild(l); out.hidden = false; }
       });
     });
@@ -32,7 +41,7 @@
   document.querySelectorAll('[data-copy-link]').forEach(function (b) {
     b.addEventListener('click', function () {
       var label = b.textContent;
-      copy(location.href, function () { b.textContent = '✓ Link copied'; setTimeout(function () { b.textContent = label; }, 5000); }, function () { b.textContent = location.href; });
+      copy(location.href, function () { b.textContent = '✓ Link copied'; say('Link copied'); setTimeout(function () { b.textContent = label; }, 5000); }, function () { b.textContent = location.href; say('Copy is blocked. The link shows on the button.'); });
     });
   });
 
@@ -52,14 +61,29 @@
     });
     menu.querySelector('.menu-close').addEventListener('click', close);
     menu.querySelectorAll('.nav a').forEach(function (a) { a.addEventListener('click', close); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    document.addEventListener('keydown', function (e) {
+      if (!menu.classList.contains('open')) return;
+      if (e.key === 'Escape') { close(); return; }
+      // Focus trap (AGP-55 AC5): Tab and Shift+Tab stay inside the open menu.
+      if (e.key !== 'Tab') return;
+      var f = [].filter.call(menu.querySelectorAll('a[href], button:not([disabled])'), function (x) { return x.offsetParent !== null && !x.hidden; });
+      if (!f.length) return;
+      var a = f[0], z = f[f.length - 1];
+      if (!menu.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
+      else if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    });
   }
 
   // "Show all 7 PM tools" on the phone.
   document.querySelectorAll('.more').forEach(function (b) {
     b.addEventListener('click', function () {
       var row = document.getElementById(b.getAttribute('aria-controls'));
+      // The button hides, so focus moves to the first card that was hidden. Focus is not lost.
+      var shown = [].filter.call(row.children, function (li) { return li.offsetParent !== null; }).length;
       row.classList.remove('clip'); b.hidden = true;
+      var nx = row.children[shown] && row.children[shown].querySelector('a, button');
+      if (nx) nx.focus();
     });
   });
 
