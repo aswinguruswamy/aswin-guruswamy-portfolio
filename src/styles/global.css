@@ -106,6 +106,12 @@ img { max-width: 100%; display: block; }
 main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
 .top { display: flex; gap: 12px; align-items: center; min-height: 84px; }
 .top .title { flex: 1; font-size: 22px; }
+/* EXPLAIN: the main page heading says the page is still being built: yellow work-tape stripes, ink text (13:1). */
+.wip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border: 1.5px solid var(--line); border-radius: 999px;
+  background: #f6c445 repeating-linear-gradient(135deg, #f6c445 0 10px, #f0b52c 10px 20px); color: #1d1d1b;
+  font: 800 13px/1.2 Inter, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 2px 2px 0 var(--shadow-s); white-space: nowrap;
+}
 .top .links { display: flex; gap: 10px; flex-wrap: wrap; }
 .menu-btn { display: none; }
 
@@ -291,6 +297,9 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
   .skills details:last-child { grid-column: span 2; }
 }
 
+/* EXPLAIN: small phones: the tag drops its icon and letter spacing, so the top bar buttons stay inside the bar. */
+@media (max-width: 429px) { .wip { letter-spacing: 0.01em; padding: 4px 9px; } .wip svg { display: none; } }
+
 /* ---------- phone (D30) ---------- */
 @media (max-width: 760px) {
   body { background-image: linear-gradient(90deg, transparent calc(50% - 3px), var(--court) calc(50% - 3px), var(--court) calc(50% + 3px), transparent calc(50% + 3px)); }
@@ -301,7 +310,10 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
     min-height: 0; padding: 6px 8px; background: var(--panel); border: 2px solid var(--line); border-radius: 16px;
     box-shadow: 3px 3px 0 var(--shadow); margin-bottom: 0;
   }
-  .top .title { display: none; }
+  .top .title { flex: 0 1 auto; font-size: 0; margin-right: auto; }
+  .top .title:empty { display: none; }
+  .wip { font-size: 11px; padding: 4px 10px; gap: 6px; }
+  .top .title { min-width: 0; }
   .menu-btn { margin-right: auto; }
   .top .links { gap: 6px; flex-wrap: nowrap; }
   .top .links .btn { padding: 0 12px; font-size: 13px; }

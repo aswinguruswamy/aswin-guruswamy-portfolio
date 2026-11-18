@@ -11,7 +11,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const live = allProjects.filter((p) => p.status === 'Live').length;
 const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.url));
 ---
-<Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="Overview" person>
+<Base title={`${profile.name} · ${profile.title}`} description={`${profile.name}, ${profile.title} (PMP, CSM, CSPO), ${profile.location}. PM tools built with AI, experience and skills.`} heading="" wip person>
   <div class="grid">
     <!-- EXPLAIN: invisible container for the intro, Projects and Career goal (D42 v0). Wide screen: the same 4-column line as before.
          Under 1100 px: one sideways row with ‹ › buttons, intro first. -->
@@ -29,7 +29,7 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
           <div class="where">{profile.location}</div>
         </div>
       </div>
-      <ul class="chips" aria-label="Credentials">{profile.badges.map((b) => <li>{b}</li>)}</ul>
+      <ul class="chips" aria-label="Credentials">{profile.badges.filter((b) => !profile.hiddenBadges.includes(b)).map((b) => <li>{b}</li>)}</ul>
       <p class="summary">{profile.summary}</p>
       <div class="hero-actions">
         <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>

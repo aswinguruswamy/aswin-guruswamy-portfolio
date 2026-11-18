@@ -1,4 +1,5 @@
 ---
+import Shuttle from '../components/Shuttle.astro';
 // EXPLAIN: the frame of every page: head tags, sidebar (desktop) or menu (phone), top bar, footer.
 import '@fontsource/bangers/400.css';
 import '@fontsource/inter/400.css';
@@ -11,8 +12,8 @@ import Avatar from '../components/Avatar.astro';
 import Icon from '../components/Icon.astro';
 import { profile } from '../data/site';
 
-interface Props { title: string; description: string; section?: string; heading: string; person?: boolean }
-const { title, description, section = 'overview', heading, person = false } = Astro.props;
+interface Props { title: string; description: string; section?: string; heading: string; person?: boolean; wip?: boolean }
+const { title, description, section = 'overview', heading, person = false, wip = false } = Astro.props;
 // EXPLAIN: a new version tag on each build, so a browser never keeps an old script with a new page (issue 12).
 const v = (process.env.GITHUB_SHA || String(Date.now())).slice(0, 8);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -87,7 +88,9 @@ const nav = [
           <button class="menu-btn" type="button" aria-label="Open menu" aria-controls="menu" aria-expanded="false">
             <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6 H21 M3 12 H21 M3 18 H21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
           </button>
-          <span class="title display">{heading}</span>
+          <span class="title display">{wip
+            ? <span class="wip" title="This page is still being built"><Shuttle size={16} /><span>Still being built</span></span>
+            : heading}</span>
           <div class="links">
             <a class="btn social" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /><span class="lbl">LinkedIn</span></a>
             <a class="btn social" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="GitHub" /><span class="lbl">GitHub</span></a>

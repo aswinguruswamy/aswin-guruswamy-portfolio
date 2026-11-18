@@ -24,6 +24,8 @@ export const profile = {
   title: 'Project Manager',
   location: 'Greater Toronto Area, Canada',
   badges: ['PMP', 'CSM', 'CSPO', 'MS Computer Engineering (USA)', 'BE ECE'],
+  // EXPLAIN: badges listed here stay in the data but do not show on the page (D44 v0). Remove a name to show it again.
+  hiddenBadges: ['MS Computer Engineering (USA)'],
   summary:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.',
   // EXPLAIN: the address is kept in 2 parts and joined by JavaScript, so it is not plain text in the page source (NFR-05).
