@@ -106,15 +106,15 @@ img { max-width: 100%; display: block; }
 main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
 .top { display: flex; gap: 12px; align-items: center; min-height: 84px; }
 .top .title { flex: 1; font-size: 22px; }
-/* EXPLAIN: the "View Build Progress" switch (D45 v1): a see-through yellow tint with faint stripes over the page colour; ink text. */
+/* EXPLAIN: the "View Build Progress" switch (D45 v2): solid yellow so visitors see it at once; dark text (12:1) in both modes. */
 .wip {
   display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border: 1.5px solid var(--line); border-radius: 999px;
-  background: repeating-linear-gradient(135deg, rgba(246, 196, 69, 0.42) 0 10px, rgba(240, 181, 44, 0.3) 10px 20px); color: var(--ink);
+  background: #f6c445; color: #1d1d1b;
   font: 800 13px/1.2 Inter, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 2px 2px 0 var(--shadow-s); white-space: nowrap;
 }
 .top .links { display: flex; gap: 10px; flex-wrap: wrap; }
 /* ---------- Workshop (D12, D24-D26, D28-D30, D35, D46 v0) ---------- */
-/* EXPLAIN: the "View Build Progress" tag is the Workshop switch (D45 v1). Pressed = the Workshop is on. */
+/* EXPLAIN: the "View Build Progress" button is the Workshop switch (D45 v2). Pressed = the Workshop is on. */
 button.wip { cursor: pointer; min-height: 32px; }
 button.wip:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--shadow); }
 button.wip[aria-pressed="true"] { box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.25); transform: none; }
