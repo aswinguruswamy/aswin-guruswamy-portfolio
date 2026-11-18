@@ -113,6 +113,45 @@ main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; 
   font: 800 13px/1.2 Inter, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 2px 2px 0 var(--shadow-s); white-space: nowrap;
 }
 .top .links { display: flex; gap: 10px; flex-wrap: wrap; }
+/* ---------- Workshop (D12, D24-D26, D28-D30, D35, D46 v0) ---------- */
+/* EXPLAIN: the "Still being built" tag is the Workshop switch. Pressed = the Workshop is on. */
+button.wip { cursor: pointer; min-height: 32px; }
+button.wip:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--shadow); }
+button.wip[aria-pressed="true"] { box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.25); transform: none; }
+/* EXPLAIN: 55% screen on the page background: the court lines fade to 45%; the cards keep their own look (D28). */
+html.ws-on { --court: color-mix(in srgb, var(--court) 45%, var(--page)); }
+.tile { position: relative; }
+/* EXPLAIN: the pie: 48 px, yellow fills from the centre, white empty part, black % on top (D25, D26). */
+.pie {
+  --p: 0; position: absolute; top: 4px; right: 4px; z-index: 2; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center; border: 1.5px solid #1d1d1b; color: #000; font: 800 13px/1 Inter, sans-serif;
+  background: conic-gradient(#f6c445 calc(var(--p) * 1%), #ffffff 0); box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35); pointer-events: none;
+}
+.pie.none { background: #ffffff; font-size: 18px; }
+/* EXPLAIN: container pies sit next to the section title; the corner holds the ‹ › buttons (D38 v0, D46 v0). */
+.pie.inline { position: static; flex: none; margin: -8px 0 -8px 2px; }
+.panel-head .pie.inline + .count { margin-left: auto; }
+.ws-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0 0 18px; padding: 10px 16px;
+  border: 2px solid var(--line); border-radius: 14px; background: var(--tile); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--shadow-s); font-size: 14px;
+}
+.ws-strip .ws-name { font-size: 22px; letter-spacing: 0.08em; }
+.ws-strip .ws-msg { font-weight: 700; }
+.ws-strip .ws-legend { color: var(--muted); font-size: 13px; }
+.ws-strip .ws-review { margin-left: auto; }
+.ws-strip.old { border-color: #b26a00; }
+.ws-strip.old .ws-msg { color: var(--ink); }
+.ws-strip.none { border-style: dashed; }
+.ws-dialog { max-width: min(560px, calc(100vw - 32px)); border: 2px solid var(--line); border-radius: 16px; padding: 20px 22px; background: var(--tile); color: var(--ink); box-shadow: 4px 4px 0 var(--shadow); }
+.ws-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+.ws-dialog h2 { margin: 0 40px 10px 0; font-size: 26px; }
+.ws-dialog h3 { margin: 14px 0 6px; font-size: 15px; }
+.ws-dialog .close { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; background: none; color: var(--ink); font-size: 22px; font-weight: 900; cursor: pointer; }
+.ws-list { margin: 0; padding-left: 18px; }
+.ws-list li { margin: 4px 0; }
+.ws-list li.empty { list-style: none; margin-left: -18px; color: var(--muted); }
+.ws-list code { font-weight: 800; }
 .menu-btn { display: none; }
 
 /* ---------- buttons ---------- */
@@ -337,6 +376,11 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
   .tile-body { padding: 0; min-width: 0; flex: 1; }
   .tile-body strong { font-family: Inter, sans-serif; letter-spacing: 0; font-size: 16px; font-weight: 800; line-height: 1.25; padding-right: 120px; }
   .tile-body .badge { position: absolute; top: 12px; right: 12px; margin: 0; font-size: 11px; }
+  /* EXPLAIN: on the phone a card pie sits on the 52 px thumbnail, and the intro pie on the avatar: no pie covers text (D22 rule 3). */
+  .tile .pie { top: 14px; left: 14px; right: auto; }
+  button.wip { min-height: 44px; }
+  .panel-head { flex-wrap: wrap; row-gap: 10px; }
+  .hero > .pie { top: 10px; left: 10px; right: auto; }
   .row.clip > li:nth-child(n + 5) { display: none; }
   .more { display: inline-flex; align-self: center; min-height: 44px; align-items: center; background: none; border: 0; color: var(--accent); font: 700 14px Inter, sans-serif; text-decoration: underline; cursor: pointer; }
   .more[hidden] { display: none; }

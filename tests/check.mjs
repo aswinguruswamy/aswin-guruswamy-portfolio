@@ -120,6 +120,53 @@ for (const path of pages) for (const w of [320, 375, 390, 768, 1024, 1280, 1440]
   for (const f of ['sitemap.xml', 'robots.txt', 'og.png', 'favicon-32.png', 'apple-touch-icon.png', 'favicon.svg']) {
     const r = await pg.request.get(B + f); if (r.status() !== 200) fails.push(`missing ${f} (${r.status()})`);
   }
+  // Workshop (REQ-16, D24-D26, D35, D46 v0): the switch, the pies, the strip, the data states
+  for (const w of [320, 390, 768, 1024, 1440]) {
+    await pg.setViewportSize({ width: w, height: 900 });
+    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip', { timeout: 5000 }).catch(() => {});
+    const ws = await pg.evaluate(async () => {
+      const r = { pies: document.querySelectorAll('.pie').length, cards: document.querySelectorAll('[data-epic], [data-group]').length, cover: [], over: document.documentElement.scrollWidth - innerWidth };
+      // a pie must cover no text in its card (D22 rule 3): compare the pie box with the box of each text line
+      for (const pie of document.querySelectorAll('.pie')) {
+        const P = pie.getBoundingClientRect(); const host = pie.closest('[data-epic], [data-group]');
+        const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          if (!n.textContent.trim() || pie.contains(n) || !n.parentElement.offsetParent) continue;
+          const range = document.createRange(); range.selectNodeContents(n);
+          for (const R of range.getClientRects()) if (R.width && R.left < P.right - 1 && R.right > P.left + 1 && R.top < P.bottom - 1 && R.bottom > P.top + 1) { r.cover.push(pie.getAttribute('aria-label') + ' covers "' + n.textContent.trim().slice(0, 20) + '"'); break; }
+        }
+      }
+      return r;
+    });
+    if (ws.pies !== ws.cards) fails.push(`workshop @${w}: ${ws.pies} pies for ${ws.cards} cards and containers`);
+    [...new Set(ws.cover)].forEach((c) => fails.push(`workshop @${w}: ${c}`));
+    if (ws.over > 0) fails.push(`workshop @${w}: side scroll ${ws.over}px`);
+  }
+  {
+    await pg.setViewportSize({ width: 1440, height: 900 });
+    const pd = JSON.parse(await (await pg.request.get(B + 'data/progress.json')).text());
+    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip');
+    const shown = await pg.evaluate(() => Object.fromEntries([...document.querySelectorAll('[data-epic]')].map((x) => [x.getAttribute('data-epic'), x.querySelector('.pie')?.textContent])));
+    for (const [k, v] of Object.entries(shown)) { const e = pd.epics[k]; const want = e.total ? Math.round((100 * e.done) / e.total) + '%' : '–'; if (v !== want) fails.push(`workshop: pie ${k} shows ${v}, progress.json says ${want}`); }
+    if (await pg.evaluate(() => document.querySelector('[data-workshop]').getAttribute('aria-pressed')) !== 'true') fails.push('workshop: the switch is not pressed');
+    // the review panel opens and lists only keys and titles, no links (REQ-17)
+    await pg.click('.ws-review'); const links = await pg.evaluate(() => document.querySelectorAll('.ws-dialog a').length);
+    if (!(await pg.locator('.ws-dialog[open]').count())) fails.push('workshop: the review panel does not open'); if (links) fails.push('workshop: the review panel has links');
+    await pg.keyboard.press('Escape');
+    // old data (more than 24 h) and no data
+    for (const [kind, body, want] of [['old', JSON.stringify({ ...pd, takenAt: '2020-01-01T00:00:00Z' }), 'Old data'], ['none', null, 'No build data']]) {
+      await pg.route('**/data/progress.json*', (r) => (body ? r.fulfill({ body, contentType: 'application/json' }) : r.fulfill({ status: 404, body: '' })));
+      await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip');
+      const msg = await pg.evaluate(() => document.querySelector('.ws-msg').textContent);
+      if (!msg.includes(want)) fails.push(`workshop ${kind} data: strip says "${msg}"`);
+      if (kind === 'none' && (await pg.evaluate(() => [...document.querySelectorAll('.pie')].some((p) => p.textContent !== '–')))) fails.push('workshop no data: a pie shows a number');
+      await pg.unroute('**/data/progress.json*');
+    }
+    // the switch turns it off again
+    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip'); await pg.click('[data-workshop]');
+    if (await pg.evaluate(() => document.querySelectorAll('.pie, .ws-strip').length)) fails.push('workshop: switch off leaves pies or the strip');
+  }
+
   // issue 10: the 404 page marks no menu item; issue 12: scripts carry a version tag
   const nf = await (await pg.request.get(B + 'no-such-page')).text();
   if (/aria-current/.test(nf)) fails.push('404: a menu item is marked as current');

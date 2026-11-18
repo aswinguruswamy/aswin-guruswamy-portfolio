@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const Tag = p.page ? 'a' : 'div';
 ---
 <li>
-  <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : undefined}>
+  <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : undefined} data-epic={p.epic}>
     <div class="shot">{p.image
       ? <img src={`${base}/img/thumb/${p.image}`} alt="" loading="lazy" decoding="async" width="240" height="160" />
       : <span class="soon"><Shuttle size={44} /><span>Coming soon</span></span>}</div>

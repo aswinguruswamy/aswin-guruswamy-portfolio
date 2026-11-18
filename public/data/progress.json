@@ -1,0 +1,186 @@
+{
+ "takenAt": "2026-11-18T16:40:00Z",
+ "epics": {
+  "AGP-1": {
+   "title": "E1 Foundation",
+   "done": 3,
+   "total": 16
+  },
+  "AGP-3": {
+   "title": "E2 Header and career",
+   "done": 7,
+   "total": 8
+  },
+  "AGP-4": {
+   "title": "E3 Experience",
+   "done": 0,
+   "total": 3
+  },
+  "AGP-5": {
+   "title": "E4 Project containers",
+   "done": 0,
+   "total": 5
+  },
+  "AGP-6": {
+   "title": "E5 Project pages",
+   "done": 0,
+   "total": 10
+  },
+  "AGP-7": {
+   "title": "E6 Skills",
+   "done": 0,
+   "total": 6
+  },
+  "AGP-8": {
+   "title": "E7 Contact actions",
+   "done": 0,
+   "total": 3
+  },
+  "AGP-9": {
+   "title": "E8 Theme",
+   "done": 5,
+   "total": 8
+  },
+  "AGP-10": {
+   "title": "E9 Workshop: Build Progress",
+   "done": 0,
+   "total": 17
+  },
+  "AGP-11": {
+   "title": "E10 Search and errors",
+   "done": 1,
+   "total": 4
+  },
+  "AGP-12": {
+   "title": "E11 Measure",
+   "done": 0,
+   "total": 2
+  },
+  "AGP-13": {
+   "title": "E12 Reuse",
+   "done": 0,
+   "total": 2
+  },
+  "AGP-14": {
+   "title": "E13 Release",
+   "done": 0,
+   "total": 3
+  },
+  "AGP-44": {
+   "title": "Monte Carlo Delivery Forecast",
+   "done": 16,
+   "total": 25
+  },
+  "AGP-45": {
+   "title": "RAID Log Extractor",
+   "done": 8,
+   "total": 10
+  },
+  "AGP-46": {
+   "title": "Weekly Status Report Generator",
+   "done": 8,
+   "total": 19
+  },
+  "AGP-47": {
+   "title": "pm-toolkit plugin",
+   "done": 8,
+   "total": 12
+  },
+  "AGP-48": {
+   "title": "PM Benchmark",
+   "done": 5,
+   "total": 8
+  },
+  "AGP-49": {
+   "title": "AI Project Gap Detector",
+   "done": 0,
+   "total": 10
+  },
+  "AGP-50": {
+   "title": "Workshop: Build Progress (card)",
+   "done": 0,
+   "total": 0
+  },
+  "AGP-51": {
+   "title": "Notification and Subscription Dashboard",
+   "done": 0,
+   "total": 24
+  },
+  "AGP-52": {
+   "title": "SelfBet",
+   "done": 3,
+   "total": 16
+  },
+  "AGP-53": {
+   "title": "Yaw Damper Simulation",
+   "done": 3,
+   "total": 10
+  },
+  "AGP-54": {
+   "title": "AME Courseware",
+   "done": 3,
+   "total": 11
+  }
+ },
+ "groups": {
+  "header": {
+   "done": 7,
+   "total": 8
+  },
+  "experience": {
+   "done": 0,
+   "total": 3
+  },
+  "skills": {
+   "done": 0,
+   "total": 6
+  },
+  "pm-tools": {
+   "done": 45,
+   "total": 101
+  },
+  "apps": {
+   "done": 9,
+   "total": 61
+  }
+ },
+ "page": {
+  "done": 16,
+  "total": 87
+ },
+ "review": {
+  "needsReview": [],
+  "doneRecent": [
+   {
+    "key": "AGP-16",
+    "title": "S3 Deploy and rollback drill",
+    "doneAt": "2026-11-18"
+   },
+   {
+    "key": "AGP-18",
+    "title": "S5 Header: name, title, location",
+    "doneAt": "2026-11-18"
+   },
+   {
+    "key": "AGP-19",
+    "title": "S6 Credential and education badges",
+    "doneAt": "2026-11-18"
+   },
+   {
+    "key": "AGP-20",
+    "title": "S7 Career-goal card",
+    "doneAt": "2026-11-18"
+   },
+   {
+    "key": "AGP-33",
+    "title": "S20 Theme on all parts",
+    "doneAt": "2026-11-18"
+   },
+   {
+    "key": "AGP-40",
+    "title": "S27 404 page",
+    "doneAt": "2026-11-18"
+   }
+  ]
+ }
+}

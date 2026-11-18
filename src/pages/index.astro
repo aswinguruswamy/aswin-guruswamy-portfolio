@@ -17,7 +17,7 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
          Under 1100 px: one sideways row with ‹ › buttons, intro first. -->
     <div class="top-nav span4"><span class="row-nav" data-row="top-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="top-row" aria-label="Scroll intro, projects and career goal left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="top-row" aria-label="Scroll intro, projects and career goal right">›</button></span></div>
     <div class="top-row span4" id="top-row">
-    <section class="panel span2 hero" id="overview" aria-label="About Aswin">
+    <section class="panel span2 hero" id="overview" aria-label="About Aswin" data-group="header">
       <div class="hero-id">
         <span class="av-wrap">
           <Avatar id="hero" size={128} />
@@ -40,7 +40,7 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
       </div>
     </section>
 
-    <section class="panel" aria-labelledby="h-projects">
+    <section class="panel" aria-labelledby="h-projects" data-epic="AGP-5">
       <div class="panel-head"><h2 class="tag" id="h-projects">PROJECTS</h2></div>
       <div class="stat">
         <span class="big display">{allProjects.length}</span>
@@ -70,24 +70,24 @@ const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.u
 
     </div>
 
-    <section class="panel span4" id="pm-tools" aria-labelledby="h-tools">
+    <section class="panel span4" id="pm-tools" aria-labelledby="h-tools" data-group="pm-tools">
       <div class="panel-head"><h2 class="tag" id="h-tools">PM TOOLS</h2><span class="count">{pmTools.length} tools</span><span class="row-nav" data-row="tools-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="tools-row" aria-label="Scroll PM tools left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="tools-row" aria-label="Scroll PM tools right">›</button></span></div>
       <ul class="row clip" id="tools-row" aria-label="PM tools, scrolls sideways">{pmTools.map((p) => <Tile p={p} />)}</ul>
       <button class="more" type="button" aria-controls="tools-row">Show all {pmTools.length} PM tools ↓</button>
     </section>
 
     <div class="split">
-      <section class="panel" id="apps" aria-labelledby="h-apps">
+      <section class="panel" id="apps" aria-labelledby="h-apps" data-group="apps">
         <div class="panel-head"><h2 class="tag" id="h-apps">APPS AND SIMULATIONS</h2><span class="count">{apps.length} apps</span><span class="row-nav" data-row="apps-row"><button class="arrow-btn" type="button" data-dir="-1" aria-controls="apps-row" aria-label="Scroll apps left">‹</button><button class="arrow-btn" type="button" data-dir="1" aria-controls="apps-row" aria-label="Scroll apps right">›</button></span></div>
         <ul class="row" id="apps-row" tabindex="0" aria-label="Apps and simulations, scrolls sideways">{apps.map((p) => <Tile p={p} />)}</ul>
       </section>
-      <section class="panel" id="experience" aria-labelledby="h-exp">
+      <section class="panel" id="experience" aria-labelledby="h-exp" data-group="experience">
         <div class="panel-head"><h2 class="tag" id="h-exp">EXPERIENCE</h2></div>
         <div class="boxes">{experience.map((e) => <div class="box"><strong>{e.org}</strong><span>{e.role}</span><p>{e.text}</p></div>)}</div>
       </section>
     </div>
 
-    <section class="panel span4" id="skills" aria-labelledby="h-skills">
+    <section class="panel span4" id="skills" aria-labelledby="h-skills" data-group="skills">
       <div class="panel-head"><h2 class="tag" id="h-skills">SKILLS</h2></div>
       <div class="skills">
         {skills.map((s, i) => (
