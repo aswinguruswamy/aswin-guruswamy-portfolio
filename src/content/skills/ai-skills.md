@@ -4,4 +4,4 @@ head: AI skills
 order: 2
 ---
 
-Lorem ipsum · Dolor sit amet · Consectetur adipiscing
+Claude API (working) · Monte Carlo forecasts (working) · AI evals (working) · Claude plugins (working)

@@ -22,4 +22,4 @@ ladder:
   - Project Manager
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Project Manager (PMP, CSM) who runs Scrum delivery on SaaS platforms and builds AI tools for forecasts, risks and status reports.

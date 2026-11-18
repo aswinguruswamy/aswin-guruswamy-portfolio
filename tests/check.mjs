@@ -32,6 +32,8 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     for (const g of document.querySelectorAll('[clip-path]')) { const m = g.getAttribute('clip-path').match(/^url\(#([\w-]+)\)$/); if (!m || !document.getElementById(m[1])) out.push('broken clip-path: ' + g.getAttribute('clip-path')); }
     if (/\$\{|\{`/.test(document.documentElement.innerHTML)) out.push('unprocessed template text in the page');
     if (/build overlay/i.test(txt)) out.push('team word "Build Overlay" on the page');
+    // D56 v0: Aswin's texts replaced the lorem ipsum of D43 v1 (18 Nov 2026). No placeholder text may come back.
+    if (/lorem ipsum|dolor sit amet/i.test(txt)) out.push('placeholder text "lorem ipsum" on the page (D56 v0)');
     // contrast of each visible text element against its nearest solid background
     const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
     const rgb = (s) => (s.match(/[\d.]+/g) || []).map(Number);

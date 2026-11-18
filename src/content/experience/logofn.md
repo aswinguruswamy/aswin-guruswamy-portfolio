@@ -5,4 +5,4 @@ role: Project Manager · Oct 2022 – now
 order: 1
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.
+Led a team of 10 in 2 countries to deliver a subscription SaaS platform. The client renewed the contract for USD $300K.
