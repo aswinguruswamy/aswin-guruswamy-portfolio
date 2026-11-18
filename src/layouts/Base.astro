@@ -75,6 +75,12 @@ const nav = [
             <a href={section === 'overview' ? hash : `${home}${hash}`} aria-current={id === section ? 'true' : undefined}><span>{label}</span></a>
           ))}
         </nav>
+        <!-- D30 v0 item 4: in menu mode the menu has LinkedIn, GitHub and light/dark as icons. -->
+        <div class="menu-links">
+          <a class="btn icon" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /></a>
+          <a class="btn icon" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="GitHub" /></a>
+          <button class="btn icon theme" type="button" aria-label="Light / dark mode"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg></button>
+        </div>
         <div class="actions">
           <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>
           <p class="copy-out" hidden></p>

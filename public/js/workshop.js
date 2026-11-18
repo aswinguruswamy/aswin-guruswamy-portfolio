@@ -62,12 +62,26 @@
     top.after(strip);
   }
 
+  // AGP-35 AC3: the strip shows a loading line while progress.json loads.
+  function loadingStrip() {
+    var msg = strip.querySelector('.ws-msg');
+    strip.classList.remove('old', 'none');
+    var r = strip.querySelector('.ws-retry'); if (r) r.remove();
+    msg.textContent = 'Loading the build data…';
+  }
+
   function updateStrip() {
     var msg = strip.querySelector('.ws-msg');
     strip.classList.remove('old', 'none');
+    var old = strip.querySelector('.ws-retry'); if (old) old.remove();
     if (state === 'none') {
       strip.classList.add('none');
       msg.textContent = 'No build data yet. The pies show "–".';
+      // AGP-35 AC4: only "Try again". It loads progress.json again and shows the loading line first.
+      var retry = el('button', 'btn ws-retry', 'Try again');
+      retry.type = 'button';
+      retry.addEventListener('click', function () { refresh(true); });
+      msg.after(retry);
       return;
     }
     var page = pct(data.page);
@@ -88,14 +102,21 @@
       .catch(function () { data = null; state = 'none'; });
   }
 
+  function refresh(focusRetry) {
+    loadingStrip();
+    return load().then(function () {
+      if (!strip) return; // the Workshop was turned off while it loaded
+      document.querySelectorAll('.pie').forEach(function (p) { p.remove(); });
+      updateStrip();
+      render();
+      var r = strip.querySelector('.ws-retry'); if (focusRetry && r) r.focus();
+    });
+  }
   function on() {
     btn.setAttribute('aria-pressed', 'true');
     root.classList.add('ws-on');
-    return load().then(function () {
-      if (!strip) buildStrip();
-      updateStrip();
-      render();
-    });
+    if (!strip) buildStrip();
+    return refresh(false);
   }
   function off() {
     btn.setAttribute('aria-pressed', 'false');
