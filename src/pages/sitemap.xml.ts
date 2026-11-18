@@ -1,5 +1,5 @@
 // EXPLAIN: sitemap.xml lists every page, so search engines find the project pages (REQ-21).
-import { withPage } from '../data/site';
+import { withPage } from '../lib/content';
 export function GET({ site }: { site: URL }) {
   const base = new URL(import.meta.env.BASE_URL, site).href;
   const urls = [base, ...withPage.map((p) => `${base}projects/${p.slug}/`)];

@@ -10,7 +10,7 @@ import '../styles/global.css';
 import fs from 'node:fs';
 import Avatar from '../components/Avatar.astro';
 import Icon from '../components/Icon.astro';
-import { profile } from '../data/site';
+import { profile } from '../lib/content';
 
 interface Props { title: string; description: string; section?: string; heading: string; person?: boolean; wip?: boolean }
 const { title, description, section = 'overview', heading, person = false, wip = false } = Astro.props;
@@ -89,7 +89,7 @@ const nav = [
             <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6 H21 M3 12 H21 M3 18 H21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
           </button>
           <span class="title display">{wip
-            ? <button class="wip" type="button" data-workshop data-base={base} aria-pressed="false" title="Show the build progress (Workshop)"><Shuttle size={16} /><span>Still being built</span></button>
+            ? <button class="wip" type="button" data-workshop data-base={base} aria-pressed="false" title="Show the build progress (Workshop)"><Shuttle size={16} /><span>View Build Progress</span></button>
             : heading}</span>
           <div class="links">
             <a class="btn social" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /><span class="lbl">LinkedIn</span></a>

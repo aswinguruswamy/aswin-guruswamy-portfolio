@@ -2,7 +2,7 @@
 // EXPLAIN: one project card. It links to its project page only when the page has real content.
 import Badge from './Badge.astro';
 import Shuttle from './Shuttle.astro';
-import type { Project } from '../data/site';
+import type { Project } from '../lib/content';
 interface Props { p: Project }
 const { p } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');

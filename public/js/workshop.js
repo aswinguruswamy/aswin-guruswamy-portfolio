@@ -1,5 +1,5 @@
 // EXPLAIN: the Workshop (internal name: Build Overlay, D12, D29). Standalone script, loaded by a script tag.
-// The "Still being built" tag in the top bar is the switch (D46 v0). When on, it reads data/progress.json and shows:
+// The "View Build Progress" tag in the top bar is the switch (D46 v0, D45 v1). When on, it reads data/progress.json and shows:
 //  - a strip under the top bar: page build %, snapshot time, legend (D30 item 5, NFR-08); no review panel (D47 v0);
 //  - a pie on each card [data-epic] and each container [data-group] (D24-D26; "–" when no work is planned, D35);
 //  - a 55% screen on the page background (D28).
