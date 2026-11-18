@@ -1,0 +1,54 @@
+{
+ "_explain": "D53 v0, D55 v0: official brand-kit logos. CI checks each file against this list: the sha256 must match, and a PNG must keep the kit ratio (within 1 px). Change this list only with a new decision version.",
+ "files": {
+  "github-invertocat-black.svg": {
+   "source": "GitHub_Logos.zip (github.com/logos) > SVG/GitHub_Invertocat_Black.svg",
+   "rule": "copied unchanged",
+   "sha256": "693d7abe6f899646cc2e96856723b45e95f71885a54910b2749f6decdf7e1ee1"
+  },
+  "github-invertocat-white.svg": {
+   "source": "GitHub_Logos.zip (github.com/logos) > SVG/GitHub_Invertocat_White.svg",
+   "rule": "copied unchanged",
+   "sha256": "ccd84c89b1056345608fc3489357f8acc7397e49a3cdc2d418b6c8016911d47b"
+  },
+  "linkedin-in-blue.png": {
+   "source": "in_logo.zip (brand.linkedin.com) > in-logo/LI-In-Bug.png",
+   "rule": "scaled to 66 px high, same ratio",
+   "sha256": "568261b606be0b2f03767e2fe4eccb78cab758435beacfcb160cae1462236cb2",
+   "kitSize": [
+    635,
+    540
+   ],
+   "size": [
+    78,
+    66
+   ]
+  },
+  "linkedin-in-black.png": {
+   "source": "in_logo.zip (brand.linkedin.com) > in-logo/InBug-Black.png",
+   "rule": "scaled to 66 px high, same ratio",
+   "sha256": "64f2848a8e55ebd297ac257da853a5690be36509cd090a4bdc23f347501fbeda",
+   "kitSize": [
+    840,
+    779
+   ],
+   "size": [
+    71,
+    66
+   ]
+  },
+  "linkedin-in-white.png": {
+   "source": "in_logo.zip (brand.linkedin.com) > in-logo/InBug-White.png",
+   "rule": "scaled to 66 px high, same ratio",
+   "sha256": "2bef082ed51bceccfd0cc661e81fcfd2f8817f4b519e91478c98d4209d5e7323",
+   "kitSize": [
+    840,
+    779
+   ],
+   "size": [
+    71,
+    66
+   ]
+  }
+ }
+}

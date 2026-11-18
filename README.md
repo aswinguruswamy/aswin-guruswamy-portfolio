@@ -40,8 +40,9 @@ The old content file is kept, unused, in `archive/site.ts`.
 
 | Item | Source | Licence |
 |---|---|---|
-| LinkedIn icon | [Font Awesome Free](https://fontawesome.com) (brands) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| GitHub icon | [Primer Octicons](https://github.com/primer/octicons) | MIT |
+| LinkedIn logo (profile link) | Official LinkedIn brand kit ([brand.linkedin.com](https://brand.linkedin.com)) | LinkedIn trademark, used as supplied under the LinkedIn brand guidelines |
+| GitHub logo (profile link) | Official GitHub brand kit ([github.com/logos](https://github.com/logos)) | GitHub trademark, used as supplied under the GitHub logo guidelines |
+| GitHub icon (Skills box) | [Primer Octicons](https://github.com/primer/octicons) | MIT |
 | Tool icons | [Simple Icons](https://simpleicons.org) | CC0 1.0 |
 | Fonts | Bangers and Inter, through [Fontsource](https://fontsource.org) | OFL 1.1 |
 
