@@ -217,6 +217,17 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     missing.forEach((n) => fails.push(`links @${w}${ws ? ' Workshop on' : ''}: no visible ${n} in the top bar or the menu (REQ-05, D30 v0 item 4)`));
     await c.close();
   }
+  // REQ-20 v0, D51 v0: when public/resume.pdf exists, the page has a working "Download résumé" link (sidebar and intro card) and no "coming soon".
+  {
+    const fs = await import('node:fs');
+    if (fs.existsSync('public/resume.pdf')) {
+      const html = await (await fetch(B)).text();
+      const n = (html.match(/href="[^"]*\/resume\.pdf"[^>]*download/g) || []).length;
+      if (n < 2) fails.push(`résumé: public/resume.pdf exists but the page has ${n} download links (want 2)`);
+      if (/Résumé (coming )?soon/.test(html)) fails.push('résumé: the page still says "Résumé coming soon"');
+      const r = await fetch(B + 'resume.pdf'); if (r.status !== 200) fails.push('résumé: resume.pdf does not load (' + r.status + ')');
+    }
+  }
   // AGP-35 AC3, AC4: with no progress.json the strip shows only "Try again"; it shows the loading line, then loads again.
   {
     const c = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const q = await c.newPage();

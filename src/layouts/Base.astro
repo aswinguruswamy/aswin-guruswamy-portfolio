@@ -23,7 +23,7 @@ const personLd = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Pe
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const home = `${base}/`;
 // EXPLAIN: the résumé button becomes a real download as soon as public/resume.pdf exists.
-const hasResume = fs.existsSync(new URL('../../public/resume.pdf', import.meta.url));
+const hasResume = fs.existsSync(process.cwd() + '/public/resume.pdf') // cwd = repo root at build time; a URL relative to this file breaks after bundling;
 const nav = [
   ['overview', 'Overview', '#overview'],
   ['pm-tools', 'PM tools', '#pm-tools'],
@@ -85,7 +85,7 @@ const nav = [
           <button class="btn primary" type="button" data-u={profile.emailUser} data-d={profile.emailDomain}>Copy email</button>
           <p class="copy-out" hidden></p>
           {hasResume
-            ? <a class="btn" href={`${base}/resume.pdf`} download>Download résumé</a>
+            ? <a class="btn" href={`${base}/resume.pdf`} download="Aswin-Guruswamy-Resume.pdf">Download résumé</a>
             : <span class="btn" aria-disabled="true">Résumé coming soon</span>}
         </div>
       </aside>
