@@ -1,3 +1,4 @@
+// ARCHIVED 18 Nov 2026: not used by the build. The content now lives in src/content/*.md (NFR-09 v1).
 // EXPLAIN: all text and links of the page live in this one file, so a content change needs no layout change.
 
 export type Status = 'Live' | 'In progress' | 'Planned';

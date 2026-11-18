@@ -2,8 +2,8 @@
 // EXPLAIN: one page for each project that has real content (problem, approach, role, stack, outcome, links).
 import Base from '../../layouts/Base.astro';
 import Badge from '../../components/Badge.astro';
-import { withPage, pmTools, type Project } from '../../data/site';
-export function getStaticPaths() {
+import { withPage, pmTools, type Project } from '../../lib/content';
+export async function getStaticPaths() {
   return withPage.map((p, i) => ({ params: { slug: p.slug }, props: { p, prev: withPage[i - 1], next: withPage[i + 1] } }));
 }
 interface Props { p: Project; prev?: Project; next?: Project }

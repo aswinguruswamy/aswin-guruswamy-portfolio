@@ -21,7 +21,20 @@ node tests/snap.mjs <name>   # milestone screenshots in docs/snaps/
 ```
 
 ## Edit the content
-All text and links are in `src/data/site.ts`. The résumé is `public/resume.pdf`: add or replace that file, and the button changes from "Résumé coming soon" to "Download résumé".
+All text and links are in Markdown files in `src/content/` (NFR-09). Edit a file on GitHub, open a pull request, and the page changes after the merge. No code change is needed.
+
+| Folder | One file is | Fields at the top | Text under the `---` line |
+| --- | --- | --- | --- |
+| `projects/` | one project card, and its project page | name, line, status, group, order, epic, image, version, links, page | not used |
+| `profile/profile.md` | the intro card, top bar and sidebar | name, title, location, badges, hiddenBadges, email in 2 parts, links, ladder | the summary |
+| `experience/` | one job | org, role, order | the card text |
+| `skills/` | one skills box | head, order, tools | the box text |
+
+A project gets its own page when its file has all 5 parts of `page` (problem, approach, role, stack, outcome).
+A wrong value stops the build and names the file (for example a status other than Live, In progress or Planned, an epic that is not a Jira key, an image that is not in `public/img`, or the same order twice). `npm run test:content` proves this with 8 planted mistakes.
+
+The résumé is `public/resume.pdf`: add or replace that file, and the button changes from "Résumé coming soon" to "Download résumé".
+The old content file is kept, unused, in `archive/site.ts`.
 
 ## Hosting
 GitHub Pages (decision D1).
