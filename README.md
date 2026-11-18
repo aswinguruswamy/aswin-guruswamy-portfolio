@@ -36,6 +36,17 @@ A wrong value stops the build and names the file (for example a status other tha
 The résumé is `public/resume.pdf`: add or replace that file, and the button changes from "Résumé coming soon" to "Download résumé".
 The old content file is kept, unused, in `archive/site.ts`.
 
+## Credits
+
+| Item | Source | Licence |
+|---|---|---|
+| LinkedIn icon | [Font Awesome Free](https://fontawesome.com) (brands) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| GitHub icon | [Primer Octicons](https://github.com/primer/octicons) | MIT |
+| Tool icons | [Simple Icons](https://simpleicons.org) | CC0 1.0 |
+| Fonts | Bangers and Inter, through [Fontsource](https://fontsource.org) | OFL 1.1 |
+
+Brand names and logos belong to their owners. They are used only to link to Aswin's profiles and tools.
+
 ## Hosting
 GitHub Pages (decision D1).
 

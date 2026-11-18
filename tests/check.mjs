@@ -217,6 +217,18 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     missing.forEach((n) => fails.push(`links @${w}${ws ? ' Workshop on' : ''}: no visible ${n} in the top bar or the menu (REQ-05, D30 v0 item 4)`));
     await c.close();
   }
+  // AGP-37 v1 AC2, AC3 (NFR-12 v0, D29 v0): the public progress.json has only the agreed fields, and no epic code or team word.
+  {
+    const j = await (await fetch(B + 'data/progress.json')).json();
+    const keys = Object.keys(j).sort().join(',');
+    if (keys !== 'epics,groups,page,takenAt') fails.push(`progress.json: top fields are [${keys}] (AGP-37 AC2)`);
+    for (const [k, e] of Object.entries(j.epics || {})) {
+      if (!/^AGP-\d+$/.test(k)) fails.push(`progress.json: bad epic key ${k}`);
+      if (Object.keys(e).sort().join(',') !== 'done,title,total') fails.push(`progress.json ${k}: fields [${Object.keys(e)}] (AGP-37 AC2)`);
+      if (/^E\d+\b/.test(e.title) || /build overlay/i.test(e.title)) fails.push(`progress.json ${k}: title "${e.title}" has an epic code or a team word (AGP-37 AC3)`);
+    }
+    for (const [g, v] of Object.entries({ ...(j.groups || {}), page: j.page })) if (!v || Object.keys(v).sort().join(',') !== 'done,total') fails.push(`progress.json ${g}: fields must be done and total`);
+  }
   // REQ-20 v0, D51 v0: when public/resume.pdf exists, the page has a working "Download résumé" link (sidebar and intro card) and no "coming soon".
   {
     const fs = await import('node:fs');
