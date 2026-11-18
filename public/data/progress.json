@@ -2,67 +2,67 @@
  "takenAt": "2026-11-18T16:30:00Z",
  "epics": {
   "AGP-1": {
-   "title": "E1 Foundation",
+   "title": "Foundation",
    "done": 3,
    "total": 16
   },
   "AGP-3": {
-   "title": "E2 Header and career",
+   "title": "Header and career",
    "done": 7,
    "total": 8
   },
   "AGP-4": {
-   "title": "E3 Experience",
+   "title": "Experience",
    "done": 0,
    "total": 3
   },
   "AGP-5": {
-   "title": "E4 Project containers",
+   "title": "Project containers",
    "done": 0,
    "total": 5
   },
   "AGP-6": {
-   "title": "E5 Project pages",
+   "title": "Project pages",
    "done": 0,
    "total": 10
   },
   "AGP-7": {
-   "title": "E6 Skills",
+   "title": "Skills",
    "done": 0,
    "total": 6
   },
   "AGP-8": {
-   "title": "E7 Contact actions",
+   "title": "Contact actions",
    "done": 0,
    "total": 3
   },
   "AGP-9": {
-   "title": "E8 Theme",
+   "title": "Theme",
    "done": 5,
    "total": 8
   },
   "AGP-10": {
-   "title": "E9 Workshop: Build Progress",
+   "title": "Workshop: Build Progress",
    "done": 0,
    "total": 14
   },
   "AGP-11": {
-   "title": "E10 Search and errors",
+   "title": "Search and errors",
    "done": 1,
    "total": 4
   },
   "AGP-12": {
-   "title": "E11 Measure",
+   "title": "Measure",
    "done": 0,
    "total": 2
   },
   "AGP-13": {
-   "title": "E12 Reuse",
+   "title": "Reuse",
    "done": 0,
    "total": 2
   },
   "AGP-14": {
-   "title": "E13 Release",
+   "title": "Release",
    "done": 0,
    "total": 3
   },

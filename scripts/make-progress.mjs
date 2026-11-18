@@ -21,7 +21,13 @@ export const GROUPS = {
 const BUILD_EPICS = ['AGP-1', 'AGP-3', 'AGP-4', 'AGP-5', 'AGP-6', 'AGP-7', 'AGP-8', 'AGP-9', 'AGP-10', 'AGP-11', 'AGP-12', 'AGP-13', 'AGP-14'];
 
 const epics = {};
-for (const [key, title] of Object.entries(snap.epics)) epics[key] = { title, done: 0, total: 0 };
+// AGP-37 AC3 (D29 v0): the public file has no epic codes ("E1 Foundation" -> "Foundation") and never "Build Overlay".
+const clean = (t) => String(t).replace(/^E\d+\s+/, '');
+for (const [key, title] of Object.entries(snap.epics)) {
+  const t = clean(title);
+  if (/build overlay/i.test(t)) throw new Error(`epic ${key}: the title has the team word "Build Overlay"`);
+  epics[key] = { title: t, done: 0, total: 0 };
+}
 for (const s of snap.stories) {
   const e = epics[s.epic];
   if (!e) throw new Error(`story ${s.key} has an unknown epic ${s.epic}`);
