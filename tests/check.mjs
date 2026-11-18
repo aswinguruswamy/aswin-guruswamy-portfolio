@@ -149,10 +149,8 @@ for (const path of pages) for (const w of [320, 375, 390, 768, 1024, 1280, 1440]
     const shown = await pg.evaluate(() => Object.fromEntries([...document.querySelectorAll('[data-epic]')].map((x) => [x.getAttribute('data-epic'), x.querySelector('.pie')?.textContent])));
     for (const [k, v] of Object.entries(shown)) { const e = pd.epics[k]; const want = e.total ? Math.round((100 * e.done) / e.total) + '%' : '–'; if (v !== want) fails.push(`workshop: pie ${k} shows ${v}, progress.json says ${want}`); }
     if (await pg.evaluate(() => document.querySelector('[data-workshop]').getAttribute('aria-pressed')) !== 'true') fails.push('workshop: the switch is not pressed');
-    // the review panel opens and lists only keys and titles, no links (REQ-17)
-    await pg.click('.ws-review'); const links = await pg.evaluate(() => document.querySelectorAll('.ws-dialog a').length);
-    if (!(await pg.locator('.ws-dialog[open]').count())) fails.push('workshop: the review panel does not open'); if (links) fails.push('workshop: the review panel has links');
-    await pg.keyboard.press('Escape');
+    // D47 v0: no review panel
+    if (await pg.locator('.ws-review, .ws-dialog').count()) fails.push('workshop: a review panel or its button is on the page (removed by D47 v0)');
     // old data (more than 24 h) and no data
     for (const [kind, body, want] of [['old', JSON.stringify({ ...pd, takenAt: '2020-01-01T00:00:00Z' }), 'Old data'], ['none', null, 'No build data']]) {
       await pg.route('**/data/progress.json*', (r) => (body ? r.fulfill({ body, contentType: 'application/json' }) : r.fulfill({ status: 404, body: '' })));

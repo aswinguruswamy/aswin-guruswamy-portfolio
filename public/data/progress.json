@@ -1,5 +1,5 @@
 {
- "takenAt": "2026-11-18T16:40:00Z",
+ "takenAt": "2026-11-18T16:30:00Z",
  "epics": {
   "AGP-1": {
    "title": "E1 Foundation",
@@ -44,7 +44,7 @@
   "AGP-10": {
    "title": "E9 Workshop: Build Progress",
    "done": 0,
-   "total": 17
+   "total": 14
   },
   "AGP-11": {
    "title": "E10 Search and errors",
@@ -137,7 +137,7 @@
   },
   "pm-tools": {
    "done": 45,
-   "total": 101
+   "total": 98
   },
   "apps": {
    "done": 9,
@@ -146,41 +146,6 @@
  },
  "page": {
   "done": 16,
-  "total": 87
- },
- "review": {
-  "needsReview": [],
-  "doneRecent": [
-   {
-    "key": "AGP-16",
-    "title": "S3 Deploy and rollback drill",
-    "doneAt": "2026-11-18"
-   },
-   {
-    "key": "AGP-18",
-    "title": "S5 Header: name, title, location",
-    "doneAt": "2026-11-18"
-   },
-   {
-    "key": "AGP-19",
-    "title": "S6 Credential and education badges",
-    "doneAt": "2026-11-18"
-   },
-   {
-    "key": "AGP-20",
-    "title": "S7 Career-goal card",
-    "doneAt": "2026-11-18"
-   },
-   {
-    "key": "AGP-33",
-    "title": "S20 Theme on all parts",
-    "doneAt": "2026-11-18"
-   },
-   {
-    "key": "AGP-40",
-    "title": "S27 404 page",
-    "doneAt": "2026-11-18"
-   }
-  ]
+  "total": 84
  }
 }

@@ -1,5 +1,5 @@
 {
- "takenAt": "2026-11-18T16:40:00Z",
+ "takenAt": "2026-11-18T16:30:00Z",
  "source": "Jira project AGP",
  "epics": {
   "AGP-1": "E1 Foundation",
@@ -230,10 +230,16 @@
    "key": "AGP-36",
    "epic": "AGP-10",
    "title": "S23 Review panel",
-   "status": "In Progress",
-   "points": 3,
+   "status": "To Do",
+   "points": 0,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-17",
+    "must",
+    "removed",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-37",

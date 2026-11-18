@@ -1,6 +1,6 @@
 // EXPLAIN: the Workshop (internal name: Build Overlay, D12, D29). Standalone script, loaded by a script tag.
 // The "Still being built" tag in the top bar is the switch (D46 v0). When on, it reads data/progress.json and shows:
-//  - a strip under the top bar: page build %, snapshot time, legend, Review button (D30 item 5, NFR-08);
+//  - a strip under the top bar: page build %, snapshot time, legend (D30 item 5, NFR-08); no review panel (D47 v0);
 //  - a pie on each card [data-epic] and each container [data-group] (D24-D26; "–" when no work is planned, D35);
 //  - a 55% screen on the page background (D28).
 // States: data OK; old data (snapshot older than 24 h); no data (file missing or broken).
@@ -10,7 +10,7 @@
   if (!btn) return;
   var root = document.documentElement;
   var base = btn.getAttribute('data-base') || '';
-  var data = null, state = 'off', strip = null, dialog = null;
+  var data = null, state = 'off', strip = null;
   var DAY = 86400000;
 
   function pct(e) { return e && e.total > 0 ? Math.round((100 * e.done) / e.total) : null; }
@@ -57,59 +57,23 @@
     var msg = el('span', 'ws-msg');
     msg.setAttribute('aria-live', 'polite');
     var legend = el('span', 'ws-legend', 'LIVE = first version out · % = share of the full plan built');
-    var review = el('button', 'btn ws-review', 'Review');
-    review.type = 'button';
-    review.addEventListener('click', openReview);
-    strip.append(title, msg, legend, review);
+    strip.append(title, msg, legend);
     var top = document.querySelector('.top');
     top.after(strip);
   }
 
   function updateStrip() {
-    var msg = strip.querySelector('.ws-msg'), review = strip.querySelector('.ws-review');
+    var msg = strip.querySelector('.ws-msg');
     strip.classList.remove('old', 'none');
     if (state === 'none') {
       strip.classList.add('none');
       msg.textContent = 'No build data yet. The pies show "–".';
-      review.hidden = true;
       return;
     }
     var page = pct(data.page);
     var when = fmtTime(data.takenAt);
     msg.textContent = 'Page built: ' + (page === null ? '–' : page + '%') + ' · Data from ' + when;
     if (state === 'old') { strip.classList.add('old'); msg.textContent += ' · Old data (more than 24 hours)'; }
-    var n = (data.review.needsReview || []).length + (data.review.doneRecent || []).length;
-    review.hidden = false;
-    review.textContent = 'Review (' + n + ')';
-  }
-
-  function list(items, empty) {
-    var ul = el('ul', 'ws-list');
-    if (!items.length) { ul.appendChild(el('li', 'empty', empty)); return ul; }
-    items.forEach(function (i) {
-      var li = el('li');
-      li.append(el('code', null, i.key), document.createTextNode(' ' + i.title + (i.doneAt ? ' · done ' + i.doneAt : '')));
-      ul.appendChild(li);
-    });
-    return ul;
-  }
-
-  function openReview() {
-    if (!dialog) {
-      dialog = el('dialog', 'ws-dialog');
-      dialog.setAttribute('aria-labelledby', 'ws-dialog-h');
-      document.body.appendChild(dialog);
-      dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
-    }
-    dialog.replaceChildren();
-    var h = el('h2', 'display', 'Review panel'); h.id = 'ws-dialog-h';
-    var close = el('button', 'close', '✕'); close.type = 'button'; close.setAttribute('aria-label', 'Close the review panel');
-    close.addEventListener('click', function () { dialog.close(); });
-    dialog.append(close, h,
-      el('h3', null, 'Waiting for Aswin’s review'), list(data.review.needsReview || [], 'Nothing waits for review.'),
-      el('h3', null, 'Done in the last 14 days'), list(data.review.doneRecent || [], 'Nothing done in the last 14 days.'));
-    dialog.showModal();
-    close.focus();
   }
 
   function load() {
@@ -117,7 +81,7 @@
     return fetch(url, { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (j) {
-        if (!j || !j.epics || !j.groups || !j.page || !j.review) throw new Error('bad file');
+        if (!j || !j.epics || !j.groups || !j.page) throw new Error('bad file');
         data = j;
         state = Date.now() - new Date(j.takenAt).getTime() > DAY ? 'old' : 'ok';
       })
