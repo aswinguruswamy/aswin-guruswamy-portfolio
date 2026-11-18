@@ -41,3 +41,4 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:quality
       - run: npm run test:content   # NFR-09 v1: a wrong edit in src/content stops the build
+      - run: npm run test:licences  # AGP-15 AC7: open licences only

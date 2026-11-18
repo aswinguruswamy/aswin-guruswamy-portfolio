@@ -1,5 +1,5 @@
 // EXPLAIN: the automatic checks that CI runs on every pull request. A failed check blocks the merge.
-// It opens each page at 10 widths (320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440 px) and in light and dark mode, then checks:
+// It opens each page at 11 widths (320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440, 1920 px) and in light and dark mode, then checks:
 // 1 no page error, 2 nothing wider than the screen, 3 every local link and image works,
 // 4 no placeholder text "[...]" and no team words, 5 the text contrast is 4.5:1 or more, 6 tap targets are 44 px or more on a phone.
 import { chromium, firefox, webkit } from '@playwright/test';
@@ -14,7 +14,7 @@ const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log
 const fails = [];
 const warns = [];
 const seen = new Set();
-for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440]) for (const scheme of ['light', 'dark']) {
+for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440, 1920]) for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme });
   const pg = await ctx.newPage();
   const tag = `${path || 'home'} @${w} ${scheme}`;
@@ -186,6 +186,34 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   const home = await (await pg.request.get(B)).text();
   const ld = home.match(/<script type="application\/ld\+json">(.*?)<\/script>/s);
   try { if (!ld || JSON.parse(ld[1])['@type'] !== 'Person') fails.push('home: no Person structured data'); } catch { fails.push('home: structured data is not valid JSON'); }
+  await ctx.close();
+}
+// Keyboard and screen readers (AGP-30, AGP-32 AC7, AGP-55 AC5, front-end bug check 18 Nov)
+{
+  for (const w of [390, 1024]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: 800 } }); const pg = await ctx.newPage(); await pg.goto(B);
+    await pg.click('.menu-btn'); await pg.waitForTimeout(150);
+    for (let i = 0; i < 20; i++) { await pg.keyboard.press('Tab'); if (!(await pg.evaluate(() => document.getElementById('menu').contains(document.activeElement)))) { fails.push(`menu @${w}: Tab leaves the open menu (AGP-55 AC5)`); break; } }
+    await pg.keyboard.press('Shift+Tab'); await pg.keyboard.press('Shift+Tab');
+    if (!(await pg.evaluate(() => document.getElementById('menu').contains(document.activeElement)))) fails.push(`menu @${w}: Shift+Tab leaves the open menu`);
+    await pg.keyboard.press('Escape');
+    if (!(await pg.evaluate(() => document.activeElement && document.activeElement.classList.contains('menu-btn')))) fails.push(`menu @${w}: Esc does not give focus back to the menu button`);
+    await ctx.close();
+  }
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 800 }, colorScheme: 'light' }); const pg = await ctx.newPage();
+  await pg.addInitScript(() => { try { Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => Promise.resolve() } }); } catch (e) {} });
+  await pg.goto(B);
+  const t = pg.locator('.top .theme');
+  if ((await t.getAttribute('aria-pressed')) !== 'false') fails.push('theme: aria-pressed is not "false" in light mode (AGP-32 AC7)');
+  await t.click(); if ((await t.getAttribute('aria-pressed')) !== 'true') fails.push('theme: aria-pressed is not "true" after the switch to dark');
+  const st = pg.locator('#status');
+  if ((await st.getAttribute('aria-live')) !== 'polite') fails.push('status: no aria-live status line (AGP-30)');
+  await pg.click('.hero [data-u]'); await pg.waitForTimeout(250);
+  const said = await st.textContent();
+  if (await pg.evaluate(() => window.isSecureContext && !!navigator.clipboard)) { if (!/copied/i.test(said || '')) fails.push('copy email: screen readers do not hear "copied" (AGP-30)'); }
+  await pg.focus('.more'); await pg.keyboard.press('Enter'); await pg.waitForTimeout(100);
+  if (await pg.evaluate(() => document.activeElement === document.body || !document.activeElement)) fails.push('show all: focus is lost after the button hides');
+  else if (!(await pg.evaluate(() => document.getElementById('tools-row').contains(document.activeElement)))) fails.push('show all: focus does not go to the new cards');
   await ctx.close();
 }
 await browser.close(); srv.close();

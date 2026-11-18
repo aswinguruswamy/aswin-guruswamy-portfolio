@@ -98,6 +98,7 @@ const nav = [
           </div>
         </header>
         <slot />
+        <p id="status" class="sr-only" role="status" aria-live="polite"></p>
         <footer>© {new Date().getFullYear()} {profile.name} · Built with Claude, run as a PM project</footer>
       </main>
     </div>
