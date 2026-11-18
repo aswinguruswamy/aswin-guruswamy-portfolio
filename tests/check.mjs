@@ -1,5 +1,5 @@
 // EXPLAIN: the automatic checks that CI runs on every pull request. A failed check blocks the merge.
-// It opens each page at 7 widths (320, 375, 390, 768, 1024, 1280, 1440 px) and in light and dark mode, then checks:
+// It opens each page at 10 widths (320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440 px) and in light and dark mode, then checks:
 // 1 no page error, 2 nothing wider than the screen, 3 every local link and image works,
 // 4 no placeholder text "[...]" and no team words, 5 the text contrast is 4.5:1 or more, 6 tap targets are 44 px or more on a phone.
 import { chromium, firefox, webkit } from '@playwright/test';
@@ -14,7 +14,7 @@ const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log
 const fails = [];
 const warns = [];
 const seen = new Set();
-for (const path of pages) for (const w of [320, 375, 390, 768, 1024, 1280, 1440]) for (const scheme of ['light', 'dark']) {
+for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440]) for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme });
   const pg = await ctx.newPage();
   const tag = `${path || 'home'} @${w} ${scheme}`;
@@ -60,6 +60,14 @@ for (const path of pages) for (const w of [320, 375, 390, 768, 1024, 1280, 1440]
     { const bar = document.querySelector('.top'); if (bar) { const T = bar.getBoundingClientRect();
       for (const el of bar.querySelectorAll('a, button, .wip')) { if (!el.offsetParent) continue; const r = el.getBoundingClientRect();
         if (r.right > T.right + 0.5 || r.left < T.left - 0.5) out.push('top bar item cut off: ' + (el.getAttribute('aria-label') || el.textContent.trim()).slice(0, 25)); } } }
+    // no 2 buttons or links overlap or sit closer than 4 px (a cut or covered control is not page overflow, so the overflow check misses it)
+    { const els = [...document.querySelectorAll('a[href], button, [tabindex="0"]')].filter((e) => e.offsetParent && !e.closest('.row') && !e.matches('ul.row') && getComputedStyle(e).visibility !== 'hidden')
+        .map((e) => ({ e, r: e.getBoundingClientRect() })).filter((x) => x.r.width && x.r.right > 0 && x.r.left < innerWidth);
+      for (let i = 0; i < els.length; i++) for (let j = i + 1; j < els.length; j++) {
+        const a = els[i], c = els[j]; if (a.e.contains(c.e) || c.e.contains(a.e)) continue;
+        const gx = Math.max(c.r.left - a.r.right, a.r.left - c.r.right), gy = Math.max(c.r.top - a.r.bottom, a.r.top - c.r.bottom);
+        if (gx < 4 && gy < 4) out.push(`controls overlap or touch: "${(a.e.getAttribute('aria-label') || a.e.textContent).trim().slice(0, 20)}" and "${(c.e.getAttribute('aria-label') || c.e.textContent).trim().slice(0, 20)}"`);
+      } }
     // the "goal" pill is on 1 line (a split pill leaves a stray "(" on the line above)
     for (const g of document.querySelectorAll('.goal')) if (g.getClientRects().length > 1) out.push('goal pill breaks over 2 lines');
     // the fixed sidebar shows only when the containers fit; otherwise the menu button shows (D39 v0)
