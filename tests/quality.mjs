@@ -34,7 +34,23 @@ for (const path of pages) {
     }
   }
 }
-console.log(`axe: ${pages.length} pages x 2 themes x 2 widths checked`);
+// The Workshop view (on): same axe rules.
+for (const scheme of ['light', 'dark']) {
+  for (const width of [390, 1440]) {
+    const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: scheme });
+    const pg = await ctx.newPage();
+    await pg.goto(B + '?workshop');
+    await pg.waitForSelector('.ws-strip');
+    for (const step of ['workshop']) {
+      const res = await new AxeBuilder({ page: pg }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+      for (const v of res.violations.filter((x) => x.impact === 'serious' || x.impact === 'critical')) {
+        fails.push(`axe ${step} @${width} ${scheme}: ${v.id} (${v.impact}) on ${v.nodes.length} element(s): ${v.nodes[0].target.join(' ')}`);
+      }
+    }
+    await ctx.close();
+  }
+}
+console.log(`axe: ${pages.length} pages x 2 themes x 2 widths checked, plus the Workshop view`);
 
 // ---- 2. Lighthouse (mobile) ----
 const chrome = await chromeLauncher.launch({ chromePath: chromium.executablePath(), chromeFlags: ['--headless=new', '--no-sandbox'] });

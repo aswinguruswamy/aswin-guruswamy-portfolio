@@ -7,6 +7,7 @@ export interface Project {
   name: string;
   line: string; // one-line problem or purpose (card text)
   status: Status;
+  epic?: string; // Jira epic key for the Workshop pie (2B)
   image?: string; // file in public/img
   version?: string;
   links?: { label: string; href: string }[];
@@ -40,7 +41,7 @@ const gh = (repo: string) => `https://github.com/aswinguruswamy/${repo}`;
 
 export const pmTools: Project[] = [
   {
-    slug: 'monte-carlo-delivery-forecast',
+    slug: 'monte-carlo-delivery-forecast', epic: 'AGP-44',
     name: 'Monte Carlo Delivery Forecast',
     line: 'Delivery dates at 50%, 85% and 95% confidence',
     status: 'Live',
@@ -61,7 +62,7 @@ export const pmTools: Project[] = [
     },
   },
   {
-    slug: 'raid-log-extractor',
+    slug: 'raid-log-extractor', epic: 'AGP-45',
     name: 'RAID Log Extractor',
     line: 'Risks, assumptions, issues and dependencies from notes',
     status: 'Live',
@@ -83,7 +84,7 @@ export const pmTools: Project[] = [
     },
   },
   {
-    slug: 'status-report-generator',
+    slug: 'status-report-generator', epic: 'AGP-46',
     name: 'Weekly Status Report Generator',
     line: 'Weekly status with RAG from Jira and GitHub',
     status: 'Live',
@@ -104,14 +105,14 @@ export const pmTools: Project[] = [
     },
   },
   {
-    slug: 'pm-toolkit-plugin',
+    slug: 'pm-toolkit-plugin', epic: 'AGP-47',
     name: 'pm-toolkit plugin',
     line: 'Runs the PM life cycle in Claude',
     status: 'Live',
     image: 'pm-toolkit-readme.webp',
   },
   {
-    slug: 'pm-benchmark',
+    slug: 'pm-benchmark', epic: 'AGP-48',
     name: 'PM Benchmark',
     line: '108 items to score a software project',
     status: 'Live',
@@ -131,34 +132,34 @@ export const pmTools: Project[] = [
     },
   },
   {
-    slug: 'ai-project-gap-detector',
+    slug: 'ai-project-gap-detector', epic: 'AGP-49',
     name: 'AI Project Gap Detector',
     line: 'Finds the PM gaps in an AI project',
     status: 'Planned',
   },
   {
-    slug: 'workshop-build-progress',
+    slug: 'workshop-build-progress', epic: 'AGP-10',
     name: 'Workshop: Build Progress',
     line: 'Shows the build progress on top of a web page',
-    status: 'Planned',
+    status: 'In progress', // D35 (2): Live when the Workshop is on the live page
   },
 ];
 
 export const apps: Project[] = [
   {
-    slug: 'notification-subscription-dashboard',
+    slug: 'notification-subscription-dashboard', epic: 'AGP-51',
     name: 'Notification and Subscription Dashboard',
     line: 'One place to see and manage notifications and subscriptions',
     status: 'Planned',
   },
-  { slug: 'selfbet', name: 'SelfBet', line: 'Basketball self-betting web app', status: 'Planned' },
+  { slug: 'selfbet', epic: 'AGP-52', name: 'SelfBet', line: 'Basketball self-betting web app', status: 'Planned' },
   {
-    slug: 'yaw-damper-simulation',
+    slug: 'yaw-damper-simulation', epic: 'AGP-53',
     name: 'Yaw Damper Simulation',
     line: 'Interactive yaw damper simulation',
     status: 'Planned',
   },
-  { slug: 'ame-courseware', name: 'AME Courseware', line: 'Offline aircraft maintenance courseware', status: 'Planned' },
+  { slug: 'ame-courseware', epic: 'AGP-54', name: 'AME Courseware', line: 'Offline aircraft maintenance courseware', status: 'Planned' },
 ];
 
 export const experience = [

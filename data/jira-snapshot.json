@@ -1,0 +1,713 @@
+{
+ "takenAt": "2026-11-18T16:30:00Z",
+ "source": "Jira project AGP",
+ "epics": {
+  "AGP-1": "E1 Foundation",
+  "AGP-3": "E2 Header and career",
+  "AGP-4": "E3 Experience",
+  "AGP-5": "E4 Project containers",
+  "AGP-6": "E5 Project pages",
+  "AGP-7": "E6 Skills",
+  "AGP-8": "E7 Contact actions",
+  "AGP-9": "E8 Theme",
+  "AGP-10": "E9 Workshop: Build Progress",
+  "AGP-11": "E10 Search and errors",
+  "AGP-12": "E11 Measure",
+  "AGP-13": "E12 Reuse",
+  "AGP-14": "E13 Release",
+  "AGP-44": "Monte Carlo Delivery Forecast",
+  "AGP-45": "RAID Log Extractor",
+  "AGP-46": "Weekly Status Report Generator",
+  "AGP-47": "pm-toolkit plugin",
+  "AGP-48": "PM Benchmark",
+  "AGP-49": "AI Project Gap Detector",
+  "AGP-50": "Workshop: Build Progress (card)",
+  "AGP-51": "Notification and Subscription Dashboard",
+  "AGP-52": "SelfBet",
+  "AGP-53": "Yaw Damper Simulation",
+  "AGP-54": "AME Courseware"
+ },
+ "stories": [
+  {
+   "key": "AGP-2",
+   "epic": "AGP-1",
+   "title": "S1 Astro site and content folder",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-15",
+   "epic": "AGP-1",
+   "title": "S2 CI checks",
+   "status": "In Progress",
+   "points": 5,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-16",
+   "epic": "AGP-1",
+   "title": "S3 Deploy and rollback drill",
+   "status": "Done",
+   "points": 3,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-17",
+   "epic": "AGP-1",
+   "title": "S4 Branch protection and secret scanning",
+   "status": "In Progress",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-18",
+   "epic": "AGP-3",
+   "title": "S5 Header: name, title, location",
+   "status": "Done",
+   "points": 2,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-19",
+   "epic": "AGP-3",
+   "title": "S6 Credential and education badges",
+   "status": "Done",
+   "points": 2,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-20",
+   "epic": "AGP-3",
+   "title": "S7 Career-goal card",
+   "status": "Done",
+   "points": 3,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-21",
+   "epic": "AGP-3",
+   "title": "S8 LinkedIn and GitHub links",
+   "status": "In Progress",
+   "points": 1,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-22",
+   "epic": "AGP-4",
+   "title": "S9 Experience cards",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-23",
+   "epic": "AGP-5",
+   "title": "S10 PM tools container",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-24",
+   "epic": "AGP-5",
+   "title": "S11 Apps and simulations container",
+   "status": "In Progress",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-25",
+   "epic": "AGP-6",
+   "title": "S12 Project page template",
+   "status": "In Progress",
+   "points": 5,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-26",
+   "epic": "AGP-6",
+   "title": "S13 Content of the 11 project files",
+   "status": "In Progress",
+   "points": 5,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-27",
+   "epic": "AGP-7",
+   "title": "S14 Skills matrix: PM skills and tools",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-28",
+   "epic": "AGP-7",
+   "title": "S15 AI skills with levels",
+   "status": "In Progress",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-29",
+   "epic": "AGP-7",
+   "title": "S16 AI skills roadmap",
+   "status": "To Do",
+   "points": 1,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-30",
+   "epic": "AGP-8",
+   "title": "S17 Copy email and résumé at the top",
+   "status": "In Progress",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-31",
+   "epic": "AGP-8",
+   "title": "S18 Download résumé button",
+   "status": "To Do",
+   "points": 1,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-32",
+   "epic": "AGP-9",
+   "title": "S19 Light and dark mode",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-33",
+   "epic": "AGP-9",
+   "title": "S20 Theme on all parts",
+   "status": "Done",
+   "points": 5,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-34",
+   "epic": "AGP-10",
+   "title": "S21 Workshop core and card pies",
+   "status": "In Progress",
+   "points": 5,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-35",
+   "epic": "AGP-10",
+   "title": "S22 Container pies and data states",
+   "status": "In Progress",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-36",
+   "epic": "AGP-10",
+   "title": "S23 Review panel",
+   "status": "To Do",
+   "points": 0,
+   "doneAt": null,
+   "kind": "build",
+   "labels": [
+    "REQ-17",
+    "must",
+    "removed",
+    "sprint-2"
+   ]
+  },
+  {
+   "key": "AGP-37",
+   "epic": "AGP-10",
+   "title": "S24 Daily data task",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-38",
+   "epic": "AGP-10",
+   "title": "S25a Workshop snapshot 1",
+   "status": "To Do",
+   "points": 1,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-39",
+   "epic": "AGP-11",
+   "title": "S26 Search and sharing data",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-40",
+   "epic": "AGP-11",
+   "title": "S27 404 page",
+   "status": "Done",
+   "points": 1,
+   "doneAt": "2026-11-18",
+   "kind": "build"
+  },
+  {
+   "key": "AGP-41",
+   "epic": "AGP-12",
+   "title": "S28 Cookieless visit counter",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-42",
+   "epic": "AGP-13",
+   "title": "S29 Status report reads progress.json",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-43",
+   "epic": "AGP-14",
+   "title": "S30 Release checks",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-55",
+   "epic": "AGP-1",
+   "title": "S31 Page shell",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-56",
+   "epic": "AGP-10",
+   "title": "S25b Workshop snapshot 2",
+   "status": "To Do",
+   "points": 1,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-57",
+   "epic": "AGP-10",
+   "title": "S25c Workshop snapshot 3 and video",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "build"
+  },
+  {
+   "key": "AGP-58",
+   "epic": "AGP-44",
+   "title": "v1: command-line forecast and Streamlit app",
+   "status": "Done",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-59",
+   "epic": "AGP-44",
+   "title": "Back-test on the TAWOS dataset (29 projects)",
+   "status": "Done",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-60",
+   "epic": "AGP-44",
+   "title": "Public release v1.0.0 and live demo",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-61",
+   "epic": "AGP-44",
+   "title": "v1.2: dark theme and v2 back-test",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-62",
+   "epic": "AGP-44",
+   "title": "Live Jira as a data source",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-63",
+   "epic": "AGP-44",
+   "title": "Visitors use their own API key",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-64",
+   "epic": "AGP-44",
+   "title": "Benefits checks (3 Dec 2026 and 1 Feb 2027)",
+   "status": "To Do",
+   "points": 1,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-65",
+   "epic": "AGP-45",
+   "title": "v1.0 extractor: RAID items from meeting notes",
+   "status": "Done",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-66",
+   "epic": "AGP-45",
+   "title": "Evaluations and release v1.0.0",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-67",
+   "epic": "AGP-45",
+   "title": "v1.1 backlog item",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-68",
+   "epic": "AGP-46",
+   "title": "v1.0 weekly report with RAG status",
+   "status": "Done",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-69",
+   "epic": "AGP-46",
+   "title": "Release v1.0.0",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-70",
+   "epic": "AGP-46",
+   "title": "v2: weekly report on a new Confluence page",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-71",
+   "epic": "AGP-46",
+   "title": "v2: Slack messages by audience",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-72",
+   "epic": "AGP-46",
+   "title": "GitHub Issues as a data source",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-73",
+   "epic": "AGP-46",
+   "title": "Read progress.json for the progress section (REQ-24)",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-74",
+   "epic": "AGP-47",
+   "title": "Hub skill and 15 PM skills",
+   "status": "Done",
+   "points": 8,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-75",
+   "epic": "AGP-47",
+   "title": "Public repository",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-76",
+   "epic": "AGP-47",
+   "title": "README and demo",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-77",
+   "epic": "AGP-48",
+   "title": "v1.0: 108-item benchmark",
+   "status": "Done",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-78",
+   "epic": "AGP-48",
+   "title": "More case studies",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-79",
+   "epic": "AGP-49",
+   "title": "Spec",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-80",
+   "epic": "AGP-49",
+   "title": "MVP: scan a repository against the benchmark",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-81",
+   "epic": "AGP-49",
+   "title": "Gap report",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-82",
+   "epic": "AGP-51",
+   "title": "Charter and spec",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-83",
+   "epic": "AGP-51",
+   "title": "Design",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-84",
+   "epic": "AGP-51",
+   "title": "Bills dashboard",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-85",
+   "epic": "AGP-51",
+   "title": "Recurring bills data",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-86",
+   "epic": "AGP-51",
+   "title": "Notifications with dynamic frequency",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-87",
+   "epic": "AGP-51",
+   "title": "Spend tracking",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-88",
+   "epic": "AGP-52",
+   "title": "Documentation suite",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-89",
+   "epic": "AGP-52",
+   "title": "Wallet and betting core",
+   "status": "In Progress",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-90",
+   "epic": "AGP-52",
+   "title": "UI",
+   "status": "To Do",
+   "points": 5,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-91",
+   "epic": "AGP-52",
+   "title": "Deploy",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-92",
+   "epic": "AGP-53",
+   "title": "First simulation",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-93",
+   "epic": "AGP-53",
+   "title": "Physics improvement",
+   "status": "In Progress",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-94",
+   "epic": "AGP-53",
+   "title": "Chapter in the AME courseware",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-95",
+   "epic": "AGP-53",
+   "title": "Publish",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-96",
+   "epic": "AGP-54",
+   "title": "Book shell and workflow",
+   "status": "Done",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-97",
+   "epic": "AGP-54",
+   "title": "YEW chapter",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-98",
+   "epic": "AGP-54",
+   "title": "Yaw damper chapter",
+   "status": "To Do",
+   "points": 3,
+   "doneAt": null,
+   "kind": "card"
+  },
+  {
+   "key": "AGP-99",
+   "epic": "AGP-54",
+   "title": "Pendrive release",
+   "status": "To Do",
+   "points": 2,
+   "doneAt": null,
+   "kind": "card"
+  }
+ ]
+}
