@@ -119,10 +119,14 @@
     var items = [];
     links.forEach(function (a) { var el = document.getElementById(a.getAttribute('href').slice(1)); if (el) items.push({ a: a, el: el }); });
     var mark = function (a) { links.forEach(function (x) { x.removeAttribute('aria-current'); }); a.setAttribute('aria-current', 'true'); };
-    links.forEach(function (a) { a.addEventListener('click', function () { mark(a); }); });
+    // After a click the selected item stays marked while the smooth scroll runs. Without this, a section near the end of the
+    // page lost its mark to the last section (the page cannot scroll it to the top; Firefox, 18 Nov).
+    var hold = 0;
+    links.forEach(function (a) { a.addEventListener('click', function () { mark(a); hold = Date.now() + 1500; }); });
     var busy = false;
     var pick = function () {
       busy = false;
+      if (Date.now() < hold) return;
       var line = window.innerHeight * 0.3, top = -Infinity, best = [];
       items.forEach(function (it) {
         var t = it.el.getBoundingClientRect().top;

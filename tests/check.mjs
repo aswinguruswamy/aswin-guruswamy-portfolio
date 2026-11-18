@@ -117,7 +117,9 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   await pg.evaluate(() => document.getElementById('skills').scrollIntoView()); await pg.waitForTimeout(600);
   const atSkills = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
   if (atSkills !== 'Skills') fails.push(`side menu marks "${atSkills}" at the Skills section`);
-  await pg.click('.side .nav a[href="#experience"]'); await pg.waitForTimeout(900);
+  await pg.click('.side .nav a[href="#experience"]');
+  // The smooth scroll can take longer than 900 ms in Firefox. Wait up to 3 s for the mark (a fixed wait made this check flaky).
+  await pg.waitForFunction(() => document.querySelector('.nav a[aria-current]')?.textContent.trim() === 'Experience', null, { timeout: 3000 }).catch(() => {});
   const cur = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
   if (cur !== 'Experience') fails.push(`side menu marks "${cur}" at the Experience section`);
   await ctx.close();
@@ -200,12 +202,44 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     if (!(await pg.evaluate(() => document.activeElement && document.activeElement.classList.contains('menu-btn')))) fails.push(`menu @${w}: Esc does not give focus back to the menu button`);
     await ctx.close();
   }
+  // REQ-05 v0, D30 v0 item 4: at each width, with the Workshop off and on, a visitor can reach LinkedIn, GitHub and light/dark:
+  // in the top bar, or in the menu when the menu button shows.
+  for (const w of [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) for (const ws of [false, true]) {
+    const c = await browser.newContext({ viewport: { width: w, height: 800 } }); const q = await c.newPage(); await q.goto(B + (ws ? '?workshop' : '')); await q.waitForTimeout(250);
+    const vis = (sel) => q.evaluate((sel) => [...document.querySelectorAll(sel)].some((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; }), sel);
+    const need = { LinkedIn: 'a[href*="linkedin.com"]', GitHub: 'a[href^="https://github.com/aswinguruswamy"]', 'light/dark': '.theme' };
+    const missing = [];
+    for (const [n, sel] of Object.entries(need)) if (!(await vis('.top ' + sel)) && !(await vis('.side ' + sel))) missing.push(n);
+    if (missing.length && (await vis('.menu-btn'))) {
+      await q.click('.menu-btn'); await q.waitForTimeout(150);
+      for (const n of [...missing]) if (await vis('#menu ' + need[n])) missing.splice(missing.indexOf(n), 1);
+    }
+    missing.forEach((n) => fails.push(`links @${w}${ws ? ' Workshop on' : ''}: no visible ${n} in the top bar or the menu (REQ-05, D30 v0 item 4)`));
+    await c.close();
+  }
+  // AGP-35 AC3, AC4: with no progress.json the strip shows only "Try again"; it shows the loading line, then loads again.
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const q = await c.newPage();
+    let n = 0; await q.route('**/data/progress.json*', async (r) => { n++; await new Promise((ok) => setTimeout(ok, 300)); r.fulfill({ status: 404, body: '' }); });
+    await q.goto(B + '?workshop'); await q.waitForTimeout(100);
+    if (!/loading/i.test((await q.textContent('.ws-strip .ws-msg').catch(() => '')) || '')) fails.push('workshop: no loading line while progress.json loads (AGP-35 AC3)');
+    await q.waitForTimeout(500);
+    const btns = await q.$$eval('.ws-strip button', (b) => b.map((x) => x.textContent.trim()));
+    if (btns.join('|') !== 'Try again') fails.push(`workshop: the no-data strip must have only "Try again", has [${btns.join(', ')}] (AGP-35 AC4)`);
+    else { await q.click('.ws-retry'); await q.waitForTimeout(100); if (!/loading/i.test(await q.textContent('.ws-strip .ws-msg'))) fails.push('workshop: "Try again" does not show the loading line'); await q.waitForTimeout(500); if (n < 2) fails.push('workshop: "Try again" does not load progress.json again'); }
+    await c.close();
+  }
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 800 }, colorScheme: 'light' }); const q = await c.newPage(); await q.goto(B);
+    const t = q.locator('.top .theme');
+    if ((await t.getAttribute('aria-pressed')) !== 'false') fails.push('theme: aria-pressed is not "false" in light mode (AGP-32 AC7)');
+    await t.click(); if ((await t.getAttribute('aria-pressed')) !== 'true') fails.push('theme: aria-pressed is not "true" after the switch to dark');
+    if ((await q.locator('#menu .theme').count()) === 0 || (await q.locator('#menu .theme').getAttribute('aria-pressed')) !== 'true') fails.push('theme: the menu switch does not show the same pressed state');
+    await c.close();
+  }
   const ctx = await browser.newContext({ viewport: { width: 390, height: 800 }, colorScheme: 'light' }); const pg = await ctx.newPage();
   await pg.addInitScript(() => { try { Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: () => Promise.resolve() } }); } catch (e) {} });
   await pg.goto(B);
-  const t = pg.locator('.top .theme');
-  if ((await t.getAttribute('aria-pressed')) !== 'false') fails.push('theme: aria-pressed is not "false" in light mode (AGP-32 AC7)');
-  await t.click(); if ((await t.getAttribute('aria-pressed')) !== 'true') fails.push('theme: aria-pressed is not "true" after the switch to dark');
   const st = pg.locator('#status');
   if ((await st.getAttribute('aria-live')) !== 'polite') fails.push('status: no aria-live status line (AGP-30)');
   await pg.click('.hero [data-u]'); await pg.waitForTimeout(250);

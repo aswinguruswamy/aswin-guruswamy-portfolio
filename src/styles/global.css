@@ -414,3 +414,19 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
 
 /* Text for screen readers only (the status line, AGP-30). */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- menu icons (D30 v0 item 4) ----------
+   EXPLAIN: the menu has LinkedIn, GitHub and light/dark as 44 px icons. They show only in menu mode (under 1360 px).
+   On phones (760 px or less) the light/dark switch is only in the menu. Under 375 px, and on phones with the Workshop on,
+   LinkedIn and GitHub are only in the menu, so the top bar has room. */
+.menu-links { display: none; }
+@media (max-width: 1359px) {
+  .menu-links { display: flex; gap: 10px; margin-top: 12px; padding: 0 6px; }
+  .menu-links .btn.icon { width: 44px; height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+}
+@media (max-width: 760px) {
+  .top .links .theme { display: none; }
+  html.ws-on .top .links .social { display: none; }
+}
+/* AGP-35 AC4: the "Try again" button in the no-data strip. 44 px tap target. */
+.ws-strip .ws-retry { min-height: 44px; padding: 0 16px; }
