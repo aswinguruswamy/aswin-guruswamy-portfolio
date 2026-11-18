@@ -10,6 +10,7 @@ import '../styles/global.css';
 import fs from 'node:fs';
 import Avatar from '../components/Avatar.astro';
 import Icon from '../components/Icon.astro';
+import BrandMark from '../components/BrandMark.astro';
 import { profile } from '../lib/content';
 
 interface Props { title: string; description: string; section?: string; heading: string; person?: boolean; wip?: boolean }
@@ -81,8 +82,8 @@ const nav = [
         </nav>
         <!-- D30 v0 item 4: in menu mode the menu has LinkedIn, GitHub and light/dark as icons. -->
         <div class="menu-links">
-          <a class="btn icon" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /></a>
-          <a class="btn icon" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="GitHub" /></a>
+          <a class="btn icon" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><BrandMark name="LinkedIn" /></a>
+          <a class="btn icon" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><BrandMark name="GitHub" /></a>
           <button class="btn icon theme" type="button" aria-label="Light / dark mode"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg></button>
         </div>
         <div class="actions">
@@ -102,8 +103,8 @@ const nav = [
             ? <button class="wip" type="button" data-workshop data-base={base} aria-pressed="false" aria-label="View Build Progress" title="Show the build progress (Workshop)"><Shuttle size={16} /><span><span class="wip-view">View </span>Build Progress</span></button>
             : heading}</span>
           <div class="links">
-            <a class="btn social" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="LinkedIn" /><span class="lbl">LinkedIn</span></a>
-            <a class="btn social" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="GitHub" /><span class="lbl">GitHub</span></a>
+            <a class="btn social" href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><BrandMark name="LinkedIn" /><span class="lbl">LinkedIn</span></a>
+            <a class="btn social" href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><BrandMark name="GitHub" /><span class="lbl">GitHub</span></a>
             <button class="btn theme" type="button" aria-label="Light / dark mode"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg><span> Light / dark</span></button>
           </div>
         </header>

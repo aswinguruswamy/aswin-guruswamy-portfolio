@@ -1,0 +1,17 @@
+---
+// EXPLAIN: LinkedIn and GitHub logos from the official brand kits (D53 v0), used as supplied: no change of colour,
+// shape or ratio. Files: public/img/brand (checksums and sources: tests/brand-kit.json). Colours (D55 v0):
+//   light mode            LinkedIn blue, GitHub black
+//   dark mode, top bar    both white (the top-bar buttons are dark)
+//   dark mode, elsewhere  both black (other buttons stay light)
+// LinkedIn: the [in] box is 22 px high (LinkedIn minimum: 21 px). The PNG files are 3x for sharp phone screens.
+interface Props { name: 'LinkedIn' | 'GitHub' }
+const { name } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const f = name === 'LinkedIn'
+  ? { light: ['linkedin-in-blue.png', 26], darktop: ['linkedin-in-white.png', 24], darkother: ['linkedin-in-black.png', 24] }
+  : { light: ['github-invertocat-black.svg', 23], darktop: ['github-invertocat-white.svg', 23], darkother: ['github-invertocat-black.svg', 23] };
+---
+<span class="bm" data-brand={name} aria-hidden="true">
+  {Object.entries(f).map(([k, [file, w]]) => <img class={`bm-${k}`} src={`${base}/img/brand/${file}`} width={w} height="22" alt="" />)}
+</span>

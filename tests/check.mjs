@@ -217,6 +217,43 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     missing.forEach((n) => fails.push(`links @${w}${ws ? ' Workshop on' : ''}: no visible ${n} in the top bar or the menu (REQ-05, D30 v0 item 4)`));
     await c.close();
   }
+  // D53 v0, D55 v0 (AGP-21 AC8): LinkedIn and GitHub logos are the official kit files, unchanged, in the agreed colour,
+  // at least 21 px (LinkedIn [in]) and at least 3:1 against their button (WCAG 1.4.11).
+  {
+    const fs = await import('node:fs'); const crypto = await import('node:crypto');
+    const kit = JSON.parse(fs.readFileSync('tests/brand-kit.json', 'utf8')).files;
+    for (const [f, e] of Object.entries(kit)) {
+      const path = 'public/img/brand/' + f;
+      if (!fs.existsSync(path)) { fails.push(`brand: ${f} is missing`); continue; }
+      const sha = crypto.createHash('sha256').update(fs.readFileSync(path)).digest('hex');
+      if (sha !== e.sha256) fails.push(`brand: ${f} is not the checked kit file (sha256 changed)`);
+      if (e.kitSize) { const [kw, kh] = e.kitSize, [w, h] = e.size; if (Math.abs(w - Math.round(kw * h / kh)) > 1) fails.push(`brand: ${f} does not keep the kit ratio`); }
+    }
+    const COLOUR = { 'linkedin-in-blue.png': [10, 102, 194], 'linkedin-in-black.png': [0, 0, 0], 'linkedin-in-white.png': [255, 255, 255], 'github-invertocat-black.svg': [0, 0, 0], 'github-invertocat-white.svg': [255, 255, 255] };
+    const WANT = { light: { LinkedIn: 'linkedin-in-blue.png', GitHub: 'github-invertocat-black.svg' }, darktop: { LinkedIn: 'linkedin-in-white.png', GitHub: 'github-invertocat-white.svg' }, darkother: { LinkedIn: 'linkedin-in-black.png', GitHub: 'github-invertocat-black.svg' } };
+    const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    for (const w of [390, 1440]) for (const scheme of ['light', 'dark']) for (const menu of [false, true]) {
+      if (menu && w === 1440) continue;
+      const c = await browser.newContext({ viewport: { width: w, height: 800 }, colorScheme: scheme }); const q = await c.newPage(); await q.goto(B); await q.waitForTimeout(150);
+      if (menu) { await q.click('.menu-btn'); await q.waitForTimeout(150); }
+      const marks = await q.evaluate(() => [...document.querySelectorAll('.bm')].filter((m) => m.getBoundingClientRect().width > 0).map((m) => {
+        const shown = [...m.querySelectorAll('img')].filter((i) => getComputedStyle(i).display !== 'none');
+        let bg = null; for (let e = m; e; e = e.parentElement) { const c = getComputedStyle(e).backgroundColor.match(/[\d.]+/g); if (c && (c.length === 3 || +c[3] > 0.9)) { bg = c.slice(0, 3).map(Number); break; } }
+        return { brand: m.dataset.brand, top: !!m.closest('.top'), files: shown.map((i) => i.getAttribute('src').split('/').pop()), h: shown[0] ? shown[0].getBoundingClientRect().height : 0, bg };
+      }));
+      if (!marks.length) fails.push(`brand @${w} ${scheme}${menu ? ' menu' : ''}: no visible logo`);
+      for (const m of marks) {
+        const where = `brand ${m.brand} @${w} ${scheme}${m.top ? ' top bar' : ' menu'}`;
+        if (m.files.length !== 1) { fails.push(`${where}: ${m.files.length} logo files show (want 1)`); continue; }
+        const want = WANT[scheme === 'light' ? 'light' : m.top ? 'darktop' : 'darkother'][m.brand];
+        if (m.files[0] !== want) fails.push(`${where}: shows ${m.files[0]}, want ${want} (D55 v0)`);
+        if (m.brand === 'LinkedIn' && m.h < 21) fails.push(`${where}: the [in] is ${m.h} px high (LinkedIn minimum 21 px)`);
+        const a = lum(COLOUR[m.files[0]]), b = lum(m.bg || [255, 255, 255]); const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+        if (ratio < 3) fails.push(`${where}: logo contrast ${ratio.toFixed(2)}:1 against its button (want 3:1)`);
+      }
+      await c.close();
+    }
+  }
   // AGP-37 v1 AC2, AC3 (NFR-12 v0, D29 v0): the public progress.json has only the agreed fields, and no epic code or team word.
   {
     const j = await (await fetch(B + 'data/progress.json')).json();
