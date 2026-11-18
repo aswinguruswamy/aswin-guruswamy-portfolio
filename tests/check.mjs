@@ -117,7 +117,9 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   await pg.evaluate(() => document.getElementById('skills').scrollIntoView()); await pg.waitForTimeout(600);
   const atSkills = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
   if (atSkills !== 'Skills') fails.push(`side menu marks "${atSkills}" at the Skills section`);
-  await pg.click('.side .nav a[href="#experience"]'); await pg.waitForTimeout(900);
+  await pg.click('.side .nav a[href="#experience"]');
+  // The smooth scroll can take longer than 900 ms in Firefox. Wait up to 3 s for the mark (a fixed wait made this check flaky).
+  await pg.waitForFunction(() => document.querySelector('.nav a[aria-current]')?.textContent.trim() === 'Experience', null, { timeout: 3000 }).catch(() => {});
   const cur = await pg.evaluate(() => document.querySelector('.nav a[aria-current]')?.textContent.trim());
   if (cur !== 'Experience') fails.push(`side menu marks "${cur}" at the Experience section`);
   await ctx.close();
