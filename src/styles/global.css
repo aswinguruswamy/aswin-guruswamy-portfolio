@@ -354,8 +354,9 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
   .hero h1 { font-size: clamp(20px, 8cqi, 30px); }
   .hero .role { font-size: 16px; }
   .avatar.big { width: 72px; height: 72px; }
-  .hero-actions { grid-template-columns: 1fr 1fr; }
-  .hero-actions .btn { padding: 0 8px; }
+  /* D54 v0 option B: on phones the 2 buttons stack, full width, Copy email first. */
+  .hero-actions { grid-template-columns: 1fr; }
+  .hero-actions .btn { padding: 0 12px; width: 100%; }
   .stat { flex-direction: row; align-items: center; }
   .stat .big { font-size: 56px; }
   .stat ul { font-size: 15px; gap: 4px; }
@@ -430,3 +431,6 @@ footer { font-size: 13px; color: var(--muted); text-align: center; padding: 6px 
 }
 /* AGP-35 AC4: the "Try again" button in the no-data strip. 44 px tap target. */
 .ws-strip .ws-retry { min-height: 44px; padding: 0 16px; }
+
+/* D54 v0: the file type and size in the résumé button. Smaller, so the button keeps its size. */
+.btn .meta { font-weight: 500; font-size: 0.85em; }

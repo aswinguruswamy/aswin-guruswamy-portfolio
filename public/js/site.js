@@ -38,6 +38,15 @@
       });
     });
   });
+  // Download résumé (D54 v0): the download starts at once (no confirmation). The button shows "✓ Downloading" for 5 s,
+  // the same time as "✓ Copied", and screen readers hear "Résumé downloading".
+  document.querySelectorAll('[data-resume]').forEach(function (a) {
+    var html = a.innerHTML, timer = null;
+    a.addEventListener('click', function () {
+      a.textContent = '✓ Downloading'; say('Résumé downloading');
+      clearTimeout(timer); timer = setTimeout(function () { a.innerHTML = html; }, 5000);
+    });
+  });
   document.querySelectorAll('[data-copy-link]').forEach(function (b) {
     b.addEventListener('click', function () {
       var label = b.textContent;

@@ -238,6 +238,19 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
       if (n < 2) fails.push(`résumé: public/resume.pdf exists but the page has ${n} download links (want 2)`);
       if (/Résumé (coming )?soon/.test(html)) fails.push('résumé: the page still says "Résumé coming soon"');
       const r = await fetch(B + 'resume.pdf'); if (r.status !== 200) fails.push('résumé: resume.pdf does not load (' + r.status + ')');
+      // D54 v0: the label names the type and the real size; a click shows "✓ Downloading" and tells screen readers, then the label comes back.
+      const kb = Math.round(fs.statSync('public/resume.pdf').size / 1024);
+      if (!html.includes(`(PDF, ${kb} KB)`)) fails.push(`résumé: the label does not say "(PDF, ${kb} KB)" (D54 v0)`);
+      const c = await browser.newContext({ viewport: { width: 1440, height: 900 }, acceptDownloads: true }); const q = await c.newPage(); await q.goto(B);
+      if (!(await q.locator('.side [data-resume]').count())) { fails.push('résumé: no [data-resume] button for the "✓ Downloading" state (D54 v0)'); await c.close(); }
+      else {
+      await q.click('.side [data-resume]'); await q.waitForTimeout(150);
+      if ((await q.textContent('.side [data-resume]')).trim() !== '✓ Downloading') fails.push('résumé: the button does not show "✓ Downloading" after the click (D54 v0)');
+      if (!/downloading/i.test((await q.textContent('#status')) || '')) fails.push('résumé: screen readers do not hear "downloading"');
+      await q.waitForTimeout(5200);
+      if (!/Download résumé \(PDF/.test(await q.textContent('.side [data-resume]'))) fails.push('résumé: the label does not come back after 5 s');
+      await c.close();
+      }
     }
   }
   // AGP-35 AC3, AC4: with no progress.json the strip shows only "Try again"; it shows the loading line, then loads again.
