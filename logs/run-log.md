@@ -1,8 +1,8 @@
 # Workshop daily run log (NFR-11)
 
-One line for each run of the daily Workshop task (S24, AGP-37): date | result | stories | page % | note.
+One line for each run of the daily Workshop task (S24, AGP-37 v1 AC7). The task writes each line with `node scripts/log-run.mjs <ok|failed> [note]`.
 
-| date (UTC) | result | stories | page | note |
-| --- | --- | --- | --- | --- |
-| 2026-11-18 | first snapshot (by hand) | 75 | 16/87 | made in the build session |
-| 2026-11-19 | ok | 75 | 22/84 | test ran on preinstalled Chromium (browser download blocked) |
+| time (UTC) | result | epics | stories | page | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-18 | first snapshot (by hand) | 24 | 75 | 16/87 | made in the build session |
+| 2026-11-19 10:17 | ok | 24 | 75 | 22/84 | test ran on preinstalled Chromium (browser download blocked) |
