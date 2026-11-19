@@ -11,6 +11,13 @@ for (const f of readdirSync(dir).filter((f) => /\.ya?ml$/.test(f))) {
     if (!/@[0-9a-f]{40}$/.test(m[1]) || !/#\s*v\d/.test(line)) bad.push(`${f}:${i + 1}: ${m[1]}`);
   });
 }
+// AGP-15 AC9: the Playwright container image must match @playwright/test in package.json, or the browsers do not match.
+const pw = JSON.parse(readFileSync('package.json', 'utf8')).devDependencies?.['@playwright/test'];
+for (const f of readdirSync(dir).filter((f) => /\.ya?ml$/.test(f))) {
+  for (const m of readFileSync(`${dir}/${f}`, 'utf8').matchAll(/mcr\.microsoft\.com\/playwright:v([\d.]+)/g)) {
+    if (m[1] !== pw) bad.push(`${f}: Playwright image v${m[1]} does not match @playwright/test ${pw} in package.json`);
+  }
+}
 bad.forEach((b) => console.log('FAIL pin', b));
-console.log(bad.length ? `RESULT: FAIL (${bad.length} not pinned to a SHA with a version comment)` : 'RESULT: PASS (all actions pinned)');
+console.log(bad.length ? `RESULT: FAIL (${bad.length}: a tag-only action or a Playwright image that does not match package.json)` : 'RESULT: PASS (all actions pinned; Playwright image matches package.json)');
 process.exit(bad.length ? 1 : 0);
