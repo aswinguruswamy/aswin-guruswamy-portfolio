@@ -18,6 +18,11 @@ for (const f of readdirSync(dir).filter((f) => /\.ya?ml$/.test(f))) {
     if (m[1] !== pw) bad.push(`${f}: Playwright image v${m[1]} does not match @playwright/test ${pw} in package.json`);
   }
 }
+// AGP-2 AC4 (ADR-01 v0 version rule): every package in package.json has a fixed version (no ^, ~, *, x or range).
+const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+for (const sec of ['dependencies', 'devDependencies']) for (const [k, v] of Object.entries(pkg[sec] || {})) {
+  if (!/^\d+\.\d+\.\d+$/.test(v)) bad.push(`package.json ${sec}.${k}: "${v}" is not a fixed version`);
+}
 bad.forEach((b) => console.log('FAIL pin', b));
-console.log(bad.length ? `RESULT: FAIL (${bad.length}: a tag-only action or a Playwright image that does not match package.json)` : 'RESULT: PASS (all actions pinned; Playwright image matches package.json)');
+console.log(bad.length ? `RESULT: FAIL (${bad.length}: a tag-only action or a Playwright image that does not match package.json)` : 'RESULT: PASS (all actions pinned; Playwright image matches package.json; fixed package versions)');
 process.exit(bad.length ? 1 : 0);
