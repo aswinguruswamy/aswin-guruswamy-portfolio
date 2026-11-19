@@ -34,4 +34,7 @@ for (const h of prof.data.hiddenBadges) if (!prof.data.badges.includes(h)) throw
 export const profile = { ...prof.data, summary: body(prof, true) };
 
 export const experience = byOrder((await getCollection('experience')).map((e) => ({ ...e.data, text: body(e, true) })), 'experience');
-export const skills = byOrder((await getCollection('skills')).map((e) => ({ ...e.data, text: body(e, !e.data.tools) })), 'skills');
+export const skills = byOrder((await getCollection('skills')).map((e) => ({ ...e.data, text: body(e, !e.data.tools && !e.data.items) })), 'skills');
+// AGP-28: each AI skill links to a project page that exists.
+const pageSlugs = new Set(withPage.map((p) => p.slug));
+for (const s of skills) for (const it of s.items ?? []) if (it.project && !pageSlugs.has(it.project)) throw new Error(`skills "${s.head}": "${it.label}" links to project "${it.project}", which has no page`);

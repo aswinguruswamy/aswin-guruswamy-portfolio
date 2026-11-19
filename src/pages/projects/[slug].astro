@@ -16,7 +16,7 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
 <Base title={`${p.name} · Aswin Guruswamy`} description={`${p.name}: ${p.line}.`} section="pm-tools" heading="">
   <div class="crumbs-row">
     <div class="crumbs">
-      <a class="btn" href={`${base}/#pm-tools`}>← All {group}</a>
+      <a class="btn" href={`${base}/#pm-tools`}><span class="arr" aria-hidden="true">←</span><span>All {group}</span></a>
       <small>{group} › {p.name}</small>
     </div>
   </div>
@@ -36,11 +36,11 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
       <section class="panel"><div class="panel-head"><h2 class="tag">{h}</h2></div><p>{t}</p></section>
     ))}
     <section class="panel"><div class="panel-head"><h2 class="tag">LINKS</h2></div>
-      <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label}<span class="vh"> (opens in a new tab)</span> <span aria-hidden="true">↗</span></a>)}</div>
+      <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer"><span>{l.label}<span class="vh"> (opens in a new tab)</span></span><span class="arr" aria-hidden="true">↗</span></a>)}</div>
     </section>
   </div>
   <nav class="pager" aria-label="Other projects">
-    {prev ? <a class="btn" href={`${base}/projects/${prev.slug}/`}>← {prev.name}</a> : <span></span>}
-    {next ? <a class="btn" href={`${base}/projects/${next.slug}/`}>{next.name} →</a> : <span></span>}
+    {prev ? <a class="btn prev" href={`${base}/projects/${prev.slug}/`}><span class="arr" aria-hidden="true">←</span><span>{prev.name}</span></a> : <span></span>}
+    {next ? <a class="btn next" href={`${base}/projects/${next.slug}/`}><span>{next.name}</span><span class="arr" aria-hidden="true">→</span></a> : <span></span>}
   </nav>
 </Base>

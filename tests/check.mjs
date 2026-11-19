@@ -256,6 +256,80 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
       await c.close();
     }
   }
+  // Polish list (Code guide 7b, 18 Nov 2026): P1-P5 and AGP-28. Each check failed on the old page.
+  {
+    const midY = (r) => (r.top + r.bottom) / 2;
+    // P1, P2: arrow buttons on project pages: 1 normal gap (<= 10 px) between text and arrow; arrow on the text centre line (<= 2.5 px).
+    for (const w of [390, 1440]) {
+      const c = await browser.newContext({ viewport: { width: w, height: 900 } }); const q = await c.newPage();
+      for (const path of ['projects/monte-carlo-delivery-forecast/', 'projects/raid-log-extractor/']) {
+        await q.goto(B + path); await q.evaluate(() => document.fonts.ready);
+        const r = await q.evaluate(() => [...document.querySelectorAll('.p-links .btn, .pager .btn, main .btn')].filter((b) => /[↗←→]/.test(b.textContent) && b.offsetParent).map((b) => {
+          const arr = b.querySelector('.arr'); const txt = [...b.children].find((x) => x !== arr && !x.classList.contains('vh'));
+          if (!arr || !txt) return { name: b.textContent.trim().slice(0, 24), bad: 'arrow is not in its own span' };
+          const range = document.createRange(); range.selectNodeContents(txt.firstChild || txt); const t = range.getBoundingClientRect(); const a = arr.getBoundingClientRect();
+          const gap = a.left >= t.right ? a.left - t.right : t.left - a.right;
+          return { name: b.textContent.trim().slice(0, 24), gap: Math.round(gap), dy: Math.abs((a.top + a.bottom) / 2 - (t.top + t.bottom) / 2) };
+        }));
+        for (const x of r) {
+          if (x.bad) fails.push(`P1/P2 ${path} @${w}: "${x.name}": ${x.bad}`);
+          else { if (x.gap > 10) fails.push(`P1 ${path} @${w}: "${x.name}": ${x.gap} px gap before the arrow (want 10 px or less)`); if (x.dy > 2.5) fails.push(`P2 ${path} @${w}: "${x.name}": arrow ${x.dy.toFixed(1)} px off the text centre line`); }
+        }
+        // P2: phones: when previous and next stack, both are full width and "next" text ends at the right.
+        if (w === 390) {
+          const pg = await q.evaluate(() => { const bs = [...document.querySelectorAll('.pager .btn')]; const nav = document.querySelector('.pager').getBoundingClientRect(); return bs.map((b) => { const r = b.getBoundingClientRect(); const t = b.querySelector('span:not(.arr)'); return { next: b.classList.contains('next'), w: r.width, navW: nav.width, right: r.right - (t ? t.getBoundingClientRect().right : 0) }; }); });
+          for (const x of pg) { if (Math.abs(x.w - x.navW) > 1) fails.push(`P2 ${path} @390: a pager button is ${Math.round(x.w)} px, not full width (${Math.round(x.navW)} px)`); if (x.next && x.right > 60) fails.push(`P2 ${path} @390: "next" text is not on the right`); }
+        }
+      }
+      await c.close();
+    }
+    {
+      const c = await browser.newContext({ viewport: { width: 390, height: 900 } }); const q = await c.newPage(); await q.goto(B); await q.evaluate(() => document.fonts.ready);
+      await q.evaluate(() => { const d = document.querySelectorAll('.skills details'); if (d[1]) d[1].open = true; });
+      const r = await q.evaluate(() => {
+        // P3: footer: the last line is at least 40% as wide as the first line.
+        const f = document.querySelector('footer'); const range = document.createRange(); range.selectNodeContents(f);
+        const lines = {}; for (const x of range.getClientRects()) { if (x.width < 1) continue; const k = Math.round(x.top); lines[k] = (lines[k] || 0) + x.width; }
+        const ws = Object.keys(lines).sort((a, b) => a - b).map((k) => lines[k]);
+        // P4: no divider under the last job.
+        const boxes = [...document.querySelectorAll('#experience .box')]; const last = boxes[boxes.length - 1];
+        // P5: the open and the closed skills marker have the same size.
+        const ch = [...document.querySelectorAll('.skills summary .chev')].map((e) => { const b = e.getBoundingClientRect(); const open = e.closest('details').open; const cs = getComputedStyle(e); return { open, w: Math.round(b.width), h: Math.round(b.height), tag: e.tagName }; });
+        // AGP-28: AI skills: each item with a project links to a project page.
+        const links = [...document.querySelectorAll('.skill-items a')].map((a) => a.getAttribute('href'));
+        // P5: the content of each open skills box ends at least 8 px above the box edge.
+        const tight = [...document.querySelectorAll('.skills details[open]')].map((d) => { const last = d.lastElementChild.getBoundingClientRect(); const box = d.getBoundingClientRect(); return { head: d.querySelector('summary').textContent.trim(), space: box.bottom - last.bottom }; }).filter((x) => x.space < 8);
+        return { ws, lastBorder: last ? parseFloat(getComputedStyle(last).borderBottomWidth) : 0, ch, links, tight };
+      });
+      if (r.ws.length > 1 && r.ws[r.ws.length - 1] < r.ws[0] * 0.4) fails.push(`P3 footer @390: the last line is ${Math.round(r.ws[r.ws.length - 1])} px, the first ${Math.round(r.ws[0])} px (1 word alone)`);
+      if (r.lastBorder > 0) fails.push(`P4 experience @390: a ${r.lastBorder} px divider under the last job`);
+      // P5 measures the shape without rotation: a turned square keeps its box; a turned glyph does not.
+      const open = r.ch.find((x) => x.open), shut = r.ch.find((x) => !x.open);
+      if (!open || !shut) fails.push('P5 skills @390: need 1 open and 1 closed box to compare');
+      else if (open.w !== shut.w || open.h !== shut.h || open.w !== open.h) fails.push(`P5 skills @390: open marker ${open.w}x${open.h} px, closed ${shut.w}x${shut.h} px (want the same square)`);
+      for (const x of r.tight) fails.push(`P5 skills @390: "${x.head}" content ends ${Math.round(x.space)} px above the box edge (want 8 px or more)`);
+      if (r.links.length < 3) fails.push(`AGP-28 AI skills: ${r.links.length} links to project pages (want 3 or more)`);
+      for (const h of r.links) if (!/\/projects\/[a-z0-9-]+\/$/.test(h)) fails.push(`AGP-28 AI skills: link "${h}" is not a project page`);
+      await c.close();
+    }
+  }
+  // P6 (Aswin, 18 Nov 2026): each section tag fills its panel's top-left corner: at the inner edge of the panel border,
+  // no own top/left border, and the same corner curve as the inside of the panel. Light and dark, phone and computer.
+  for (const w of [390, 1024, 1440]) for (const scheme of ['light', 'dark']) {
+    const c = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme }); const q = await c.newPage(); await q.goto(B); await q.evaluate(() => document.fonts.ready);
+    const r = await q.evaluate(() => [...document.querySelectorAll('.panel .tag')].filter((t) => t.offsetParent).map((t) => {
+      const pn = t.closest('.panel'); const a = t.getBoundingClientRect(), b = pn.getBoundingClientRect(); const ps = getComputedStyle(pn), ts = getComputedStyle(t);
+      const bw = parseFloat(ps.borderTopWidth), inner = parseFloat(ps.borderTopLeftRadius) - bw;
+      return { tag: t.textContent.trim(), dx: a.left - b.left - bw, dy: a.top - b.top - bw, rad: parseFloat(ts.borderTopLeftRadius), inner, bt: parseFloat(ts.borderTopWidth), bl: parseFloat(ts.borderLeftWidth) };
+    }));
+    for (const x of r) {
+      const where = `P6 tag "${x.tag}" @${w} ${scheme}`;
+      if (Math.abs(x.dx) > 0.6 || Math.abs(x.dy) > 0.6) fails.push(`${where}: ${x.dx.toFixed(1)}/${x.dy.toFixed(1)} px from the panel's inner corner (want 0)`);
+      if (Math.abs(x.rad - x.inner) > 0.6) fails.push(`${where}: corner ${x.rad} px, panel inner corner ${x.inner} px`);
+      if (x.bt > 0 || x.bl > 0) fails.push(`${where}: own top/left border (${x.bt}/${x.bl} px) shows a double line`);
+    }
+    await c.close();
+  }
   // AGP-37 v1 AC2, AC3 (NFR-12 v0, D29 v0): the public progress.json has only the agreed fields, and no epic code or team word.
   {
     const j = await (await fetch(B + 'data/progress.json')).json();
