@@ -42,7 +42,7 @@ const nav = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://aswinguruswamy.goatcounter.com; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -114,6 +114,7 @@ const nav = [
       </main>
     </div>
     <script is:inline src={`${base}/js/site.js?v=${v}`} defer></script>
+    <script is:inline src={`${base}/js/count.js?v=${v}`} defer></script>
     {wip && <script is:inline defer src={`${base}/js/workshop.js?v=${v}`}></script>}
   </body>
 </html>

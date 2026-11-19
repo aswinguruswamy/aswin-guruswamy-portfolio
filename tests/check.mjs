@@ -461,6 +461,20 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     }
     await c.close();
   }
+  // D10 v1 (NFR-06, AGP-41): the visit counter loads from this site only, the CSP allows only the GoatCounter image
+  // address, and no count, cookie or local-storage entry is made outside the live address or in a test browser.
+  {
+    const html = await (await fetch(B)).text();
+    if (!/\/js\/count\.js\?v=/.test(html)) fails.push('D10 v1: the page does not load js/count.js');
+    const csp = (html.match(/Content-Security-Policy" content="([^"]+)"/) || [])[1] || '';
+    if (!/script-src 'self';/.test(csp) || !/img-src 'self' data: https:\/\/aswinguruswamy\.goatcounter\.com;/.test(csp)) fails.push(`D10 v1: CSP must keep script-src 'self' and add only the GoatCounter image host: ${csp}`);
+    const c = await browser.newContext(); const q = await c.newPage(); const hits = [];
+    q.on('request', (r) => { if (/goatcounter|zgo\.at/.test(r.url())) hits.push(r.url()); });
+    await q.goto(B); await q.waitForLoadState('networkidle');
+    if (hits.length) fails.push(`D10 v1: a count went out from a test browser: ${hits[0]}`);
+    if ((await c.cookies()).length) fails.push('D10 v1 (NFR-06): the page set a cookie');
+    await c.close();
+  }
   // REQ-20 v0, D51 v0: when public/resume.pdf exists, the page has a working "Download résumé" link (sidebar and intro card) and no "coming soon".
   {
     const fs = await import('node:fs');
