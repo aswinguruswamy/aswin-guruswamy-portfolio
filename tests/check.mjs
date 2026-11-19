@@ -177,6 +177,72 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     if (await pg.evaluate(() => document.querySelectorAll('.pie, .ws-strip').length)) fails.push('workshop: switch off leaves pies or the strip');
   }
 
+  // AGP-34 v2 AC2, AC4, AC5, AC6 and AGP-35 AC1, AC2, AC6, AC7 (D23 v0, D25 v0, D26 v0, D28 v0, D35 v1): test data with known answers.
+  {
+    await pg.setViewportSize({ width: 1440, height: 900 });
+    const pd = JSON.parse(await (await pg.request.get(B + 'data/progress.json')).text());
+    const keys = Object.keys(pd.epics); const t = JSON.parse(JSON.stringify(pd));
+    for (const k of keys) t.epics[k] = { title: t.epics[k].title, done: 0, total: 0 };
+    t.epics['AGP-44'] = { title: '<img src=x onerror="window.__xss=1">MCF', done: 1, total: 250 }; // 0.4% -> 1%; HTML in a title
+    t.epics['AGP-45'] = { title: 'RAID', done: 3, total: 4 }; // 75%
+    t.epics['AGP-10'] = { title: 'Workshop', done: 1, total: 3 }; // 33%
+    for (const g of Object.keys(t.groups)) t.groups[g] = { done: 0, total: 0 };
+    t.groups['pm-tools'] = { done: 5, total: 257 }; // the sum of its epics, made by make-progress.mjs
+    t.takenAt = new Date().toISOString();
+    await pg.goto(B); await pg.waitForLoadState('networkidle');
+    const before = await pg.evaluate(() => [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x), Math.round(r.y)]; }));
+    await pg.route('**/data/progress.json*', (r) => r.fulfill({ body: JSON.stringify(t), contentType: 'application/json' }));
+    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip .ws-legend');
+    const got = await pg.evaluate(() => {
+      const pieOf = (sel) => document.querySelector(sel)?.querySelector('.pie');
+      const p = pieOf('[data-epic="AGP-44"]'); const cs = getComputedStyle(p);
+      return {
+        mcf: p.textContent, raid: pieOf('[data-epic="AGP-45"]').textContent, nm: pieOf('[data-epic="AGP-51"]').textContent,
+        nmLabel: pieOf('[data-epic="AGP-51"]').getAttribute('aria-label'),
+        pmGroup: pieOf('[data-group="pm-tools"]').textContent, apps: pieOf('[data-group="apps"]').textContent,
+        w: p.getBoundingClientRect().width, size: cs.fontSize, weight: cs.fontWeight, color: cs.color, bg: cs.backgroundImage,
+        legend: document.querySelector('.ws-legend').textContent, time: document.querySelector('.ws-strip').textContent,
+        xss: window.__xss === 1, img: !!document.querySelector('.ws-strip img, .pie img'),
+        on: document.documentElement.classList.contains('ws-on'),
+        after: [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x), Math.round(r.y)]; }),
+      };
+    });
+    if (got.mcf !== '1%') fails.push(`AGP-34 AC2: 1 of 250 points shows "${got.mcf}", want "1%"`);
+    if (got.raid !== '75%') fails.push(`AGP-34 AC2: 3 of 4 points shows "${got.raid}", want "75%"`);
+    if (got.nm !== '–' || !/no work planned yet/i.test(got.nmLabel || '')) fails.push('AGP-34 AC3: 0 planned points must show "–" and read "No work planned yet"');
+    if (got.pmGroup !== '2%') fails.push(`AGP-35 AC1: PM tools pie shows "${got.pmGroup}", want 2% (5 of 257 points)`);
+    if (got.apps !== '–') fails.push(`AGP-35 AC1: Apps pie shows "${got.apps}", want "–" (0 planned points)`);
+    if (Math.round(got.w) !== 48 || got.size !== '13px' || Number(got.weight) < 700 || got.color !== 'rgb(0, 0, 0)') fails.push(`AGP-34 AC4: pie ${got.w}px, ${got.size}, weight ${got.weight}, colour ${got.color}`);
+    if (!/rgb\(255, 255, 255\)/.test(got.bg) || !got.on) fails.push('AGP-34 AC6: the empty part of the pie is not white, or the page has no 55% screen');
+    if (got.legend !== 'LIVE = first version out · % = share of the full plan built' || !/UTC/.test(got.time)) fails.push('AGP-35 AC2: the strip has no snapshot time or the legend text is wrong');
+    if (got.xss || got.img) fails.push('AGP-35 AC7: HTML from progress.json went into the page');
+    // The strip sits above the content (D46 v0) and moves the whole page down by its height; the pies must move no card inside it.
+    const norm = (a) => a.map((x) => [x[0], x[1] - a[0][1], x[2] - a[0][2]]);
+    before.splice(0, before.length, ...norm(before)); got.after = norm(got.after);
+    const moved = got.after.filter((a, i) => before[i] && (Math.abs(a[1] - before[i][1]) > 1 || Math.abs(a[2] - before[i][2]) > 1)).map((a) => a[0]);
+    if (moved.length) fails.push(`AGP-34 AC5: cards moved when the Workshop turned on: ${got.after.filter((a, i) => before[i] && (a[1] !== before[i][1] || a[2] !== before[i][2])).map((a, i) => a.join(':') + ' was ' + before.find((b) => b[0] === a[0]).slice(1).join(':')).slice(0, 3).join(', ')}`);
+    for (const [kind, body] of [['empty', ''], ['broken', '{"epics": ']]) {
+      await pg.unroute('**/data/progress.json*');
+      await pg.route('**/data/progress.json*', (r) => r.fulfill({ body, contentType: 'application/json' }));
+      await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip'); await pg.waitForTimeout(300);
+      const r = await pg.evaluate(() => ({ nums: [...document.querySelectorAll('.pie')].filter((p) => p.textContent !== '–').length, text: document.querySelector('.ws-strip').textContent }));
+      if (r.nums || /error|undefined|null|NaN|Syntax|JSON/i.test(r.text)) fails.push(`AGP-35 AC6: ${kind} progress.json: ${r.nums} pies with a number, strip "${r.text.slice(0, 60)}"`);
+    }
+    await pg.unroute('**/data/progress.json*');
+  }
+  // AGP-32 AC4, AC5 (NFR-12): the choice is kept for the next visit, only the theme is in local storage, and theme.js runs before the CSS.
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 800 }, colorScheme: 'light' }); const q = await c.newPage();
+    await q.goto(B); await q.locator('.top .theme').click();
+    const q2 = await c.newPage(); await q2.goto(B);
+    if ((await q2.evaluate(() => document.documentElement.getAttribute('data-theme'))) !== 'dark') fails.push('AGP-32 AC4: a new visit does not open in the saved dark choice');
+    const ls = await q2.evaluate(() => Object.keys(localStorage));
+    if (ls.join(',') !== 'theme') fails.push(`AGP-32 AC4 (NFR-12): local storage holds [${ls}], want only theme`);
+    const head = await (await q2.request.get(B)).text();
+    const iT = head.indexOf('/js/theme.js'), iC = head.search(/<link[^>]+stylesheet/);
+    if (iT < 0 || (iC >= 0 && iT > iC) || /<script[^>]+theme\.js[^>]+(defer|async)/.test(head)) fails.push('AGP-32 AC5: theme.js must load before the CSS, with no defer or async');
+    await c.close();
+  }
   // issue 10: the 404 page marks no menu item; issue 12: scripts carry a version tag
   const nf = await (await pg.request.get(B + 'no-such-page')).text();
   if (/aria-current/.test(nf)) fails.push('404: a menu item is marked as current');
