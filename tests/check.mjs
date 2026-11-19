@@ -189,13 +189,15 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     for (const g of Object.keys(t.groups)) t.groups[g] = { done: 0, total: 0 };
     t.groups['pm-tools'] = { done: 5, total: 257 }; // the sum of its epics, made by make-progress.mjs
     t.takenAt = new Date().toISOString();
+    // One page load: measure with the Workshop off, then press the switch and measure again (WebKit gave 2 page loads
+    // different head heights, 19 Nov, so 2 loads cannot show what the pies alone do).
+    await pg.route('**/data/progress.json*', (r) => r.fulfill({ body: JSON.stringify(t), contentType: 'application/json' }));
     await pg.goto(B); await pg.waitForLoadState('networkidle'); await pg.evaluate(() => document.fonts.ready); await pg.waitForTimeout(300);
     // Each card is measured from the top of its own section, after the fonts load (WebKit flake, 19 Nov: the top row
     // height changed with font timing, not with the pies).
     const POS = () => [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); const s = (x.parentElement.closest('section.panel') || x.parentElement).getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x - s.x), Math.round(r.y - s.y)]; });
     const before = await pg.evaluate(POS);
-    await pg.route('**/data/progress.json*', (r) => r.fulfill({ body: JSON.stringify(t), contentType: 'application/json' }));
-    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip .ws-legend');
+    await pg.click('[data-workshop]'); await pg.waitForSelector('.ws-strip .ws-legend'); await pg.waitForTimeout(300);
     const got = await pg.evaluate(() => {
       const pieOf = (sel) => document.querySelector(sel)?.querySelector('.pie');
       const p = pieOf('[data-epic="AGP-44"]'); const cs = getComputedStyle(p);
