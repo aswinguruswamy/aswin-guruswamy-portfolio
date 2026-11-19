@@ -286,6 +286,7 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     {
       const c = await browser.newContext({ viewport: { width: 390, height: 900 } }); const q = await c.newPage(); await q.goto(B); await q.evaluate(() => document.fonts.ready);
       await q.evaluate(() => { const d = document.querySelectorAll('.skills details'); if (d[1]) d[1].open = true; });
+      await q.waitForTimeout(400); // let the marker finish its 0.15 s turn before it is measured (WebKit measured mid-turn)
       const r = await q.evaluate(() => {
         // P3: footer: the last line is at least 40% as wide as the first line.
         const f = document.querySelector('footer'); const range = document.createRange(); range.selectNodeContents(f);
@@ -294,7 +295,7 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
         // P4: no divider under the last job.
         const boxes = [...document.querySelectorAll('#experience .box')]; const last = boxes[boxes.length - 1];
         // P5: the open and the closed skills marker have the same size.
-        const ch = [...document.querySelectorAll('.skills summary .chev')].map((e) => { const b = e.getBoundingClientRect(); const open = e.closest('details').open; const cs = getComputedStyle(e); return { open, w: Math.round(b.width), h: Math.round(b.height), tag: e.tagName }; });
+        const ch = [...document.querySelectorAll('.skills summary .chev')].map((e) => { const b = e.getBoundingClientRect(); const open = e.closest('details').open; const cs = getComputedStyle(e); const lw = parseFloat(cs.width), lh = parseFloat(cs.height); return { open, w: Math.round(isNaN(lw) ? b.width : lw), h: Math.round(isNaN(lh) ? b.height : lh), tag: e.tagName }; }); // layout size: a turn (transform) does not change it
         // AGP-28: AI skills: each item with a project links to a project page.
         const links = [...document.querySelectorAll('.skill-items a')].map((a) => a.getAttribute('href'));
         // P5: the content of each open skills box ends at least 8 px above the box edge.
