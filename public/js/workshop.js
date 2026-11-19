@@ -13,7 +13,8 @@
   var data = null, state = 'off', strip = null;
   var DAY = 86400000;
 
-  function pct(e) { return e && e.total > 0 ? Math.round((100 * e.done) / e.total) : null; }
+  // D23 v0: a whole %, and at least 1% when any work is done (0.4% shows 1%, not 0%).
+  function pct(e) { return e && e.total > 0 ? (e.done > 0 ? Math.max(1, Math.round((100 * e.done) / e.total)) : 0) : null; }
   function fmtTime(iso) {
     var d = new Date(iso);
     if (isNaN(d)) return 'unknown';
