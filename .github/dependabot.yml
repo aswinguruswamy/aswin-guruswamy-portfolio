@@ -1,0 +1,25 @@
+# EXPLAIN: P-CI-3. Each Monday, Dependabot opens pull requests that update the npm packages and the pinned
+# GitHub Actions (it changes the SHA and the version comment together). CI checks each PR like any other.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    groups:
+      actions:
+        patterns: ["*"]
