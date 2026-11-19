@@ -96,10 +96,12 @@ const resumeKB = hasResume ? Math.round(fs.statSync(resumePath).size / 1024) : 0
       <div class="skills">
         {skills.map((s, i) => (
           <details open={i === 0}>
-            <summary><span>{s.head}</span><span class="chev" aria-hidden="true">▸</span></summary>
+            <summary><span>{s.head}</span><svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1 L8 5 L2 9 Z" fill="currentColor"/></svg></summary>
             {s.tools
               ? <ul class="tools">{s.tools.map((t) => <li><Icon name={t} size={20} />{t}</li>)}</ul>
-              : <p>{s.text}</p>}
+              : s.items
+                ? <ul class="skill-items">{s.items.map((it) => <li>{it.project ? <a href={`${base}/projects/${it.project}/`}>{it.label}</a> : it.label}{'\u00a0'}<span class="lvl">({it.level})</span></li>)}</ul>
+                : <p>{s.text}</p>}
           </details>
         ))}
       </div>

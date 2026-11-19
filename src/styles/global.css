@@ -443,3 +443,29 @@ html:not([data-theme='dark']) .bm .bm-light { display: block; }
 html[data-theme='dark'] .bm .bm-darkother { display: block; }
 html[data-theme='dark'] .top .bm .bm-darkother { display: none; }
 html[data-theme='dark'] .top .bm .bm-darktop { display: block; }
+
+/* ---------- Polish list (Code guide 7b, 18 Nov 2026) ---------- */
+/* P1, P2: arrows sit in their own span: 1 gap, a little larger, on the centre line of the text. */
+.btn .arr { font-size: 1.15em; line-height: 1; display: inline-block; transform: translateY(-0.04em); }
+/* P2: phones: previous and next are full width; "next" text sits on the right. */
+@media (max-width: 760px) {
+  .pager { flex-direction: column; }
+  .pager .btn { width: 100%; justify-content: flex-start; }
+  .pager .btn.next { justify-content: flex-end; text-align: right; }
+}
+/* P3: footer lines of about the same length (no single word alone on a line). */
+footer { text-wrap: balance; }
+/* P4: no divider line after the last job. */
+.boxes .box:last-child { border-bottom: 0 !important; }
+/* P5: 1 square marker (svg) that turns when the box opens; same size open and closed. */
+.skills .chev { flex: none; width: 10px; height: 10px; transition: transform 0.15s; }
+/* AGP-28: AI skill links. */
+/* 1 skill per line, 8 px apart, so each link is a clear tap target (no link sits right under another). */
+.skill-items { list-style: none; margin: 4px 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.skill-items li { line-height: 1.4; }
+.skill-items a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.skill-items .lvl { color: var(--muted); }
+/* P6 (Aswin, 18 Nov): the section tag fills the panel's top-left corner. The panel border is the tag's top and left edge,
+   and the tag's corner has the same curve as the inside of the panel (16 px - 2 px border). The tag always sits at the top,
+   also when tall ‹ › buttons are beside it. */
+.panel .tag { border-top: 0; border-left: 0; border-top-left-radius: 14px; align-self: flex-start; }

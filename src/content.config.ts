@@ -48,7 +48,9 @@ const experience = defineCollection({
 
 const skills = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/skills' }),
-  schema: z.object({ head: text, order: z.number().int().min(1), tools: z.array(text).optional() }).strict(),
+  // items (AGP-28): an AI skill with an honest level; project = the slug of a project page that proves it (checked in lib/content.ts).
+  schema: z.object({ head: text, order: z.number().int().min(1), tools: z.array(text).optional(),
+    items: z.array(z.object({ label: text, level: z.enum(['basic', 'learning', 'working', 'strong']), project: z.string().regex(/^[a-z0-9-]+$/).optional() }).strict()).optional() }).strict(),
 });
 
 export const collections = { projects, profile, experience, skills };
