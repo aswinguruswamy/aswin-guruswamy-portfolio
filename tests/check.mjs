@@ -374,6 +374,27 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     if (!rows.length) fails.push('run-log: no run line from 19 Nov 2026 on (AGP-37 AC7)');
     for (const l of rows) if (!/^\| \d{4}-\d\d-\d\d \d\d:\d\d \| (ok|failed) \| \d+ \| \d+ \| \d+\/\d+ \| [^|]+ \|$/.test(l)) fails.push(`run-log: line "${l}" needs time, result, epics, stories, page (AGP-37 AC7)`);
   }
+  // AGP-43 release checks (NFR-02): the keyboard reaches every control on each page, each in a visible focus ring;
+  // and no page shows "Details coming soon" (D33 v0 (6), AGP-23 AC6, AGP-24 AC5).
+  {
+    const html = await (await fetch(B)).text();
+    const pages = ['', ...new Set([...html.matchAll(/projects\/([a-z0-9-]+)\//g)].map((m) => 'projects/' + m[1] + '/'))];
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const q = await c.newPage();
+    for (const path of pages) {
+      await q.goto(B + path); await q.waitForLoadState('networkidle');
+      if (/Details coming soon/.test(await q.evaluate(() => document.body.innerText))) fails.push(`/${path}: shows "Details coming soon" (AGP-43)`);
+      const want = await q.evaluate(() => [...document.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter((e) => e.offsetParent && getComputedStyle(e).visibility !== 'hidden' && !e.closest('[inert], [hidden], #menu')).length);
+      const seen = new Set(); let noRing = [];
+      for (let i = 0; i < want + 5; i++) {
+        await q.keyboard.press('Tab');
+        const f = await q.evaluate(() => { const e = document.activeElement; if (!e || e === document.body) return null; const cs = getComputedStyle(e); const ring = (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) >= 2) || /rgb/.test(cs.boxShadow); return { id: e.outerHTML.slice(0, 80), ring }; });
+        if (!f) continue; seen.add(f.id); if (!f.ring) noRing.push(f.id);
+      }
+      if (seen.size < want) fails.push(`/${path}: Tab reached ${seen.size} of ${want} controls (AGP-43 keyboard)`);
+      [...new Set(noRing)].slice(0, 3).forEach((n) => fails.push(`/${path}: no visible focus ring on ${n} (D31 v0 (1))`));
+    }
+    await c.close();
+  }
   // REQ-20 v0, D51 v0: when public/resume.pdf exists, the page has a working "Download résumé" link (sidebar and intro card) and no "coming soon".
   {
     const fs = await import('node:fs');
