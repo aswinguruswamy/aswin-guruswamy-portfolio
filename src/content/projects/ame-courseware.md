@@ -7,4 +7,10 @@ status: Planned
 group: apps
 order: 4
 epic: AGP-54
+page:
+  problem: "Aircraft maintenance students need course material that works with no internet."
+  approach: "A reusable offline book shell. Chapters are built one at a time, to a written workflow and standard. The first 2 chapters are YEW and the yaw damper."
+  role: "PM and builder."
+  stack: "Plain HTML, CSS and JavaScript. Works offline and from a pendrive."
+  outcome: "Chapters in progress. A pendrive release is planned."
 ---

@@ -1,6 +1,6 @@
 ---
 # EXPLAIN: one skills box = one file. "items" are the AI skills (AGP-28, D56 v0): label, honest level (basic, learning,
-# working, strong) and the project page that proves it. A project without a page (pm-toolkit plugin, AGP-26) has no link yet.
+# working, strong) and the project page that proves it. Every item links to a project page.
 head: AI skills
 order: 2
 items:
@@ -15,4 +15,5 @@ items:
     project: raid-log-extractor
   - label: Claude plugins
     level: working
+    project: pm-toolkit-plugin
 ---

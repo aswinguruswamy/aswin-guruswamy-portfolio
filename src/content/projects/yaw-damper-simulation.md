@@ -7,4 +7,10 @@ status: Planned
 group: apps
 order: 3
 epic: AGP-53
+page:
+  problem: "Dutch roll and the yaw damper are hard to see from equations alone."
+  approach: "An interactive top-view simulation of an aircraft with Dutch-roll physics. The aircraft shape stays simple; the physics gets better step by step."
+  role: "Builder."
+  stack: "React."
+  outcome: "The physics is being improved. It is planned as a chapter of the AME Courseware."
 ---
