@@ -6,6 +6,7 @@ import { readFileSync, appendFileSync } from 'node:fs';
 // Medium findings that cannot be fixed on GitHub Pages, with the reason (recorded, AGP-43).
 const ACCEPTED = {
   10038: 'CSP header: GitHub Pages cannot set response headers. The page sets a strict CSP in a meta tag (NFR-05).',
+  10055: 'CSP findings: (a) "No Fallback" = frame-ancestors, which a meta CSP cannot set and GitHub Pages gives no header for; (b) "style-src unsafe-inline" is only on GitHub files outside this site (the github.io root 404 page, /robots.txt, /sitemap.xml). The page CSP has no unsafe-inline.',
   10098: 'Cross-domain (Access-Control-Allow-Origin: *): GitHub Pages sets it for every file and it cannot be changed. All files are public; the page has no sign-in and no private data.',
   10020: 'Anti-clickjacking header: GitHub Pages cannot set X-Frame-Options, and frame-ancestors does not work in a meta CSP. The page has no forms and no sign-in.',
 };
