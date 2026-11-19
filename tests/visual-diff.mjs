@@ -22,9 +22,9 @@ for (const [p, path] of pages) for (const w of [390, 768, 1440]) for (const t of
 shots.push({ name: 'home-390-light-menu', path: '', w: 390, t: 'light', menu: true });
 shots.push({ name: 'home-1440-light-workshop', path: '?workshop', w: 1440, t: 'light', workshop: true });
 
-// A shot counts as changed above 50 changed pixels. 2 builds of the same code give 0 (tested 19 Nov), and a % limit missed a
-// small change on the large 1440 px page.
-const MIN_PIXELS = 50;
+// A shot counts as changed above 4 changed pixels. 2 builds of the same code give 0 (tested 19 Nov). A % limit missed a small
+// change on the 1440 px page, and a 50-pixel limit missed a 20-pixel ↗ mark (D58 v0), so the limit stays just above 0.
+const MIN_PIXELS = 4;
 const prSrv = await start(4601, 'dist'); const baseSrv = await start(4602, baseDist);
 const browser = await chromium.launch();
 

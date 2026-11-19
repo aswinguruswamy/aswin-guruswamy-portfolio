@@ -6,15 +6,18 @@ import type { Project } from '../lib/content';
 interface Props { p: Project }
 const { p } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const Tag = p.page ? 'a' : 'div';
+// D58 v0: a card with no project page links to its first outside link, in a new tab (rule 9).
+const ext = !p.page && p.links?.length ? p.links[0] : undefined;
+const Tag = p.page || ext ? 'a' : 'div';
 ---
 <li>
-  <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : undefined} data-epic={p.epic}>
+  <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : ext?.href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener noreferrer' : undefined}
+    aria-label={ext ? `${p.name}: ${ext.label} (opens in a new tab)` : undefined} data-epic={p.epic}>
     <div class="shot">{p.image
       ? <img src={`${base}/img/thumb/${p.image}`} alt="" loading="lazy" decoding="async" width="240" height="160" />
       : <span class="soon"><Shuttle size={44} /><span>Coming soon</span></span>}</div>
     <div class="tile-body">
-      <strong class="display">{p.name}</strong>
+      <strong class="display">{p.name}{ext && <span class="ext" aria-hidden="true"> ↗</span>}</strong>
       <span class="line">{p.line}</span>
       <Badge status={p.status} />
     </div>

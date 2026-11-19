@@ -8,4 +8,9 @@ group: pm-tools
 order: 4
 epic: AGP-47
 image: pm-toolkit-readme.webp
+# D58 v0: no public plugin repository yet; the card links the PM Benchmark repository, which the plugin is built on.
+# Change this link when the pm-toolkit repository is public.
+links:
+  - label: PM Benchmark repository (the plugin is built on it)
+    href: https://github.com/aswinguruswamy/pm-benchmark-software-projects
 ---

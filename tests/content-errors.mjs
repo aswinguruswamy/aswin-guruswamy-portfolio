@@ -12,6 +12,7 @@ const cases = [
   ['src/content/projects/selfbet.md', (s) => s.replace('order: 2', 'order: 1'), /order 1 is used twice/],
   ['src/content/projects/selfbet.md', (s) => s.replace('name: SelfBet', 'name: SelfBet\ncolour: red'), /colour/],
   ['src/content/profile/profile.md', (s) => s.replace('hiddenBadges:\n  - MS Computer Engineering (USA)', 'hiddenBadges:\n  - MBA'), /hidden badge "MBA"/],
+  ['src/content/projects/pm-toolkit-plugin.md', (s) => s.replace(/\nlinks:\n  - label: .*\n    href: .*\n/, '\n'), /pm-toolkit-plugin\.md: a Live card needs a project page or 1 link/],
   ['src/content/skills/ai-skills.md', (s) => s.replace('project: raid-log-extractor', 'project: no-such-project'), /no-such-project.*has no page/],
   ['src/content/experience/amazon.md', (s) => s.replace(/---\n\n[\s\S]*$/, '---\n'), /amazon\.md: write the text/],
 ];
