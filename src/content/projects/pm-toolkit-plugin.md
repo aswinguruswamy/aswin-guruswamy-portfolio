@@ -13,4 +13,10 @@ image: pm-toolkit-readme.webp
 links:
   - label: PM Benchmark repository (the plugin is built on it)
     href: https://github.com/aswinguruswamy/pm-benchmark-software-projects
+page:
+  problem: "A PM can miss steps between the phases of a project, and each new chat with an AI starts with no process."
+  approach: "A Claude plugin with 15 skills. The pm-lifecycle hub finds the project phase and sends each request to the right skill: charter and plan, RAID log, status report, change request, quality gate, release readiness, post-mortem and more. Each skill maps to items of the PM Benchmark."
+  role: "Author and owner. Claude builds the skills to Aswin's rules and grades them."
+  stack: "Claude Code plugin. Skills in Markdown. Built on the PM Benchmark."
+  outcome: "Used to run the Monte Carlo Delivery Forecast and this portfolio page. A public repository is planned."
 ---

@@ -7,4 +7,10 @@ status: Planned
 group: pm-tools
 order: 6
 epic: AGP-49
+page:
+  problem: "AI projects often skip PM work that the standards expect, and the gaps show only late."
+  approach: "Scan a project repository against the 108 items of the PM Benchmark, then write a gap report with the missing items first."
+  role: "PM and owner."
+  stack: "To be chosen in the spec."
+  outcome: "Planned. It comes after the pm-toolkit plugin and the PM Benchmark."
 ---

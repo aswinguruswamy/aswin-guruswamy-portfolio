@@ -7,4 +7,10 @@ status: Planned
 group: apps
 order: 1
 epic: AGP-51
+page:
+  problem: "Subscriptions and recurring bills (car, insurance, utilities, internet, TV, credit cards) are in many places, and reminders come at the wrong time."
+  approach: "One dashboard for all subscriptions and recurring bills, notifications with a dynamic frequency, and spend tracking."
+  role: "PM. Run as a simulation of a full software team, with full governance."
+  stack: "To be chosen in the design."
+  outcome: "Planned. The next app after the Monte Carlo Delivery Forecast."
 ---

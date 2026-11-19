@@ -353,6 +353,20 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     }
     for (const [g, v] of Object.entries({ ...(j.groups || {}), page: j.page })) if (!v || Object.keys(v).sort().join(',') !== 'done,total') fails.push(`progress.json ${g}: fields must be done and total`);
   }
+  // REQ-09 v0, AGP-25: every project page has no empty box (picture or "Coming soon"; LINKS only with links), and its menu item and Back link name its own container.
+  {
+    const html = await (await fetch(B)).text();
+    const slugs = [...new Set([...html.matchAll(/projects\/([a-z0-9-]+)\//g)].map((m) => m[1]))];
+    if (slugs.length !== 11) fails.push(`project pages: ${slugs.length} cards link to a page, want 11 (REQ-09)`);
+    for (const s of slugs) {
+      const h = await (await fetch(B + 'projects/' + s + '/')).text();
+      if (/<div class="shot"><\/div>/.test(h)) fails.push(`projects/${s}: empty picture box`);
+      if (/<div class="p-links"><\/div>/.test(h)) fails.push(`projects/${s}: empty LINKS box`);
+      const apps = /All Apps and simulations/.test(h);
+      const cur = (h.match(/href="[^"]*#([a-z-]+)" aria-current="true"/) || [])[1];
+      if (cur !== (apps ? 'apps' : 'pm-tools')) fails.push(`projects/${s}: menu marks "${cur}", not its own container`);
+    }
+  }
   // AGP-37 v1 AC7 (NFR-11 v0): each run line from 19 Nov 2026 on has the UTC time, the result, the epic count, the stories and the page points.
   {
     const fs = await import('node:fs');

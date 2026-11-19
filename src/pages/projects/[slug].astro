@@ -2,6 +2,7 @@
 // EXPLAIN: one page for each project that has real content (problem, approach, role, stack, outcome, links).
 import Base from '../../layouts/Base.astro';
 import Badge from '../../components/Badge.astro';
+import Shuttle from '../../components/Shuttle.astro';
 import { withPage, pmTools, type Project } from '../../lib/content';
 export async function getStaticPaths() {
   return withPage.map((p, i) => ({ params: { slug: p.slug }, props: { p, prev: withPage[i - 1], next: withPage[i + 1] } }));
@@ -9,20 +10,24 @@ export async function getStaticPaths() {
 interface Props { p: Project; prev?: Project; next?: Project }
 const { p, prev, next } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const group = pmTools.includes(p) ? 'PM tools' : 'Apps and simulations';
+const isPm = pmTools.includes(p);
+const group = isPm ? 'PM tools' : 'Apps and simulations';
+const sec = isPm ? 'pm-tools' : 'apps';
 const pg = p.page!;
 const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.approach], ['MY ROLE', pg.role], ['STACK', pg.stack], ['OUTCOME', pg.outcome]];
 ---
-<Base title={`${p.name} · Aswin Guruswamy`} description={`${p.name}: ${p.line}.`} section="pm-tools" heading="">
+<Base title={`${p.name} · Aswin Guruswamy`} description={`${p.name}: ${p.line}.`} section={sec} heading="">
   <div class="crumbs-row">
     <div class="crumbs">
-      <a class="btn" href={`${base}/#pm-tools`}><span class="arr" aria-hidden="true">←</span><span>All {group}</span></a>
+      <a class="btn" href={`${base}/#${sec}`}><span class="arr" aria-hidden="true">←</span><span>All {group}</span></a>
       <small>{group} › {p.name}</small>
     </div>
   </div>
   <section class="panel">
     <div class="p-hero">
-      <div class="shot">{p.image && <img src={`${base}/img/${p.image}`} alt={`Screenshot of ${p.name}`} decoding="async" />}</div>
+      <div class="shot">{p.image
+        ? <img src={`${base}/img/${p.image}`} alt={`Screenshot of ${p.name}`} decoding="async" />
+        : <span class="soon"><Shuttle size={64} /><span>{p.status === 'Live' ? 'No screenshot yet' : 'Coming soon'}</span></span>}</div>
       <div>
         <h1 class="display">{p.name.toUpperCase()}</h1>
         <p>{p.line}</p>
@@ -35,9 +40,9 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
     {boxes.map(([h, t]) => (
       <section class="panel"><div class="panel-head"><h2 class="tag">{h}</h2></div><p>{t}</p></section>
     ))}
-    <section class="panel"><div class="panel-head"><h2 class="tag">LINKS</h2></div>
+    {p.links?.length ? <section class="panel"><div class="panel-head"><h2 class="tag">LINKS</h2></div>
       <div class="p-links">{(p.links ?? []).map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer"><span>{l.label}<span class="vh"> (opens in a new tab)</span></span><span class="arr" aria-hidden="true">↗</span></a>)}</div>
-    </section>
+    </section> : null}
   </div>
   <nav class="pager" aria-label="Other projects">
     {prev ? <a class="btn prev" href={`${base}/projects/${prev.slug}/`}><span class="arr" aria-hidden="true">←</span><span>{prev.name}</span></a> : <span></span>}
