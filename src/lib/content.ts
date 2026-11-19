@@ -27,6 +27,8 @@ export const pmTools = byOrder(all.filter((p) => p.group === 'pm-tools'), 'proje
 export const apps = byOrder(all.filter((p) => p.group === 'apps'), 'projects (apps)');
 export const allProjects = [...pmTools, ...apps];
 export const withPage = allProjects.filter((p) => p.page);
+// P-RB-4 (D58 v0): a Live card must lead somewhere: a project page or 1 outside link.
+for (const p of allProjects) if (p.status === 'Live' && !p.page && !p.links?.length) throw new Error(`${p.slug}.md: a Live card needs a project page or 1 link`);
 
 const [prof] = await getCollection('profile');
 if (!prof) throw new Error('src/content/profile/profile.md is missing');

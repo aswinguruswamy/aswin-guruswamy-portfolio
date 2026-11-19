@@ -469,3 +469,6 @@ footer { text-wrap: balance; }
    and the tag's corner has the same curve as the inside of the panel (16 px - 2 px border). The tag always sits at the top,
    also when tall ‹ › buttons are beside it. */
 .panel .tag { border-top: 0; border-left: 0; border-top-left-radius: 14px; align-self: flex-start; }
+
+/* D58 v0: a card that opens an outside link shows a small ↗ after its name. */
+.tile .ext { font-family: Inter, sans-serif; font-size: 0.8em; }

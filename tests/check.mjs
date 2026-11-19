@@ -331,6 +331,16 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     }
     await c.close();
   }
+  // P-RB-4, D58 v0: every Live card leads somewhere (its page, or an outside link in a new tab).
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const q = await c.newPage(); await q.goto(B);
+    const r = await q.evaluate(() => [...document.querySelectorAll('.row .tile')].map((t) => ({ name: t.querySelector('strong')?.textContent.trim(), live: /live/i.test(t.querySelector('.badge')?.textContent || ''), tag: t.tagName, href: t.getAttribute('href') || '', target: t.getAttribute('target') })));
+    for (const t of r.filter((x) => x.live)) {
+      if (t.tag !== 'A' || !t.href) fails.push(`P-RB-4 Live card "${t.name}" leads nowhere (no page, no link)`);
+      else if (/^https?:/.test(t.href) && t.target !== '_blank') fails.push(`P-RB-4 Live card "${t.name}": an outside link must open in a new tab`);
+    }
+    await c.close();
+  }
   // AGP-37 v1 AC2, AC3 (NFR-12 v0, D29 v0): the public progress.json has only the agreed fields, and no epic code or team word.
   {
     const j = await (await fetch(B + 'data/progress.json')).json();
