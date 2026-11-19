@@ -353,6 +353,13 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     }
     for (const [g, v] of Object.entries({ ...(j.groups || {}), page: j.page })) if (!v || Object.keys(v).sort().join(',') !== 'done,total') fails.push(`progress.json ${g}: fields must be done and total`);
   }
+  // AGP-37 v1 AC7 (NFR-11 v0): each run line from 19 Nov 2026 on has the UTC time, the result, the epic count, the stories and the page points.
+  {
+    const fs = await import('node:fs');
+    const rows = fs.readFileSync('logs/run-log.md', 'utf8').split('\n').filter((l) => /^\| 20\d\d-/.test(l) && l >= '| 2026-11-19');
+    if (!rows.length) fails.push('run-log: no run line from 19 Nov 2026 on (AGP-37 AC7)');
+    for (const l of rows) if (!/^\| \d{4}-\d\d-\d\d \d\d:\d\d \| (ok|failed) \| \d+ \| \d+ \| \d+\/\d+ \| [^|]+ \|$/.test(l)) fails.push(`run-log: line "${l}" needs time, result, epics, stories, page (AGP-37 AC7)`);
+  }
   // REQ-20 v0, D51 v0: when public/resume.pdf exists, the page has a working "Download résumé" link (sidebar and intro card) and no "coming soon".
   {
     const fs = await import('node:fs');
