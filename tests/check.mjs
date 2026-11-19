@@ -189,10 +189,15 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     for (const g of Object.keys(t.groups)) t.groups[g] = { done: 0, total: 0 };
     t.groups['pm-tools'] = { done: 5, total: 257 }; // the sum of its epics, made by make-progress.mjs
     t.takenAt = new Date().toISOString();
-    await pg.goto(B); await pg.waitForLoadState('networkidle');
-    const before = await pg.evaluate(() => [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x), Math.round(r.y)]; }));
+    // One page load: measure with the Workshop off, then press the switch and measure again (WebKit gave 2 page loads
+    // different head heights, 19 Nov, so 2 loads cannot show what the pies alone do).
     await pg.route('**/data/progress.json*', (r) => r.fulfill({ body: JSON.stringify(t), contentType: 'application/json' }));
-    await pg.goto(B + '?workshop'); await pg.waitForSelector('.ws-strip .ws-legend');
+    await pg.goto(B); await pg.waitForLoadState('networkidle'); await pg.evaluate(() => document.fonts.ready); await pg.waitForTimeout(300);
+    // Each card is measured from the top of its own section, after the fonts load (WebKit flake, 19 Nov: the top row
+    // height changed with font timing, not with the pies).
+    const POS = () => [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); const s = (x.parentElement.closest('section.panel') || x.parentElement).getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x - s.x), Math.round(r.y - s.y)]; });
+    const before = await pg.evaluate(POS);
+    await pg.click('[data-workshop]'); await pg.waitForSelector('.ws-strip .ws-legend'); await pg.waitForTimeout(300);
     const got = await pg.evaluate(() => {
       const pieOf = (sel) => document.querySelector(sel)?.querySelector('.pie');
       const p = pieOf('[data-epic="AGP-44"]'); const cs = getComputedStyle(p);
@@ -204,9 +209,9 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
         legend: document.querySelector('.ws-legend').textContent, time: document.querySelector('.ws-strip').textContent,
         xss: window.__xss === 1, img: !!document.querySelector('.ws-strip img, .pie img'),
         on: document.documentElement.classList.contains('ws-on'),
-        after: [...document.querySelectorAll('[data-epic]')].map((x) => { const r = x.getBoundingClientRect(); return [x.dataset.epic, Math.round(r.x), Math.round(r.y)]; }),
       };
     });
+    await pg.evaluate(() => document.fonts.ready); got.after = await pg.evaluate(POS);
     if (got.mcf !== '1%') fails.push(`AGP-34 AC2: 1 of 250 points shows "${got.mcf}", want "1%"`);
     if (got.raid !== '75%') fails.push(`AGP-34 AC2: 3 of 4 points shows "${got.raid}", want "75%"`);
     if (got.nm !== '–' || !/no work planned yet/i.test(got.nmLabel || '')) fails.push('AGP-34 AC3: 0 planned points must show "–" and read "No work planned yet"');
@@ -216,9 +221,7 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
     if (!/rgb\(255, 255, 255\)/.test(got.bg) || !got.on) fails.push('AGP-34 AC6: the empty part of the pie is not white, or the page has no 55% screen');
     if (got.legend !== 'LIVE = first version out · % = share of the full plan built' || !/UTC/.test(got.time)) fails.push('AGP-35 AC2: the strip has no snapshot time or the legend text is wrong');
     if (got.xss || got.img) fails.push('AGP-35 AC7: HTML from progress.json went into the page');
-    // The strip sits above the content (D46 v0) and moves the whole page down by its height; the pies must move no card inside it.
-    const norm = (a) => a.map((x) => [x[0], x[1] - a[0][1], x[2] - a[0][2]]);
-    before.splice(0, before.length, ...norm(before)); got.after = norm(got.after);
+    // The strip sits above the content (D46 v0) and moves whole sections down; a pie must move no card inside its section.
     const moved = got.after.filter((a, i) => before[i] && (Math.abs(a[1] - before[i][1]) > 1 || Math.abs(a[2] - before[i][2]) > 1)).map((a) => a[0]);
     if (moved.length) fails.push(`AGP-34 AC5: cards moved when the Workshop turned on: ${got.after.filter((a, i) => before[i] && (a[1] !== before[i][1] || a[2] !== before[i][2])).map((a, i) => a.join(':') + ' was ' + before.find((b) => b[0] === a[0]).slice(1).join(':')).slice(0, 3).join(', ')}`);
     for (const [kind, body] of [['empty', ''], ['broken', '{"epics": ']]) {
