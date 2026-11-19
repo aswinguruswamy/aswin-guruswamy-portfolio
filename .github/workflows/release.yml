@@ -9,8 +9,7 @@ on:
     branches: [main]
     paths: [VERSION]
 
-permissions:
-  contents: write
+permissions: {}   # P-CI-5: per job
 
 concurrency:
   group: release
@@ -19,8 +18,10 @@ concurrency:
 jobs:
   tag-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # to make the tag and the release
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 

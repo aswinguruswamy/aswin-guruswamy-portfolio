@@ -6,43 +6,84 @@ on:
   pull_request:
   push:
     branches: [main]
-permissions:
-  contents: read
+# P-CI-5: no permission at workflow level; each job asks only for what it needs.
+permissions: {}
 jobs:
   build-and-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]   # NFR-04
+    # P-RB-6: Playwright's official image has the browsers and their system packages, so there is no install step that can hang
+    # (on 18 Nov the install hung twice, and a stuck apt process blocked the retries). The tag matches @playwright/test 1.63.0.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user 1001 --ipc=host
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
-      # The browser install hung for 18+ min on GitHub's machines (18 Nov, twice). Each try stops after 5 min; 3 tries.
-      - run: for i in 1 2 3; do timeout 300 npx playwright install --with-deps ${{ matrix.browser }} && exit 0; echo "install try $i failed or timed out"; done; exit 1
-        timeout-minutes: 16
       - run: npm test
         env:
           BROWSER: ${{ matrix.browser }}
   quality:
     # EXPLAIN: speed and access gate. axe on every page; Lighthouse mobile on the main page (median of 3 runs).
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # P-RB-6: Playwright's official image has the browsers and their system packages, so there is no install step that can hang
+    # (on 18 Nov the install hung twice, and a stuck apt process blocked the retries). The tag matches @playwright/test 1.63.0.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user 1001 --ipc=host
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: for i in 1 2 3; do timeout 300 npx playwright install --with-deps chromium && exit 0; echo "install try $i failed or timed out"; done; exit 1
-        timeout-minutes: 16
       - run: npm run test:quality
       - run: npm run test:content   # NFR-09 v1: a wrong edit in src/content stops the build
       - run: npm run test:licences  # AGP-15 AC7: open licences only
-      - run: pip install pypdf==6.17.0 && python3 scripts/check-resume.py   # D51 v0: no email, phone, photo; Amazon title D6 v1
+  security:
+    # EXPLAIN: P-CI-1 secret scan, P-CI-4 dependency scan, P-CI-2 pin check. Each check proves it can fail.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0   # the secret scan reads the full history
+      - name: Get gitleaks 8.30.1 (checksum checked before it runs)
+        run: |
+          curl -sSL -o "$RUNNER_TEMP/gl.tgz" https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $RUNNER_TEMP/gl.tgz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/gl.tgz" -C "$RUNNER_TEMP" gitleaks
+      - name: Prove the secret scan finds a key (a fake key made here; it is never in the repo)
+        run: |
+          mkdir -p "$RUNNER_TEMP/plant"
+          printf 'token = "ghp_%s"\n' "$(head -c 400 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 36)" > "$RUNNER_TEMP/plant/config.txt"
+          if "$RUNNER_TEMP/gitleaks" dir "$RUNNER_TEMP/plant" --no-banner --redact; then echo "FAIL: gitleaks did not find the planted key"; exit 1; fi
+          echo "OK: gitleaks found the planted key"
+      - name: Secret scan (full history; findings are masked)
+        run: '"$RUNNER_TEMP/gitleaks" git . --no-banner --redact'
+      - name: Every action is pinned to a commit SHA (P-CI-2)
+        run: node scripts/check-pins.mjs
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Dependency scan (fails on high or critical)
+        run: npm audit --audit-level=high
+      - name: Résumé privacy check (D51 v0; moved here from the quality job, which runs in a container without Python)
+        run: pip install pypdf==6.17.0 && python3 scripts/check-resume.py
