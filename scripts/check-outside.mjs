@@ -49,7 +49,8 @@ async function open(u) {
 }
 for (const u of links.filter((u) => !isDemo(u))) {
   const st = await open(u);
-  if (st === 999) notes.push(`blocked to robots (not checked): ${u}`);
+  // LinkedIn answers robots with 999 or 429; that is a block, not a broken link.
+  if (st === 999 || (st === 429 && /linkedin\.com/.test(u))) notes.push(`blocked to robots (${st}, not checked): ${u}`);
   else if (typeof st !== 'number' || st >= 400) fails.push(`link does not open (${st}): ${u}`);
 }
 
@@ -69,12 +70,24 @@ if (demos.length) {
         }
         return false;
       };
-      const asleep = await pg.getByText(/gone to sleep/i).first().isVisible().catch(() => false);
+      // Streamlit shows its pages inside frames, so look in every frame.
+      const inFrames = async (fn) => { for (const fr of pg.frames()) { try { const r = await fn(fr); if (r) return r; } catch {} } return null; };
+      await pg.waitForTimeout(8000);
+      const asleep = !!(await inFrames(async (fr) => (await fr.getByText(/gone to sleep|app is asleep|zzz/i).count()) > 0));
       if (asleep) {
         notes.push(`demo was asleep and was woken up: ${u}`);
-        await pg.getByRole('button', { name: /back up|wake/i }).first().click().catch(() => {});
+        await inFrames(async (fr) => { const b = fr.getByRole('button', { name: /back up|wake/i }).first(); if (await b.count()) { await b.click(); return true; } });
       }
-      if (!(await appLoaded(asleep ? 180000 : 90000))) fails.push(`demo does not load${asleep ? ' (after wake-up)' : ''}: ${u}`);
+      if (!(await appLoaded(asleep ? 180000 : 90000))) {
+        fails.push(`demo does not load${asleep ? ' (after wake-up)' : ''}: ${u}`);
+        // evidence for the issue: what the page shows (frames, title, first text) and a screenshot
+        const name = u.replace(/^https?:\/\//, '').replace(/[^\w.-]+/g, '_');
+        fs.mkdirSync('outside-evidence', { recursive: true });
+        await pg.screenshot({ path: `outside-evidence/${name}.png`, fullPage: true }).catch(() => {});
+        const info = [];
+        for (const fr of pg.frames()) info.push(`${fr.url().slice(0, 80)} :: ${((await fr.locator('body').innerText().catch(() => '')) || '').replace(/\s+/g, ' ').slice(0, 160)}`);
+        notes.push(`evidence for ${u}: title "${await pg.title().catch(() => '')}"; frames: ${info.join(' | ')}`);
+      }
       const bad = await pg.getByText(/oh no\.|error running app/i).first().isVisible().catch(() => false);
       if (bad) fails.push(`demo shows an error page: ${u}`);
     } catch (e) { fails.push(`demo does not open (${e.name}): ${u}`); }

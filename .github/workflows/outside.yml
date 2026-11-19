@@ -35,3 +35,10 @@ jobs:
           OPEN_ISSUE: ${{ github.event_name != 'pull_request' && '1' || '0' }}
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/check-outside.mjs
+      - name: Keep the evidence (screenshots of a demo that did not load)
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: outside-evidence
+          path: outside-evidence
+          retention-days: 14
