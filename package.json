@@ -23,6 +23,8 @@
     "@primer/octicons": "^19.42.0",
     "chrome-launcher": "1.2.3",
     "lighthouse": "13.6.0",
+    "pixelmatch": "8.0.0",
+    "pngjs": "7.0.0",
     "simple-icons": "^16.38.0"
   }
 }

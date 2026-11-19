@@ -1,0 +1,44 @@
+# EXPLAIN: daily outside check (P-RB-1 links, P-RB-2 Streamlit demos, P-RB-5 card versions): scripts/check-outside.mjs.
+# It runs each morning (06:43 Toronto) and by hand (Actions > Outside check > Run workflow). On a failure it opens
+# 1 GitHub issue with the label "outside-check" (or adds a comment to the open one). The daily visit also wakes a
+# sleeping demo before recruiters open it. It also runs on a pull request that changes the check itself
+# (no issue then). It is not a required check: an outside site that is slow must not block a merge.
+name: Outside check
+on:
+  schedule:
+    - cron: '43 11 * * *'   # 06:43 Toronto (EST); 07:43 in summer time
+  workflow_dispatch:
+  pull_request:
+    paths: [scripts/check-outside.mjs, .github/workflows/outside.yml]
+permissions: {}
+jobs:
+  outside:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write   # to open the issue on a failure
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user 1001 --ipc=host
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Self-test (a planted broken link and a wrong version must fail)
+        run: node scripts/check-outside.mjs --self-test
+      - name: Check links, demos and versions
+        env:
+          OPEN_ISSUE: ${{ github.event_name != 'pull_request' && '1' || '0' }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/check-outside.mjs
+      - name: Keep the evidence (screenshots of a demo that did not load)
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: outside-evidence
+          path: outside-evidence
+          retention-days: 14

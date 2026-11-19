@@ -2,3 +2,5 @@ node_modules/
 dist/
 .astro/
 test-results/
+visual-diff/
+outside-evidence/
