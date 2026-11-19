@@ -3,9 +3,10 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 const BASE = '/aswin-guruswamy-portfolio';
-const DIST = path.resolve('dist');
-const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.woff': 'font/woff', '.pdf': 'application/pdf' };
-export function start(port = 4321) {
+const TYPES = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.woff': 'font/woff', '.pdf': 'application/pdf', '.webp': 'image/webp', '.json': 'application/json' };
+// dist: the folder to serve (default dist/). The visual diff serves the main build from a second folder.
+export function start(port = 4321, dist = 'dist') {
+  const DIST = path.resolve(dist);
   const srv = http.createServer((req, res) => {
     let p = decodeURIComponent(req.url.split('?')[0]);
     if (!p.startsWith(BASE)) { res.writeHead(302, { Location: BASE + '/' }); return res.end(); }

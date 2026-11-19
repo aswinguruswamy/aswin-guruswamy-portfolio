@@ -1,0 +1,45 @@
+# EXPLAIN: P-RB-9 visual diff. On each pull request it builds main and the PR, takes the same screenshots of both
+# (3 pages x 3 widths x 2 themes, the phone menu, the Workshop view) and compares them (tests/visual-diff.mjs).
+# A changed screenshot must be named in the PR description: "Visual changes: home-390-light, ...". A change that
+# nobody named stops the merge. The side-by-side images (main | PR | diff) are in the "visual-diff" artifact.
+# "edited" is in the triggers, so the check runs again when the PR description changes.
+name: Visual diff
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+permissions: {}
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user 1001 --ipc=host
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build main
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git worktree add "$RUNNER_TEMP/base" "origin/$BASE_REF"
+          cd "$RUNNER_TEMP/base" && npm ci && npm run build
+      - name: Build the PR
+        run: npm ci && npm run build
+      - name: Compare
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node tests/visual-diff.mjs "$RUNNER_TEMP/base/dist" visual-diff
+      - name: Keep the images
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: visual-diff
+          path: visual-diff
+          retention-days: 14
