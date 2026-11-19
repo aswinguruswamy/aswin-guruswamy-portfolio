@@ -1,0 +1,29 @@
+# EXPLAIN: AGP-43 release check (benchmark item 86): a passive OWASP ZAP baseline scan of the live page.
+# Rule: 0 high findings; each medium finding is fixed or recorded with a reason (scripts/check-zap.mjs).
+# It runs each Monday and by hand (Actions > Release checks > Run workflow). It is not a required check:
+# it scans the live page, not the pull request.
+name: Release checks
+on:
+  schedule:
+    - cron: '29 12 * * 1'   # Monday 07:29 Toronto (EST)
+  workflow_dispatch:
+  pull_request:
+    paths: [scripts/check-zap.mjs, .github/workflows/release-checks.yml]
+permissions: {}
+jobs:
+  zap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: ZAP baseline scan (passive)
+        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
+        with:
+          target: https://aswinguruswamy.github.io/aswin-guruswamy-portfolio/
+          fail_action: false
+          allow_issue_writing: false
+          cmd_options: '-j'
+      - name: 0 high findings; mediums need a reason
+        run: node scripts/check-zap.mjs report_json.json
