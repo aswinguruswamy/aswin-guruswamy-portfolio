@@ -9,10 +9,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // D58 v0: a card with no project page links to its first outside link, in a new tab (rule 9).
 const ext = !p.page && p.links?.length ? p.links[0] : undefined;
 const Tag = p.page || ext ? 'a' : 'div';
+// The screen-reader text comes after the visible text (WCAG 2.5.3: the name must contain the visible label).
 ---
 <li>
   <Tag class="tile" href={p.page ? `${base}/projects/${p.slug}/` : ext?.href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener noreferrer' : undefined}
-    aria-label={ext ? `${p.name}: ${ext.label} (opens in a new tab)` : undefined} data-epic={p.epic}>
+    data-epic={p.epic}>
     <div class="shot">{p.image
       ? <img src={`${base}/img/thumb/${p.image}`} alt="" loading="lazy" decoding="async" width="240" height="160" />
       : <span class="soon"><Shuttle size={44} /><span>Coming soon</span></span>}</div>
@@ -20,6 +21,7 @@ const Tag = p.page || ext ? 'a' : 'div';
       <strong class="display">{p.name}{ext && <span class="ext" aria-hidden="true"> ↗</span>}</strong>
       <span class="line">{p.line}</span>
       <Badge status={p.status} />
+      {ext && <span class="vh">Opens {ext.label} in a new tab.</span>}
     </div>
   </Tag>
 </li>
