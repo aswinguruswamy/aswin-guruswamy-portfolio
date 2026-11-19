@@ -1,5 +1,5 @@
 {
- "takenAt": "2026-11-18T16:30:00Z",
+ "takenAt": "2026-11-19T10:17:41.839Z",
  "source": "Jira project AGP",
  "epics": {
   "AGP-1": "E1 Foundation",
@@ -31,29 +31,48 @@
   {
    "key": "AGP-2",
    "epic": "AGP-1",
-   "title": "S1 Astro site and content folder",
+   "title": "S1 Set up the Astro site, folder structure, and Markdown content folder",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-09",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-15",
    "epic": "AGP-1",
-   "title": "S2 CI checks",
-   "status": "In Progress",
+   "title": "S2 CI: Playwright tests (4 widths), axe-core, Lighthouse CI, page-weight check",
+   "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "build"
+   "doneAt": "2026-11-18",
+   "kind": "build",
+   "labels": [
+    "NFR-01",
+    "NFR-02",
+    "NFR-03",
+    "NFR-04",
+    "NFR-10",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-16",
    "epic": "AGP-1",
-   "title": "S3 Deploy and rollback drill",
+   "title": "S3 Deploy to GitHub Pages on each merge; 1 timed rollback drill",
    "status": "Done",
    "points": 3,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-07",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-17",
@@ -62,7 +81,12 @@
    "status": "In Progress",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-05",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-18",
@@ -71,165 +95,263 @@
    "status": "Done",
    "points": 2,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-01",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-19",
    "epic": "AGP-3",
-   "title": "S6 Credential and education badges",
+   "title": "S6 Credential badges (PMP, CSM, CSPO) and education badges",
    "status": "Done",
    "points": 2,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-02",
+    "REQ-03",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-20",
    "epic": "AGP-3",
-   "title": "S7 Career-goal card",
+   "title": "S7 Career-goal card with the D2 ladder; current step marked",
    "status": "Done",
    "points": 3,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-04",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-21",
    "epic": "AGP-3",
    "title": "S8 LinkedIn and GitHub links",
-   "status": "In Progress",
+   "status": "Done",
    "points": 1,
-   "doneAt": null,
-   "kind": "build"
+   "doneAt": "2026-11-18",
+   "kind": "build",
+   "labels": [
+    "REQ-05",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-22",
    "epic": "AGP-4",
-   "title": "S9 Experience cards",
+   "title": "S9 Experience cards (Logofn, Amazon, PM background)",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-06",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-23",
    "epic": "AGP-5",
-   "title": "S10 PM tools container",
+   "title": "S10 PM tools container: 7 cards with title, problem, status",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-07",
+    "REQ-11",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-24",
    "epic": "AGP-5",
-   "title": "S11 Apps and simulations container",
+   "title": "S11 Apps and simulations container: 4 cards",
    "status": "In Progress",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-08",
+    "REQ-11",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-25",
    "epic": "AGP-6",
-   "title": "S12 Project page template",
+   "title": "S12 Project page template from 1 Markdown file; shareable link; Back control",
    "status": "In Progress",
    "points": 5,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-09",
+    "REQ-09",
+    "REQ-10",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-26",
    "epic": "AGP-6",
-   "title": "S13 Content of the 11 project files",
+   "title": "S13 Content of the 11 project files (Claude drafts, Aswin approves)",
    "status": "In Progress",
    "points": 5,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-10",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-27",
    "epic": "AGP-7",
-   "title": "S14 Skills matrix: PM skills and tools",
+   "title": "S14 Skills matrix: PM skills (CB3 list, with sources) and tools",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-12",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-28",
    "epic": "AGP-7",
-   "title": "S15 AI skills with levels",
+   "title": "S15 AI skills: honest levels, each linked to a project page",
    "status": "In Progress",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-12",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-29",
    "epic": "AGP-7",
-   "title": "S16 AI skills roadmap",
+   "title": "S16 AI skills roadmap (3 or more next steps with dates)",
    "status": "To Do",
    "points": 1,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-13",
+    "should",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-30",
    "epic": "AGP-8",
-   "title": "S17 Copy email and résumé at the top",
+   "title": "S17 Copy email and Download résumé at the top (sidebar on desktop, first card on the phone",
    "status": "In Progress",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-05",
+    "REQ-14",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-31",
    "epic": "AGP-8",
-   "title": "S18 Download résumé button",
+   "title": "S18 Download resume button",
    "status": "To Do",
    "points": 1,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-20",
+    "should",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-32",
    "epic": "AGP-9",
-   "title": "S19 Light and dark mode",
+   "title": "S19 Light and dark mode toggle; follows the system setting; remembers the choice",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-02",
+    "REQ-15",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-33",
    "epic": "AGP-9",
-   "title": "S20 Theme on all parts",
+   "title": "S20 Apply the G4 theme (colours, type, original art) to all parts",
    "status": "Done",
    "points": 5,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-19",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-34",
    "epic": "AGP-10",
-   "title": "S21 Workshop core and card pies",
+   "title": "S21 Overlay core: standalone JS, Workshop toggle, card pies from progress.json",
    "status": "In Progress",
    "points": 5,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-16",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-35",
    "epic": "AGP-10",
-   "title": "S22 Container pies and data states",
+   "title": "S22 Container pies (sum of the epics), snapshot time, and data states",
    "status": "In Progress",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-08",
+    "REQ-16",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-36",
    "epic": "AGP-10",
-   "title": "S23 Review panel",
+   "title": "S23 Review panel: needs-review list and done in the last 14 days",
    "status": "To Do",
    "points": 0,
    "doneAt": null,
@@ -237,45 +359,67 @@
    "labels": [
     "REQ-17",
     "must",
-    "removed",
-    "sprint-2"
+    "removed"
    ]
   },
   {
    "key": "AGP-37",
    "epic": "AGP-10",
-   "title": "S24 Daily data task",
-   "status": "To Do",
+   "title": "S24 Daily scheduled task: read Jira, write progress.json, push with git; alert on failure",
+   "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-08",
+    "NFR-11",
+    "NFR-12",
+    "REQ-18",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-38",
    "epic": "AGP-10",
-   "title": "S25a Workshop snapshot 1",
+   "title": "S25a Evidence: Workshop snapshot 1 (end of Sprint 1)",
    "status": "To Do",
    "points": 1,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-23",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-39",
    "epic": "AGP-11",
-   "title": "S26 Search and sharing data",
+   "title": "S26 Title, description, preview image, favicon, sitemap, robots.txt, Person data",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-21",
+    "must",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-40",
    "epic": "AGP-11",
-   "title": "S27 404 page",
+   "title": "S27 404 page in the theme",
    "status": "Done",
    "points": 1,
    "doneAt": "2026-11-18",
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-22",
+    "should",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-41",
@@ -284,52 +428,88 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-06",
+    "should",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-42",
    "epic": "AGP-13",
-   "title": "S29 Status report reads progress.json",
+   "title": "S29 Weekly Status Report Generator reads progress.json",
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-24",
+    "could",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-43",
    "epic": "AGP-14",
-   "title": "S30 Release checks",
+   "title": "S30 Release checks: keyboard test, iPhone check, network check, final review",
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "NFR-02",
+    "NFR-04",
+    "NFR-06",
+    "NFR-11",
+    "NFR-12",
+    "must",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-55",
    "epic": "AGP-1",
-   "title": "S31 Page shell",
+   "title": "S31 Page shell: desktop sidebar, top bar, phone header and menu",
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "CR-02",
+    "NFR-02",
+    "NFR-03",
+    "must",
+    "sprint-1"
+   ]
   },
   {
    "key": "AGP-56",
    "epic": "AGP-10",
-   "title": "S25b Workshop snapshot 2",
+   "title": "S25b Evidence: Workshop snapshot 2 (end of Sprint 2)",
    "status": "To Do",
    "points": 1,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-23",
+    "must",
+    "sprint-2"
+   ]
   },
   {
    "key": "AGP-57",
    "epic": "AGP-10",
-   "title": "S25c Workshop snapshot 3 and video",
+   "title": "S25c Evidence: Workshop snapshot 3, the video, and the card links",
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "build"
+   "kind": "build",
+   "labels": [
+    "REQ-23",
+    "must",
+    "sprint-3"
+   ]
   },
   {
    "key": "AGP-58",
@@ -337,8 +517,11 @@
    "title": "v1: command-line forecast and Streamlit app",
    "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-59",
@@ -346,8 +529,11 @@
    "title": "Back-test on the TAWOS dataset (29 projects)",
    "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-60",
@@ -355,8 +541,11 @@
    "title": "Public release v1.0.0 and live demo",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-61",
@@ -364,8 +553,11 @@
    "title": "v1.2: dark theme and v2 back-test",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-62",
@@ -374,7 +566,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-63",
@@ -383,7 +578,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-64",
@@ -392,7 +590,10 @@
    "status": "To Do",
    "points": 1,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-65",
@@ -400,8 +601,11 @@
    "title": "v1.0 extractor: RAID items from meeting notes",
    "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-66",
@@ -409,8 +613,11 @@
    "title": "Evaluations and release v1.0.0",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-67",
@@ -419,7 +626,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-68",
@@ -427,8 +637,11 @@
    "title": "v1.0 weekly report with RAG status",
    "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-69",
@@ -436,8 +649,11 @@
    "title": "Release v1.0.0",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-70",
@@ -446,7 +662,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-71",
@@ -455,7 +674,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-72",
@@ -464,7 +686,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-73",
@@ -473,7 +698,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-74",
@@ -481,8 +709,11 @@
    "title": "Hub skill and 15 PM skills",
    "status": "Done",
    "points": 8,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-75",
@@ -491,7 +722,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-76",
@@ -500,7 +734,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-77",
@@ -508,8 +745,11 @@
    "title": "v1.0: 108-item benchmark",
    "status": "Done",
    "points": 5,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-78",
@@ -518,7 +758,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-79",
@@ -527,7 +770,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-80",
@@ -536,7 +782,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-81",
@@ -545,7 +794,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-82",
@@ -554,7 +806,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-83",
@@ -563,7 +818,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-84",
@@ -572,7 +830,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-85",
@@ -581,7 +842,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-86",
@@ -590,7 +854,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-87",
@@ -599,7 +866,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-88",
@@ -607,8 +877,11 @@
    "title": "Documentation suite",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-89",
@@ -617,7 +890,10 @@
    "status": "In Progress",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-90",
@@ -626,7 +902,10 @@
    "status": "To Do",
    "points": 5,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-91",
@@ -635,7 +914,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-92",
@@ -643,8 +925,11 @@
    "title": "First simulation",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-93",
@@ -653,7 +938,10 @@
    "status": "In Progress",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-94",
@@ -662,7 +950,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-95",
@@ -671,7 +962,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-96",
@@ -679,8 +973,11 @@
    "title": "Book shell and workflow",
    "status": "Done",
    "points": 3,
-   "doneAt": null,
-   "kind": "card"
+   "doneAt": "2026-11-18",
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-97",
@@ -689,7 +986,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-98",
@@ -698,7 +998,10 @@
    "status": "To Do",
    "points": 3,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   },
   {
    "key": "AGP-99",
@@ -707,7 +1010,10 @@
    "status": "To Do",
    "points": 2,
    "doneAt": null,
-   "kind": "card"
+   "kind": "card",
+   "labels": [
+    "card-story"
+   ]
   }
  ]
 }

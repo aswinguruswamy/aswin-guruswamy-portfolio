@@ -1,14 +1,14 @@
 {
- "takenAt": "2026-11-18T16:30:00Z",
+ "takenAt": "2026-11-19T10:17:41.839Z",
  "epics": {
   "AGP-1": {
    "title": "Foundation",
-   "done": 3,
+   "done": 8,
    "total": 16
   },
   "AGP-3": {
    "title": "Header and career",
-   "done": 7,
+   "done": 8,
    "total": 8
   },
   "AGP-4": {
@@ -124,7 +124,7 @@
  },
  "groups": {
   "header": {
-   "done": 7,
+   "done": 8,
    "total": 8
   },
   "experience": {
@@ -145,7 +145,7 @@
   }
  },
  "page": {
-  "done": 16,
+  "done": 22,
   "total": 84
  }
 }
