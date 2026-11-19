@@ -20,6 +20,23 @@ npm test           # the checks that CI runs (needs: npx playwright install chro
 node tests/snap.mjs <name>   # milestone screenshots in docs/snaps/
 ```
 
+## Folders
+
+| Folder | Use |
+| --- | --- |
+| `src/pages` | the routes: main page, project pages, 404 |
+| `src/components` | reused parts: Tile (card), Badge, Avatar, BrandMark, Icon, Shuttle |
+| `src/layouts` | `Base.astro`, the page frame (sidebar, top bar, phone menu) |
+| `src/content` | all text, in Markdown: `projects/`, `profile/`, `experience/`, `skills/` (schema in `src/content.config.ts`) |
+| `src/styles` | `global.css`, the colours (design tokens), light and dark mode |
+| `public/js` | `site.js` (Copy email, menu, rows), `theme.js` (light/dark before the page shows), `workshop.js` (Build Progress view) |
+| `public/data` | `progress.json`, the daily Jira data for the Workshop |
+| `logs` | `run-log.md`, 1 line for each daily data run |
+| `tests` | page checks (`check.mjs`), accessibility and Lighthouse (`quality.mjs`), planted content errors, visual diff, screenshots |
+| `scripts` | Jira snapshot and progress.json, run log, pin, licence, résumé and outside checks |
+| `archive` | old files kept for the record, not used by the build |
+| `.github/workflows` | CI, CodeQL, visual diff, daily outside check, deploy, release |
+
 ## Edit the content
 All text and links are in Markdown files in `src/content/` (NFR-09). Edit a file on GitHub, open a pull request, and the page changes after the merge. No code change is needed.
 
@@ -31,7 +48,7 @@ All text and links are in Markdown files in `src/content/` (NFR-09). Edit a file
 | `skills/` | one skills box | head, order, tools | the box text |
 
 A project gets its own page when its file has all 5 parts of `page` (problem, approach, role, stack, outcome).
-A wrong value stops the build and names the file (for example a status other than Live, In progress or Planned, an epic that is not a Jira key, an image that is not in `public/img`, or the same order twice). `npm run test:content` proves this with 8 planted mistakes.
+A wrong value stops the build and names the file (for example a status other than Live, In progress or Planned, an epic that is not a Jira key, an image that is not in `public/img`, or the same order twice). `npm run test:content` proves this with 10 planted mistakes.
 
 The résumé is `public/resume.pdf`: add or replace that file, and the button changes from "Résumé coming soon" to "Download résumé".
 The old content file is kept, unused, in `archive/site.ts`.
