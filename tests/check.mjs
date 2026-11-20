@@ -547,7 +547,7 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   const slugs = await pg.evaluate(() => [...document.querySelectorAll('a.tile')].map((a) => a.getAttribute('href')));
   for (const path of ['', ...slugs.filter((h) => h && h.includes('/projects/')).map((h) => h.replace(/^.*?\/projects\//, 'projects/'))]) {
     const html = await (await pg.request.get(B + path)).text();
-    if (/yaw damper simulation/i.test(html.replace(/<!--[\s\S]*?-->/g, ''))) fails.push(`AGP-100 AC2: ${path || 'home'} still shows "Yaw Damper Simulation"`);
+    if (/yaw damper simulation/i.test(html)) fails.push(`AGP-100 AC2: ${path || 'home'} still shows "Yaw Damper Simulation"`);
   }
   const gone = await pg.request.get(B + 'projects/yaw-damper-simulation/');
   if (gone.status() === 200 && !/404|out of court/i.test(await gone.text())) fails.push('AGP-100 AC2: /projects/yaw-damper-simulation/ is still built');
