@@ -10,7 +10,7 @@ const kind = process.env.BROWSER || 'chromium';
 const browser = await ({ chromium, firefox, webkit })[kind].launch(kind === 'chromium' && process.env.CHROME ? { executablePath: process.env.CHROME, args: ['--no-sandbox'] } : {});
 console.log('browser:', kind);
 const B = URL_BASE(4500);
-const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log-extractor/', 'projects/status-report-generator/', 'projects/pm-benchmark/', 'no-such-page'];
+const pages = ['', 'projects/monte-carlo-delivery-forecast/', 'projects/raid-log-extractor/', 'projects/status-report-generator/', 'projects/pm-benchmark/', 'projects/ame-3d-lessons/', 'no-such-page'];
 const fails = [];
 const warns = [];
 const seen = new Set();
@@ -533,6 +533,28 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   await pg.focus('.more'); await pg.keyboard.press('Enter'); await pg.waitForTimeout(100);
   if (await pg.evaluate(() => document.activeElement === document.body || !document.activeElement)) fails.push('show all: focus is lost after the button hides');
   else if (!(await pg.evaluate(() => document.getElementById('tools-row').contains(document.activeElement)))) fails.push('show all: focus does not go to the new cards');
+  await ctx.close();
+}
+// REQ-08 v1, D11 v1, AGP-100: the Apps row has AME 3D Lessons first; the Yaw Damper Simulation card is gone; the AME page has its 2 links.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const pg = await ctx.newPage();
+  await pg.goto(B);
+  const apps = await pg.evaluate(() => [...document.querySelectorAll('#apps-row .tile')].map((t) => ({ name: t.querySelector('strong')?.childNodes[0]?.textContent.trim(), epic: t.getAttribute('data-epic'), status: t.querySelector('.badge, [class*="badge"]')?.textContent.trim() || t.textContent, img: !!t.querySelector('img') })));
+  const want = ['AME 3D Lessons', 'Notification and Subscription Dashboard', 'SelfBet', 'AME Courseware'];
+  if (apps.map((a) => a.name).join('|') !== want.join('|')) fails.push(`AGP-100 AC1: Apps row is [${apps.map((a) => a.name).join(', ')}], want [${want.join(', ')}]`);
+  const ame = apps.find((a) => a.name === 'AME 3D Lessons');
+  if (!ame || ame.epic !== 'AGP-53' || !/live/i.test(ame.status) || !ame.img) fails.push('AGP-100 AC3: AME 3D Lessons card is not Live, has no picture, or has no data-epic="AGP-53"');
+  const slugs = await pg.evaluate(() => [...document.querySelectorAll('a.tile')].map((a) => a.getAttribute('href')));
+  for (const path of ['', ...slugs.filter((h) => h && h.includes('/projects/')).map((h) => h.replace(/^.*?\/projects\//, 'projects/'))]) {
+    const html = await (await pg.request.get(B + path)).text();
+    if (/yaw damper simulation/i.test(html.replace(/<!--[\s\S]*?-->/g, ''))) fails.push(`AGP-100 AC2: ${path || 'home'} still shows "Yaw Damper Simulation"`);
+  }
+  const gone = await pg.request.get(B + 'projects/yaw-damper-simulation/');
+  if (gone.status() === 200 && !/404|out of court/i.test(await gone.text())) fails.push('AGP-100 AC2: /projects/yaw-damper-simulation/ is still built');
+  await pg.goto(B + 'projects/ame-3d-lessons/');
+  const links = await pg.evaluate(() => [...document.querySelectorAll('.p-links a')].map((a) => [a.textContent.replace(/\s*\(opens in a new tab\)\s*/, '').replace('↗', '').trim(), a.href, a.target]));
+  const wantL = [['Live demo', 'https://aswinguruswamy.github.io/ame-3d-lessons/', '_blank'], ['Repository', 'https://github.com/aswinguruswamy/ame-3d-lessons', '_blank']];
+  if (JSON.stringify(links) !== JSON.stringify(wantL)) fails.push(`AGP-100 AC4: AME page links are ${JSON.stringify(links)}`);
   await ctx.close();
 }
 await browser.close(); srv.close();

@@ -5,7 +5,7 @@ name: SelfBet
 line: Basketball self-betting web app
 status: Planned
 group: apps
-order: 2
+order: 3
 epic: AGP-52
 page:
   problem: "Wallet and betting logic is easy to get wrong, and a small error changes balances."
