@@ -5,7 +5,7 @@ name: Notification and Subscription Dashboard
 line: One place to see and manage notifications and subscriptions
 status: Planned
 group: apps
-order: 1
+order: 2
 epic: AGP-51
 page:
   problem: "Subscriptions and recurring bills (car, insurance, utilities, internet, TV, credit cards) are in many places, and reminders come at the wrong time."
