@@ -1,5 +1,5 @@
 {
- "takenAt": "2026-11-20T10:18:58.482Z",
+ "takenAt": "2026-11-21T10:18:41.869Z",
  "epics": {
   "AGP-1": {
    "title": "Foundation",
@@ -19,7 +19,7 @@
   "AGP-5": {
    "title": "Project containers",
    "done": 5,
-   "total": 5
+   "total": 7
   },
   "AGP-6": {
    "title": "Project pages",
@@ -113,8 +113,8 @@
   },
   "AGP-53": {
    "title": "Yaw Damper Simulation",
-   "done": 3,
-   "total": 10
+   "done": 8,
+   "total": 8
   },
   "AGP-54": {
    "title": "AME Courseware",
@@ -140,12 +140,12 @@
    "total": 98
   },
   "apps": {
-   "done": 9,
-   "total": 61
+   "done": 14,
+   "total": 59
   }
  },
  "page": {
   "done": 64,
-  "total": 84
+  "total": 86
  }
 }
