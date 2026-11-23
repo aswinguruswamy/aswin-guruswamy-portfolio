@@ -16,7 +16,7 @@ export const GROUPS = {
   experience: ['AGP-4'],
   skills: ['AGP-7'],
   'pm-tools': ['AGP-44', 'AGP-45', 'AGP-46', 'AGP-47', 'AGP-48', 'AGP-49', 'AGP-10'],
-  apps: ['AGP-51', 'AGP-52', 'AGP-53', 'AGP-54'],
+  apps: ['AGP-51', 'AGP-52', 'AGP-53'], // D11 v2: the AME Courseware card (AGP-54) is removed
 };
 const BUILD_EPICS = ['AGP-1', 'AGP-3', 'AGP-4', 'AGP-5', 'AGP-6', 'AGP-7', 'AGP-8', 'AGP-9', 'AGP-10', 'AGP-11', 'AGP-12', 'AGP-13', 'AGP-14'];
 
