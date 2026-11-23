@@ -1,0 +1,20 @@
+---
+// EXPLAIN: D59 v0. The 3 PM tools of the v2 family share 1 page design with Chrome-style tabs.
+// Each tab is a link to the page of its tool, so each tool keeps its own address, the back button works,
+// and the page works with no JavaScript. The open tab has aria-current="page".
+import { allProjects } from '../lib/content';
+import { SUITE } from '../lib/suite';
+interface Props { current: string }
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const tabs = SUITE.map(([slug, icon, short]) => ({ slug, icon, short, p: allProjects.find((x) => x.slug === slug)! }));
+---
+<nav class="vt" aria-label="PM tools, version 2">
+  {tabs.map((t) => (
+    <a href={`${base}/projects/${t.slug}/`} aria-current={t.slug === current ? 'page' : undefined}>
+      <span class="ic" aria-hidden="true">{t.icon}</span>
+      <span class="l">{t.p.name}</span><span class="s" aria-hidden="true">{t.short}</span>
+      {t.p.version && <span class="v">{t.p.version}</span>}
+    </a>
+  ))}
+</nav>

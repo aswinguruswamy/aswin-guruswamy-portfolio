@@ -6,7 +6,7 @@ order: 2
 items:
   - label: Claude API
     level: working
-    project: status-report-generator
+    project: raid-log-extractor
   - label: Monte Carlo forecasts
     level: working
     project: monte-carlo-delivery-forecast
