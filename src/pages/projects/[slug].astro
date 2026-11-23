@@ -3,6 +3,8 @@
 import Base from '../../layouts/Base.astro';
 import Badge from '../../components/Badge.astro';
 import Shuttle from '../../components/Shuttle.astro';
+import SuiteTabs from '../../components/SuiteTabs.astro';
+import { SUITE } from '../../lib/suite';
 import { withPage, pmTools, type Project } from '../../lib/content';
 export async function getStaticPaths() {
   return withPage.map((p, i) => ({ params: { slug: p.slug }, props: { p, prev: withPage[i - 1], next: withPage[i + 1] } }));
@@ -14,6 +16,7 @@ const isPm = pmTools.includes(p);
 const group = isPm ? 'PM tools' : 'Apps and simulations';
 const sec = isPm ? 'pm-tools' : 'apps';
 const pg = p.page!;
+const inSuite = SUITE.some(([s]) => s === p.slug);
 const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.approach], ['MY ROLE', pg.role], ['STACK', pg.stack], ['OUTCOME', pg.outcome]];
 ---
 <Base title={`${p.name} · Aswin Guruswamy`} description={`${p.name}: ${p.line}.`} section={sec} heading="">
@@ -23,6 +26,7 @@ const boxes: [string, string][] = [['PROBLEM', pg.problem], ['APPROACH', pg.appr
       <small>{group} › {p.name}</small>
     </div>
   </div>
+  {inSuite && <SuiteTabs current={p.slug} />}
   <section class="panel">
     <div class="p-hero">
       <div class="shot">{p.image

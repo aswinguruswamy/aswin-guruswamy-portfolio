@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 const cases = [
   ['src/content/projects/selfbet.md', (s) => s.replace('status: Planned', 'status: Done'), /status/],
   ['src/content/projects/selfbet.md', (s) => s.replace('epic: AGP-52', 'epic: SB-1'), /Jira key/],
-  ['src/content/projects/raid-log-extractor.md', (s) => s.replace('image: raid-log-extractor.webp', 'image: no-such-file.webp'), /no-such-file\.webp/],
+  ['src/content/projects/raid-log-extractor.md', (s) => s.replace('image: raid-log-extractor-v2.webp', 'image: no-such-file.webp'), /no-such-file\.webp/],
   ['src/content/projects/raid-log-extractor.md', (s) => s.replace(/\n  stack: .*\n/, '\n'), /stack/],
   ['src/content/projects/selfbet.md', (s) => s.replace('order: 3', 'order: 1'), /order 1 is used twice/],
   ['src/content/projects/selfbet.md', (s) => s.replace('name: SelfBet', 'name: SelfBet\ncolour: red'), /colour/],

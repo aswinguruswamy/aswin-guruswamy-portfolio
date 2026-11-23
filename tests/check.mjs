@@ -535,6 +535,40 @@ for (const path of pages) for (const w of [320, 360, 375, 390, 414, 430, 768, 10
   else if (!(await pg.evaluate(() => document.getElementById('tools-row').contains(document.activeElement)))) fails.push('show all: focus does not go to the new cards');
   await ctx.close();
 }
+// D59 v0: the 3 v2 PM tools share Chrome-style tabs. Each page has the 3 tabs in order, its own tab marked
+// (aria-current, panel colour), the full name for screen readers, short labels on phones, and v2.0.0 on desktop.
+{
+  const SUITE = [['monte-carlo-delivery-forecast', 'Monte Carlo Delivery Forecast', 'Forecast'], ['raid-log-extractor', 'RAID Log Extractor', 'RAID'], ['status-report-generator', 'Status Report Generator', 'Status']];
+  for (const [w, scheme] of [[1440, 'light'], [1440, 'dark'], [390, 'light']]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, colorScheme: scheme }); const pg = await ctx.newPage();
+    for (const [slug] of SUITE) {
+      await pg.goto(B + 'projects/' + slug + '/');
+      const t = await pg.evaluate(() => {
+        const nav = document.querySelector('nav.vt'); if (!nav) return null;
+        const panel = nav.nextElementSibling;
+        return { next: panel?.matches('section.panel'), panelBg: getComputedStyle(panel).backgroundColor, tabs: [...nav.querySelectorAll('a')].map((a) => ({
+          href: a.getAttribute('href'), cur: a.getAttribute('aria-current'), bg: getComputedStyle(a).backgroundColor, text: [...a.children].filter((e) => e.getBoundingClientRect().width > 2 && getComputedStyle(e).display !== 'none').map((e) => e.textContent.trim()).join(' '),
+          name: (a.querySelector('.l')?.textContent || '') })) };
+      });
+      const tag = `D59 v0 ${slug} @${w} ${scheme}`;
+      if (!t) { fails.push(`${tag}: no tab bar`); continue; }
+      if (!t.next) fails.push(`${tag}: the tab bar is not on top of the first panel`);
+      if (t.tabs.map((x) => x.href.replace(/^.*\/projects\//, '').replace(/\/$/, '')).join('|') !== SUITE.map((x) => x[0]).join('|')) fails.push(`${tag}: tab order or links are wrong`);
+      t.tabs.forEach((x, i) => {
+        const mine = SUITE[i][0] === slug;
+        if (mine !== (x.cur === 'page')) fails.push(`${tag}: tab ${i + 1} aria-current is ${x.cur}`);
+        if (mine && x.bg !== t.panelBg) fails.push(`${tag}: the open tab (${x.bg}) is not the panel colour (${t.panelBg})`);
+        if (!mine && x.bg === t.panelBg) fails.push(`${tag}: a closed tab has the panel colour`);
+        if (x.name !== SUITE[i][1]) fails.push(`${tag}: tab ${i + 1} screen-reader name is "${x.name}"`);
+        const want = `${'FRS'[i]} ` + (w < 900 ? SUITE[i][2] : `${SUITE[i][1]} v2.0.0`);
+        if (x.text !== want) fails.push(`${tag}: tab ${i + 1} shows "${x.text}", want "${want}"`);
+      });
+    }
+    await pg.goto(B + 'projects/pm-benchmark/');
+    if (await pg.locator('nav.vt').count()) fails.push('D59 v0: a tool outside the v2 family has the tab bar');
+    await ctx.close();
+  }
+}
 // REQ-08 v2, D11 v2, AGP-100: the Apps row has 3 cards, AME 3D Lessons first; the Yaw Damper Simulation and AME Courseware cards are gone; the AME page has its 2 links.
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const pg = await ctx.newPage();
